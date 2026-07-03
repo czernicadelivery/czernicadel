@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Czernica Delivery</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .header {
+            background-color: #ff6600;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            background-color: #e65c00;
+        }
+        .nav-buttons button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            background: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .nav-buttons button.active {
+            background-color: #cc5200;
+        }
+        .container {
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .section {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h2 { margin-top: 0; font-size: 18px; color: #ff6600; }
+        .option-card {
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        .option-card input { margin-right: 15px; }
+        .note { font-size: 12px; color: #666; margin-top: 5px; }
+        input[type="text"], input[type="tel"], textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .summary {
+            background-color: #fff3e6;
+            border-left: 4px solid #ff6600;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .order-btn {
+            width: 100%;
+            background-color: #25D366; /* Kolor WhatsApp */
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        #driver-panel { display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="header">📦 Czernica Delivery</div>
+    
+    <div class="nav-buttons">
+        <button id="btn-order" class="active" onclick="switchTab('order')">Zamów</button>
+        <button id="btn-driver" onclick="switchTab('driver')">Zaloguj jako Dostawca</button>
+    </div>
+
+    <div class="container">
+        <!-- SEKCJA ZAMAWIANIA -->
+        <div id="order-panel">
+            <div class="section">
+                <h2>1. Skąd dostawa?</h2>
+                <label class="option-card">
+                    <input type="radio" name="sklep" value="0.5" checked onchange="calculate()">
+                    <div>
+                        <strong>🪧 Sklep Czernica (+0,50 zł)</strong>
+                    </div>
+                </label>
+                <label class="option-card">
+                    <input type="radio" name="sklep" value="1.0" onchange="calculate()">
+                    <div>
+                        <strong>🪧 Sklep Janówek (+1,00 zł)</strong>
+                        <div class="note">Uwaga: Wymagająca trasa pod górkę.</div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="section">
+                <h2>2. Czym dostarczyć?</h2>
+                <label class="option-card">
+                    <input type="radio" name="transport" value="1.0" checked onchange="calculate()">
+                    <div>
+                        <strong>🚲 Rower (+1,00 zł)</strong>
+                        <div class="note">Szybka dostawa! (5-10 min szybciej).</div>
+                    </div>
+                </label>
+                <label class="option-card">
+                    <input type="radio" name="transport" value="0.5" onchange="calculate()">
+                    <div>
+                        <strong>🛴 Hulajnoga (+0,50 zł)</strong>
+                        <div class="note">Wolniejsza dostawa na spokojnie.</div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="section">
+                <h2>3. Twoje dane i zakupy</h2>
+                <input type="text" id="imie" placeholder="Imię i nazwisko" required>
+                <input type="text" id="adres" placeholder="Dokładny adres dostawy" required>
+                <textarea id="lista" rows="4" placeholder="Co mam kupić? (np. 2x chleb, mleko)"></textarea>
+                
+                <h2 style="margin-top: 15px;">Forma płatności</h2>
+                <select id="platnosc">
+                    <option value="BLIK">BLIK na telefon (Preferowane)</option>
+                    <option value="Gotówka">Gotówka przy odbiorze</option>
+                </select>
+            </div>
+
+            <div class="summary">
+                Koszt samej dostawy: <span id="total">1.50</span> zł<br>
+                <span style="font-size: 12px; font-weight: normal;">(Koszt zakupów doliczony zostanie ze specjalnego paragonu)</span>
+            </div>
+
+            <!-- Ten przycisk przygotuje wiadomość na WhatsApp do Ciebie -->
+            <button class="order-btn" onclick="sendOrder()">Wyślij zamówienie do dostawcy</button>
+        </div>
+
+        <!-- SEKCJA DOSTAWCY -->
+        <div id="driver-panel">
+            <div class="section">
+                <h2>Panel Dostawcy</h2>
+                <p>Zaloguj się, aby zarządzać zamówieniami.</p>
+                <input type="text" placeholder="Login (np. SzefCzernica)">
+                <input type="password" placeholder="Unikalne Hasło">
+                <button style="width: 100%; padding: 10px; background: #ff6600; color: white; border: none; margin-top: 10px;" onclick="alert('Na ten moment zamówienia spływają na Twój telefon! Rozbudowa o logowanie z bazą danych to kolejny krok.')">Zaloguj</button>
+            </div>
+            <div class="section">
+                <h2>Oceny dostawcy ⭐⭐⭐⭐⭐ (5.0)</h2>
+                <div class="note">"Super szybka dostawa rowerem, polecam!" - Pani Krystyna</div>
+                <div class="note">"Zakupy z Janówka dowiezione na czas." - Pan Jan</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Funkcja do przełączania zakładek Zamów / Dostawca
+        function switchTab(tab) {
+            if (tab === 'order') {
+                document.getElementById('order-panel').style.display = 'block';
+                document.getElementById('driver-panel').style.display = 'none';
+                document.getElementById('btn-order').classList.add('active');
+                document.getElementById('btn-driver').classList.remove('active');
+            } else {
+                document.getElementById('order-panel').style.display = 'none';
+                document.getElementById('driver-panel').style.display = 'block';
+                document.getElementById('btn-driver').classList.add('active');
+                document.getElementById('btn-order').classList.remove('active');
+            }
+        }
+
+        // Funkcja do liczenia kosztów na żywo
+        function calculate() {
+            let sklepPrice = parseFloat(document.querySelector('input[name="sklep"]:checked').value);
+            let transportPrice = parseFloat(document.querySelector('input[name="transport"]:checked').value);
+            let total = sklepPrice + transportPrice;
+            document.getElementById('total').innerText = total.toFixed(2);
+        }
+
+        // Funkcja do wysyłania zamówienia (Przekierowanie na WhatsApp do Ciebie)
+        function sendOrder() {
+            let imie = document.getElementById('imie').value;
+            let adres = document.getElementById('adres').value;
+            let lista = document.getElementById('lista').value;
+            let platnosc = document.getElementById('platnosc').value;
+            let kosztDostawy = document.getElementById('total').innerText;
+            
+            if(!imie || !adres || !lista) {
+                alert("Wypełnij wszystkie dane (imię, adres, lista zakupów) przed zamówieniem!");
+                return;
+            }
+
+            // TUTAJ WPISZ SWÓJ NUMER TELEFONU (z kierunkowym +48) np. 48123456789
+            let twojNumerTelefonu = "48781469903"; 
+
+            let wiadomosc = `Hej Czernica Delivery! 📦%0A%0A` +
+                            `*Imię:* ${imie}%0A` +
+                            `*Adres:* ${adres}%0A` +
+                            `*Koszt dostawy:* ${kosztDostawy} zł%0A` +
+                            `*Płatność:* ${platnosc}%0A%0A` +
+                            `*Lista zakupów:*%0A${lista}%0A%0A` +
+                            `Proszę o potwierdzenie przyjęcia!`;
+
+            // Otwiera link do wysłania wiadomości WhatsApp
+            window.open(`https://wa.me/${twojNumerTelefonu}?text=${wiadomosc}`, '_blank');
+            
+            // Pokazuje status klientowi na stronie
+            alert("Zamówienie przygotowane! Wyślij wiadomość, aby dostawca mógł wyjechać z punktu.");
+        }
+    </script>
+
+</body>
+</html>
