@@ -194,10 +194,11 @@
 
             <div class="section">
                 <h2>1. Skąd dostawa?</h2>
-                <label class="option-card">
+                <label class="option-card" id="czernica-card">
                     <input type="radio" name="sklep" value="1.0" checked onchange="calculate()">
                     <div>
                         <strong>🪧 Sklep Czernica (+1,00 zł)</strong>
+                        <div id="czernica-note" class="note" style="color: var(--danger); font-weight: bold; display: none;"></div>
                     </div>
                 </label>
                 <label class="option-card">
@@ -296,6 +297,7 @@
 
         // Funkcja uruchamiana przy starcie strony
         window.onload = function() {
+            checkStoreHours();
             checkSystemStatus();
             calculate();
         };
@@ -305,6 +307,49 @@
             document.getElementById('driver-panel').style.display = tab === 'driver' ? 'block' : 'none';
             document.getElementById('btn-order').className = tab === 'order' ? 'active' : '';
             document.getElementById('btn-driver').className = tab === 'driver' ? 'active' : '';
+        }
+
+        // --- SPRAWDZANIE GODZIN OTWARCIA SKLEPU CZERNICA ---
+        function checkStoreHours() {
+            let now = new Date();
+            let day = now.getDay(); // 0 = Niedziela, 1 = Poniedziałek, ..., 5 = Piątek, 6 = Sobota
+            let hour = now.getHours();
+
+            let czernicaRadio = document.querySelector('input[name="sklep"][value="1.0"]');
+            let czernicaCard = document.getElementById('czernica-card');
+            let noteDiv = document.getElementById('czernica-note');
+
+            let isWeekday = (day >= 1 && day <= 5);
+
+            // Przerwa 12:00 - 14:00
+            if (isWeekday && hour >= 12 && hour < 14) {
+                czernicaRadio.disabled = true;
+                czernicaCard.style.opacity = '0.5';
+                czernicaCard.style.pointerEvents = 'none';
+                noteDiv.innerText = "Przerwa kasjerki. Sklep będzie czynny o 14:00.";
+                noteDiv.style.display = 'block';
+                if (czernicaRadio.checked) {
+                    document.querySelector('input[name="sklep"][value="2.0"]').checked = true;
+                }
+            } 
+            // Koniec pracy o 18:00 w tygodniu
+            else if (isWeekday && hour >= 18) {
+                czernicaRadio.disabled = true;
+                czernicaCard.style.opacity = '0.5';
+                czernicaCard.style.pointerEvents = 'none';
+                noteDiv.innerText = "Sklep czynny do 18:00.";
+                noteDiv.style.display = 'block';
+                if (czernicaRadio.checked) {
+                    document.querySelector('input[name="sklep"][value="2.0"]').checked = true;
+                }
+            } 
+            // Sklep otwarty
+            else {
+                czernicaRadio.disabled = false;
+                czernicaCard.style.opacity = '1';
+                czernicaCard.style.pointerEvents = 'auto';
+                noteDiv.style.display = 'none';
+            }
         }
 
         // --- LOGIKA BIZNESOWA I CENNIK ---
