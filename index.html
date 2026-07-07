@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Czernica Delivery | Szybkie Zakupy</title>
-    <!-- Nowoczesna czcionka Google -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
-    <!-- Minimalistyczne ikony FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -188,7 +186,7 @@
         .badge-weekend { background: var(--danger); color: white; padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: bold; margin-left: 10px; display: none; }
         
         /* Pola tekstowe */
-        input[type="text"], input[type="password"], textarea, select {
+        input[type="text"], input[type="password"], input[type="datetime-local"], textarea, select {
             width: 100%;
             padding: 15px;
             margin-top: 8px;
@@ -342,17 +340,44 @@
         }
         .modal-btn:hover { background: var(--primary-light); }
 
+        /* Pływający przycisk WhatsApp */
+        .floating-whatsapp {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background-color: #25D366;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 50px;
+            font-size: 15px;
+            font-weight: bold;
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+            text-decoration: none;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+        .floating-whatsapp:hover {
+            transform: scale(1.08) translateY(-3px);
+            color: white;
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.5);
+        }
+        .floating-whatsapp i {
+            font-size: 22px;
+        }
+
         #driver-panel { display: none; }
         #reviews-panel { display: none; }
         #admin-dashboard { display: none; }
         .calc-result { font-weight: 800; color: var(--primary); font-size: 20px; margin-top: 15px; text-align: center; background: #fff3e6; padding: 15px; border-radius: 12px;}
         
-        .footer { text-align: center; font-size: 12px; color: #999; padding: 30px 20px; }
+        .footer { text-align: center; font-size: 12px; color: #999; padding: 30px 20px; margin-bottom: 60px; }
     </style>
 </head>
 <body>
 
-    <!-- Popup -->
     <div class="modal-overlay" id="welcome-modal">
         <div class="modal-content">
             <h3><i class="fas fa-bolt"></i> Hej!</h3>
@@ -360,6 +385,10 @@
             <button class="modal-btn" onclick="closeModal()">Rozumiem!</button>
         </div>
     </div>
+
+    <a href="https://wa.me/48781469903" class="floating-whatsapp" target="_blank">
+        <i class="fab fa-whatsapp"></i> Skontaktuj się
+    </a>
 
     <div class="header">
         <img src="IMG_9073.png" alt="Czernica Delivery" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
@@ -386,7 +415,6 @@
 
     <div class="container">
         
-        <!-- SEKCJA ZAMAWIANIA -->
         <div id="order-panel">
             
             <div class="order-counter">
@@ -401,7 +429,7 @@
             <div class="section">
                 <h2><i class="fas fa-map-marker-alt"></i> 1. Skąd dostawa?</h2>
                 <label class="option-card" id="czernica-card" onclick="addRipple(event)">
-                    <input type="radio" name="sklep" value="1.0" checked onchange="calculate()">
+                    <input type="radio" name="sklep" value="1.0" checked onchange="calculate()" data-nazwa="Sklep Czernica">
                     <i class="fas fa-store"></i>
                     <div>
                         <strong>Sklep Czernica (+1,00 zł)</strong>
@@ -409,7 +437,7 @@
                     </div>
                 </label>
                 <label class="option-card" onclick="addRipple(event)">
-                    <input type="radio" name="sklep" value="2.0" onchange="calculate()">
+                    <input type="radio" name="sklep" value="2.0" onchange="calculate()" data-nazwa="Sklep Janówek">
                     <i class="fas fa-shopping-basket"></i>
                     <div>
                         <strong>Sklep Janówek (+2,00 zł)</strong>
@@ -424,7 +452,7 @@
                     <span id="weekend-badge" class="badge-weekend">+0,50 zł Weekend</span>
                 </h2>
                 <label class="option-card" onclick="addRipple(event)">
-                    <input type="radio" name="transport" value="2.0" checked onchange="calculate()">
+                    <input type="radio" name="transport" value="2.0" checked onchange="calculate()" data-nazwa="Rower">
                     <i class="fas fa-bicycle"></i>
                     <div>
                         <strong>Rower (+2,00 zł)</strong>
@@ -432,7 +460,7 @@
                     </div>
                 </label>
                 <label class="option-card" onclick="addRipple(event)">
-                    <input type="radio" name="transport" value="1.0" onchange="calculate()">
+                    <input type="radio" name="transport" value="1.0" onchange="calculate()" data-nazwa="Hulajnoga">
                     <i class="fas fa-bolt"></i>
                     <div>
                         <strong>Hulajnoga (+1,00 zł)</strong>
@@ -442,11 +470,22 @@
             </div>
 
             <div class="section">
-                <h2><i class="fas fa-clipboard-list"></i> 3. Szczegóły zamówienia</h2>
+                <h2><i class="fas fa-clock"></i> 3. Kiedy dostarczyć?</h2>
+                <select id="czas-dostawy" onchange="toggleTimePicker()">
+                    <option value="szybko">Jak najszybciej (standardowo)</option>
+                    <option value="planowana">Wybierz datę i godzinę (nawet na jutro)</option>
+                </select>
+                <div id="date-picker-container" style="display:none; margin-top:10px;">
+                    <label style="font-size:12px; color:#666; font-weight:bold;">Wybierz dokładny termin:</label>
+                    <input type="datetime-local" id="dokladny-czas">
+                </div>
+            </div>
+
+            <div class="section">
+                <h2><i class="fas fa-clipboard-list"></i> 4. Szczegóły zamówienia</h2>
                 <input type="text" id="imie" placeholder="Twoje imię i nazwisko" required>
                 <input type="text" id="adres" placeholder="Dokładny adres dostawy" required>
                 
-                <!-- Polecane produkty -->
                 <h3 style="font-size: 14px; margin: 15px 0 10px; color: #555;">Najczęściej zamawiane u nas <i class="fas fa-heart" style="color:var(--danger)"></i></h3>
                 <div class="recommendations">
                     <div class="rec-card" onclick="addToCart('Lody')">
@@ -468,13 +507,17 @@
 
                 <textarea id="lista" rows="4" placeholder="Co mamy kupić? (np. 1x chleb jasny, 2x mleko 3.2%)"></textarea>
                 
-                <h2 style="margin-top: 25px;"><i class="fas fa-wallet"></i> Płatność i dostawa</h2>
+                <h2 style="margin-top: 25px;"><i class="fas fa-wallet"></i> Płatność i opcje</h2>
                 <select id="platnosc">
                     <option value="BLIK">BLIK na telefon (Preferowane i bezpieczne)</option>
                     <option value="Gotówka">Gotówka przy odbiorze</option>
                 </select>
 
-                <!-- Dodatek: Napiwek -->
+                <div class="checkbox-container" style="background: #eef9f0; border: 1px solid #c3e6cb; margin-bottom: 15px;">
+                    <input type="checkbox" id="bez-kontaktu">
+                    <label for="bez-kontaktu"><i class="fas fa-door-closed" style="color:#25D366"></i> <strong>Zostaw zakupy pod drzwiami</strong> (Dostawa bezkontaktowa)</label>
+                </div>
+
                 <h3 style="font-size: 14px; margin: 15px 0 10px; color: #555;">Doceniasz kuriera? Dorzuć napiwek 🛵</h3>
                 <div class="tips-container">
                     <button class="tip-btn active" onclick="setTip(0, this)">0 zł</button>
@@ -501,7 +544,6 @@
             </button>
         </div>
 
-        <!-- SEKCJA OPINII -->
         <div id="reviews-panel">
             <div class="section">
                 <h2><i class="fas fa-star"></i> Zostaw swoją opinię</h2>
@@ -545,11 +587,9 @@
             
             <h3 style="color:#555; font-size:16px; margin-top:30px;"><i class="fas fa-comments"></i> Opinie naszych klientów:</h3>
             <div id="reviews-list">
-                <!-- Tu załadują się opinie z LocalStorage -->
-            </div>
+                </div>
         </div>
 
-        <!-- SEKCJA DOSTAWCY (LOGOWANIE) -->
         <div id="driver-panel">
             <div class="section" id="login-section">
                 <h2><i class="fas fa-lock"></i> Panel Administracyjny</h2>
@@ -558,7 +598,6 @@
                 <button class="order-btn" style="margin-top: 10px; padding: 15px;" onclick="checkLogin(event)">Zaloguj się</button>
             </div>
             
-            <!-- PANEL SZEFA (UKRYTY DO ZALOGOWANIA) -->
             <div id="admin-dashboard">
                 <div class="section">
                     <h2>Zarządzanie Statusem <i class="fas fa-traffic-light"></i></h2>
@@ -570,7 +609,6 @@
                     </div>
                 </div>
 
-                <!-- NOWA SEKCJA ADMINA: Ustawienia strony -->
                 <div class="section">
                     <h2>Ustawienia Strony <i class="fas fa-cogs"></i></h2>
                     <p style="font-size: 13px; color: #666;">Zmień tekst powitania w wyskakującym okienku (Popup).</p>
@@ -578,7 +616,6 @@
                     <button onclick="updateSettings(event)" style="background: var(--primary); color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; width: 100%; font-weight:bold; margin-top:5px; transition:0.3s;">Zapisz tekst powitania</button>
                 </div>
                 
-                <!-- NOWA SEKCJA ADMINA: Moderacja opinii -->
                 <div class="section">
                     <h2>Moderacja Opinii <i class="fas fa-trash-alt"></i></h2>
                     <p style="font-size: 13px; color: #666;">Zarządzaj opiniami klientów. Możesz usunąć niechciane wpisy.</p>
@@ -653,6 +690,11 @@
 
         function closeModal() {
             document.getElementById('welcome-modal').classList.remove('active');
+        }
+
+        function toggleTimePicker() {
+            let val = document.getElementById('czas-dostawy').value;
+            document.getElementById('date-picker-container').style.display = (val === 'planowana') ? 'block' : 'none';
         }
 
         function addToCart(item) {
@@ -926,6 +968,23 @@
             let platnosc = document.getElementById('platnosc').value;
             let kosztDostawy = document.getElementById('total').innerText;
             
+            // Pobieranie nowych danych: sklep, transport, czas, bezkontakt
+            let wybranySklep = document.querySelector('input[name="sklep"]:checked').getAttribute('data-nazwa');
+            let wybranyTransport = document.querySelector('input[name="transport"]:checked').getAttribute('data-nazwa');
+            
+            let trybCzasu = document.getElementById('czas-dostawy').value;
+            let kiedyDostarczyc = "Jak najszybciej 🚀";
+            if(trybCzasu === "planowana") {
+                let dataWartosc = document.getElementById('dokladny-czas').value;
+                if(!dataWartosc) {
+                    alert("Wybierz dokładną datę i godzinę, na którą chcesz dostawę!");
+                    return;
+                }
+                kiedyDostarczyc = dataWartosc.replace('T', ' o godz. ');
+            }
+
+            let bezKontaktu = document.getElementById('bez-kontaktu').checked ? "TAK (Zostaw pod drzwiami 🚪)" : "NIE";
+
             if(!imie || !adres || !lista) {
                 alert("Wypełnij wszystkie dane (imię, adres, lista zakupów) przed zamówieniem!");
                 return;
@@ -937,9 +996,14 @@
             let wiadomosc = `📦 *NOWE ZAMÓWIENIE CZERNICA* 📦%0A%0A` +
                             `*Klient:* ${imie}%0A` +
                             `*Adres:* ${adres}%0A` +
+                            `*Sklep:* ${wybranySklep}%0A` +
+                            `*Transport:* ${wybranyTransport}%0A` +
+                            `*Kiedy dostarczyć:* ${kiedyDostarczyc}%0A` +
+                            `*Dostawa bezkontaktowa:* ${bezKontaktu}%0A` +
                             `*Dostawa z napiwkiem:* ${kosztDostawy} zł%0A` +
                             `*Płatność:* ${platnosc}${napiwekTekst}%0A%0A` +
                             `*🛒 Lista zakupów:*%0A${lista}%0A%0A` +
+                            `🧾 *Informacja:* Generuję i dołączam paragon ze sklepu do Twoich zakupów!%0A%0A` +
                             `Czekam na potwierdzenie!`;
 
             window.open(`https://wa.me/${dwaNumerTelefonu}?text=${wiadomosc}`, '_blank');
