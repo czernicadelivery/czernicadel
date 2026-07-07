@@ -1046,14 +1046,12 @@
         }
 
                  // --- LICZNIK ZAMÓWIEŃ (REALNY) ---
-        function initCounter() {
-            // Ustawiamy wartość 2, jeśli licznik jeszcze nie istnieje
-            let count = parseInt(localStorage.getItem('czernicaOrders'));
-            
-            if (isNaN(count)) {
-                count = 2;
-                localStorage.setItem('czernicaOrders', count);
-            }
+               function initCounter() {
+            // Wymuszamy start od 2 i nadpisujemy cokolwiek tam było
+            localStorage.setItem('czernicaOrders', 2);
+            document.getElementById('counter-value').innerText = 2;
+        }
+
             
             document.getElementById('counter-value').innerText = count;
         }
