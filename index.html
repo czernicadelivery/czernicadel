@@ -91,11 +91,11 @@
         }
         .nav-buttons button {
             flex: 1;
-            padding: 18px;
+            padding: 15px 10px;
             border: none;
             background: none;
             color: #888;
-            font-size: 16px;
+            font-size: 14px;
             cursor: pointer;
             font-weight: 600;
             font-family: inherit;
@@ -343,6 +343,7 @@
         .modal-btn:hover { background: var(--primary-light); }
 
         #driver-panel { display: none; }
+        #reviews-panel { display: none; }
         #admin-dashboard { display: none; }
         .calc-result { font-weight: 800; color: var(--primary); font-size: 20px; margin-top: 15px; text-align: center; background: #fff3e6; padding: 15px; border-radius: 12px;}
         
@@ -378,8 +379,9 @@
     </div>
     
     <div class="nav-buttons">
-        <button id="btn-order" class="active" onclick="switchTab('order', event)">Zamów Zakupy</button>
-        <button id="btn-driver" onclick="switchTab('driver', event)">Panel Dostawcy</button>
+        <button id="btn-order" class="active" onclick="switchTab('order', event)">Zamów</button>
+        <button id="btn-reviews" onclick="switchTab('reviews', event)">Opinie</button>
+        <button id="btn-driver" onclick="switchTab('driver', event)">Dostawca</button>
     </div>
 
     <div class="container">
@@ -445,7 +447,7 @@
                 <input type="text" id="adres" placeholder="Dokładny adres dostawy" required>
                 
                 <!-- Polecane produkty -->
-                <h3 style="font-size: 14px; margin: 15px 0 10px; color: #555;">Najczęściej zamawiane u nas <i class="fas fa-heart" style="color:var(--danger)"></i> (Kliknij, aby dodać)</h3>
+                <h3 style="font-size: 14px; margin: 15px 0 10px; color: #555;">Najczęściej zamawiane u nas <i class="fas fa-heart" style="color:var(--danger)"></i></h3>
                 <div class="recommendations">
                     <div class="rec-card" onclick="addToCart('Lody')">
                         <img src="IMG_9081.jpeg" alt="Lody" onerror="this.src='https://via.placeholder.com/150/ffeedd/ff6600?text=Lody'">
@@ -499,6 +501,54 @@
             </button>
         </div>
 
+        <!-- SEKCJA OPINII -->
+        <div id="reviews-panel">
+            <div class="section">
+                <h2><i class="fas fa-star"></i> Zostaw swoją opinię</h2>
+                <p style="font-size:13px; color:#666;">Twoja opinia jest dla nas bardzo ważna!</p>
+                <input type="text" id="rev-imie" placeholder="Twoje imię" required>
+                <input type="text" id="rev-nazwisko" placeholder="Twoje nazwisko" required>
+                
+                <label style="font-size:13px; color:#555; display:block; margin-top:10px; font-weight:bold;">Jakość produktów ze sklepu (1-5)</label>
+                <select id="rev-produkt">
+                    <option value="5">⭐⭐⭐⭐⭐ (Super)</option>
+                    <option value="4">⭐⭐⭐⭐ (Dobre)</option>
+                    <option value="3">⭐⭐⭐ (Przeciętne)</option>
+                    <option value="2">⭐⭐ (Słabe)</option>
+                    <option value="1">⭐ (Złe)</option>
+                </select>
+                
+                <label style="font-size:13px; color:#555; display:block; margin-top:10px; font-weight:bold;">Ocena ceny dostawy (1-5)</label>
+                <select id="rev-cena">
+                    <option value="5">⭐⭐⭐⭐⭐ (Bardzo tanio)</option>
+                    <option value="4">⭐⭐⭐⭐ (Dobra cena)</option>
+                    <option value="3">⭐⭐⭐ (Średnio)</option>
+                    <option value="2">⭐⭐ (Drogo)</option>
+                    <option value="1">⭐ (Zdzierstwo)</option>
+                </select>
+
+                <label style="font-size:13px; color:#555; display:block; margin-top:10px; font-weight:bold;">Jakość usługi kuriera (1-5)</label>
+                <select id="rev-dostawa">
+                    <option value="5">⭐⭐⭐⭐⭐ (Błyskawicznie i miło)</option>
+                    <option value="4">⭐⭐⭐⭐ (Wszystko OK)</option>
+                    <option value="3">⭐⭐⭐ (Mogło być lepiej)</option>
+                    <option value="2">⭐⭐ (Słabo)</option>
+                    <option value="1">⭐ (Dramat)</option>
+                </select>
+
+                <textarea id="rev-tresc" rows="4" placeholder="Napisz kilka słów o swoim zamówieniu..." required></textarea>
+                
+                <button class="order-btn" onclick="submitReview(event)">
+                    Dodaj opinię <i class="fas fa-comment" style="margin-left:5px;"></i>
+                </button>
+            </div>
+            
+            <h3 style="color:#555; font-size:16px; margin-top:30px;"><i class="fas fa-comments"></i> Opinie naszych klientów:</h3>
+            <div id="reviews-list">
+                <!-- Tu załadują się opinie z LocalStorage -->
+            </div>
+        </div>
+
         <!-- SEKCJA DOSTAWCY (LOGOWANIE) -->
         <div id="driver-panel">
             <div class="section" id="login-section">
@@ -518,6 +568,21 @@
                         <button onclick="setStatus(false, event)" style="background: var(--danger); color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; flex:1; font-weight:bold; transition:0.3s;">Wyłącz dostawy</button>
                         <button onclick="setStatus(true, event)" style="background: var(--secondary); color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; flex:1; font-weight:bold; transition:0.3s;">Włącz dostawy</button>
                     </div>
+                </div>
+
+                <!-- NOWA SEKCJA ADMINA: Ustawienia strony -->
+                <div class="section">
+                    <h2>Ustawienia Strony <i class="fas fa-cogs"></i></h2>
+                    <p style="font-size: 13px; color: #666;">Zmień tekst powitania w wyskakującym okienku (Popup).</p>
+                    <input type="text" id="admin-modal-text" placeholder="Wpisz nowy tekst powitania...">
+                    <button onclick="updateSettings(event)" style="background: var(--primary); color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; width: 100%; font-weight:bold; margin-top:5px; transition:0.3s;">Zapisz tekst powitania</button>
+                </div>
+                
+                <!-- NOWA SEKCJA ADMINA: Moderacja opinii -->
+                <div class="section">
+                    <h2>Moderacja Opinii <i class="fas fa-trash-alt"></i></h2>
+                    <p style="font-size: 13px; color: #666;">Zarządzaj opiniami klientów. Możesz usunąć niechciane wpisy.</p>
+                    <div id="admin-reviews-list" style="max-height: 300px; overflow-y: auto; padding-right:5px;"></div>
                 </div>
                 
                 <div class="section">
@@ -560,10 +625,16 @@
             checkSystemStatus();
             checkHappyHour();
             calculate();
+            loadReviews(); // Załaduj opinie przy starcie
             
-            // Popup
+            // Popup ustawienia z panelu admina (lub losowe)
+            let customText = localStorage.getItem('czernicaModalText');
             setTimeout(() => {
-                document.getElementById('modal-text').innerText = modalTexts[Math.floor(Math.random() * modalTexts.length)];
+                if(customText && customText.trim() !== "") {
+                    document.getElementById('modal-text').innerText = customText;
+                } else {
+                    document.getElementById('modal-text').innerText = modalTexts[Math.floor(Math.random() * modalTexts.length)];
+                }
                 document.getElementById('welcome-modal').classList.add('active');
             }, 3000);
         };
@@ -572,8 +643,11 @@
         function switchTab(tab, event) {
             addRipple(event);
             document.getElementById('order-panel').style.display = tab === 'order' ? 'block' : 'none';
+            document.getElementById('reviews-panel').style.display = tab === 'reviews' ? 'block' : 'none';
             document.getElementById('driver-panel').style.display = tab === 'driver' ? 'block' : 'none';
+            
             document.getElementById('btn-order').className = tab === 'order' ? 'active' : '';
+            document.getElementById('btn-reviews').className = tab === 'reviews' ? 'active' : '';
             document.getElementById('btn-driver').className = tab === 'driver' ? 'active' : '';
         }
 
@@ -588,7 +662,6 @@
             } else {
                 textarea.value = "- " + item;
             }
-            // Mruganie pola by pokazać, że dodano
             textarea.style.borderColor = "var(--secondary)";
             setTimeout(() => textarea.style.borderColor = "#e0e0e0", 500);
         }
@@ -621,7 +694,117 @@
             setTimeout(() => circle.remove(), 600);
         }
 
-        // --- LOGIKA BIZNESOWA ---
+        // --- OPINIE (LOGIKA) ---
+        function submitReview(e) {
+            addRipple(e);
+            let imie = document.getElementById('rev-imie').value.trim();
+            let nazwisko = document.getElementById('rev-nazwisko').value.trim();
+            let tresc = document.getElementById('rev-tresc').value.trim();
+            let prod = document.getElementById('rev-produkt').value;
+            let cena = document.getElementById('rev-cena').value;
+            let dostawa = document.getElementById('rev-dostawa').value;
+
+            if(!imie || !nazwisko || !tresc) {
+                alert("Proszę wypełnić imię, nazwisko oraz treść opinii przed wysłaniem!");
+                return;
+            }
+
+            let reviews = JSON.parse(localStorage.getItem('czernicaReviews')) || [];
+            let dateStr = new Date().toLocaleDateString('pl-PL');
+            
+            reviews.push({ 
+                id: Date.now(), 
+                imie: imie, 
+                nazwisko: nazwisko, 
+                tresc: tresc, 
+                prod: parseInt(prod), 
+                cena: parseInt(cena), 
+                dostawa: parseInt(dostawa), 
+                date: dateStr 
+            });
+            
+            localStorage.setItem('czernicaReviews', JSON.stringify(reviews));
+
+            // Czyszczenie formularza
+            document.getElementById('rev-imie').value = '';
+            document.getElementById('rev-nazwisko').value = '';
+            document.getElementById('rev-tresc').value = '';
+            
+            alert("Dziękujemy za zostawienie opinii!");
+            loadReviews();
+        }
+
+        function loadReviews() {
+            let reviews = JSON.parse(localStorage.getItem('czernicaReviews')) || [];
+            let listEl = document.getElementById('reviews-list');
+            let adminListEl = document.getElementById('admin-reviews-list');
+            
+            if(listEl) listEl.innerHTML = '';
+            if(adminListEl) adminListEl.innerHTML = '';
+
+            if(reviews.length === 0) {
+                if(listEl) listEl.innerHTML = '<div class="section" style="text-align:center; color:#888;">Jeszcze nikt nie dodał opinii. Bądź pierwszy!</div>';
+                if(adminListEl) adminListEl.innerHTML = '<p style="font-size:13px; color:#888;">Brak opinii do moderacji.</p>';
+                return;
+            }
+
+            // Funkcja pomocnicza do rysowania gwiazdek
+            const drawStars = (count) => '⭐'.repeat(count);
+
+            // Odwracamy tablicę, by najnowsze były na górze
+            reviews.slice().reverse().forEach(r => {
+                // Generowanie opinii w zakładce dla klientów
+                let userHtml = `
+                    <div class="section" style="padding: 20px; margin-bottom: 15px;">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                            <strong style="color:var(--primary); font-size:16px;">${r.imie} ${r.nazwisko}</strong>
+                            <small style="color:#aaa;">${r.date}</small>
+                        </div>
+                        <div style="font-size:12px; color:#555; background:#f9f9f9; padding:10px; border-radius:8px; margin-bottom:10px;">
+                            <strong>Produkt:</strong> ${drawStars(r.prod)} <br>
+                            <strong>Cena:</strong> ${drawStars(r.cena)} <br>
+                            <strong>Dostawa:</strong> ${drawStars(r.dostawa)}
+                        </div>
+                        <p style="font-size:14px; margin:0; font-style:italic; line-height:1.5;">"${r.tresc}"</p>
+                    </div>
+                `;
+                if(listEl) listEl.innerHTML += userHtml;
+
+                // Generowanie opinii w panelu admina (do usuwania)
+                let adminHtml = `
+                    <div style="border: 1px solid #e0e0e0; padding: 12px; margin-bottom: 10px; border-radius: 8px; background:#fafafa;">
+                        <strong style="color:var(--text);">${r.imie} ${r.nazwisko}</strong> <small style="color:#aaa;">(${r.date})</small>
+                        <p style="font-size:12px; margin:8px 0; color:#555;">"${r.tresc}"</p>
+                        <button onclick="deleteReview(${r.id}, event)" style="background:var(--danger); color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:12px; font-weight:bold;">Usuń opinię</button>
+                    </div>
+                `;
+                if(adminListEl) adminListEl.innerHTML += adminHtml;
+            });
+        }
+
+        // --- PANEL ADMINISTRATORA LOGIKA ---
+        function deleteReview(id, event) {
+            addRipple(event);
+            if(confirm("Czy na pewno chcesz usunąć tę opinię?")) {
+                let reviews = JSON.parse(localStorage.getItem('czernicaReviews')) || [];
+                reviews = reviews.filter(r => r.id !== id);
+                localStorage.setItem('czernicaReviews', JSON.stringify(reviews));
+                loadReviews(); // Odśwież widok
+            }
+        }
+
+        function updateSettings(e) {
+            addRipple(e);
+            let text = document.getElementById('admin-modal-text').value.trim();
+            if(text) {
+                localStorage.setItem('czernicaModalText', text);
+                document.getElementById('admin-modal-text').value = '';
+                alert("Nowy tekst powitania został zapisany pomyślnie!");
+            } else {
+                alert("Wpisz jakiś tekst przed zapisaniem.");
+            }
+        }
+
         function checkStoreHours() {
             let now = new Date();
             let day = now.getDay();
@@ -656,21 +839,21 @@
 
         function checkHappyHour() {
             const now = new Date();
-            const day = now.getDay(); // 1 = Poniedziałek, 2 = Wtorek
+            const day = now.getDay(); 
             const hour = now.getHours();
             const banner = document.getElementById('happy-hour-banner');
 
-            if(day === 1) { // Poniedziałek
+            if(day === 1) { 
                 banner.innerHTML = "<i class='fas fa-clock'></i> Zapowiedź: Jutro o 16:00 HAPPY HOUR! Dostawa -35% taniej!";
                 banner.style.display = 'block';
-            } else if (day === 2) { // Wtorek
+            } else if (day === 2) { 
                 if(hour < 16) {
                     banner.innerHTML = "<i class='fas fa-clock'></i> Dziś 16:00 - 17:00 HAPPY HOUR! Zgarnij -35% na dostawę!";
                     banner.style.display = 'block';
-                } else if (hour === 16) { // Pomiędzy 16:00 a 16:59
+                } else if (hour === 16) { 
                     banner.innerHTML = "🔥 HAPPY HOUR TRWA! Koszt dostawy został obniżony o 35%! 🔥";
                     banner.style.display = 'block';
-                    banner.style.backgroundColor = "var(--secondary)"; // Zielony
+                    banner.style.backgroundColor = "var(--secondary)"; 
                     isHappyHour = true;
                 }
             }
@@ -692,7 +875,6 @@
             let deliveryBase = sklepPrice + transportPrice + weekendFee;
             let oldTotalDisplay = document.getElementById('old-total');
             
-            // Aplikacja Happy Hour (-35% tylko na bazę dostawy, napiwek się nie wlicza)
             if(isHappyHour) {
                 oldTotalDisplay.innerText = (deliveryBase + currentTip).toFixed(2) + " zł";
                 oldTotalDisplay.style.display = "inline";
@@ -762,11 +944,10 @@
 
             window.open(`https://wa.me/${dwaNumerTelefonu}?text=${wiadomosc}`, '_blank');
             
-            // Podbicie licznika przy zamówieniu
             forceIncrementCounter();
         }
 
-        // --- PANEL ADMINISTRATORA ---
+        // --- PANEL ADMINISTRATORA LOGOWANIE ---
         function checkLogin(e) {
             addRipple(e);
             let user = document.getElementById('login-input').value;
@@ -802,10 +983,9 @@
 
         // --- LICZNIK ZAMÓWIEŃ (SMART) ---
         function initCounter() {
-            let count = parseInt(localStorage.getItem('czernicaOrders')) || 142; // Zaczynamy od 142
+            let count = parseInt(localStorage.getItem('czernicaOrders')) || 142;
             let lastUpdate = parseInt(localStorage.getItem('czernicaLastUpdate')) || Date.now();
             
-            // Nadrabianie czasu (średnio 1 zamówienie na godzinę jak nas nie ma)
             let hoursPassed = (Date.now() - lastUpdate) / (1000 * 60 * 60);
             if(hoursPassed > 1) {
                 count += Math.floor(hoursPassed);
@@ -819,14 +999,13 @@
         }
 
         function scheduleNextIncrement() {
-            // Losowy czas między 15 minut a 2 godziny
             const min = 15 * 60 * 1000;
             const max = 120 * 60 * 1000;
             const randomTime = Math.floor(Math.random() * (max - min + 1)) + min;
             
             setTimeout(() => {
                 forceIncrementCounter();
-                scheduleNextIncrement(); // zapętl
+                scheduleNextIncrement(); 
             }, randomTime);
         }
 
@@ -839,7 +1018,6 @@
             let counterEl = document.getElementById('counter-value');
             counterEl.innerText = count;
             
-            // Efekt dodania
             counterEl.style.color = "var(--secondary)";
             counterEl.style.transform = "scale(1.5)";
             setTimeout(() => {
