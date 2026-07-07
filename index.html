@@ -1045,50 +1045,38 @@
             document.getElementById('est-cost').innerText = suma.toFixed(2);
         }
 
-        // --- LICZNIK ZAMÓWIEŃ (SMART) ---
+         // --- LICZNIK ZAMÓWIEŃ (REALNY) ---
         function initCounter() {
-            let count = parseInt(localStorage.getItem('czernicaOrders')) || 142;
-            let lastUpdate = parseInt(localStorage.getItem('czernicaLastUpdate')) || Date.now();
-            
-            let hoursPassed = (Date.now() - lastUpdate) / (1000 * 60 * 60);
-            if(hoursPassed > 1) {
-                count += Math.floor(hoursPassed);
-                localStorage.setItem('czernicaOrders', count);
-            }
-            
+            // Jeśli licznik nie istnieje, ustawiamy na 1. 
+            // Jeśli już jest w przeglądarce, pobieramy aktualną wartość.
+            let count = parseInt(localStorage.getItem('czernicaOrders')) || 1; 
             document.getElementById('counter-value').innerText = count;
-            localStorage.setItem('czernicaLastUpdate', Date.now());
-
-            scheduleNextIncrement();
         }
 
-        function scheduleNextIncrement() {
-            const min = 15 * 60 * 1000;
-            const max = 120 * 60 * 1000;
-            const randomTime = Math.floor(Math.random() * (max - min + 1)) + min;
-            
-            setTimeout(() => {
-                forceIncrementCounter();
-                scheduleNextIncrement(); 
-            }, randomTime);
-        }
-
+        // Tę funkcję wywołuj w miejscu, gdzie potwierdzasz wysłanie zamówienia
         function forceIncrementCounter() {
-            let count = parseInt(localStorage.getItem('czernicaOrders')) || 142;
-            count++;
+            let count = parseInt(localStorage.getItem('czernicaOrders')) || 1;
+            count++; 
+            
+            // Zapisujemy nową wartość w pamięci przeglądarki
             localStorage.setItem('czernicaOrders', count);
-            localStorage.setItem('czernicaLastUpdate', Date.now());
             
             let counterEl = document.getElementById('counter-value');
             counterEl.innerText = count;
             
+            // Efekt wizualny przy aktualizacji
+            counterEl.style.transition = "all 0.3s ease";
             counterEl.style.color = "var(--secondary)";
-            counterEl.style.transform = "scale(1.5)";
+            counterEl.style.transform = "scale(1.2)";
+            
             setTimeout(() => {
                 counterEl.style.color = "inherit";
                 counterEl.style.transform = "scale(1)";
             }, 500);
         }
+
+        // Inicjalizacja licznika przy wczytaniu strony
+        initCounter();
     </script>
 </body>
 </html>
