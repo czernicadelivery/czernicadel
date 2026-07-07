@@ -1045,13 +1045,16 @@
             document.getElementById('est-cost').innerText = suma.toFixed(2);
         }
 
-                 // --- LICZNIK ZAMÓWIEŃ (REALNY) ---
-               function initCounter() {
-            // Wymuszamy start od 2 i nadpisujemy cokolwiek tam było
-            localStorage.setItem('czernicaOrders', 2);
-            document.getElementById('counter-value').innerText = 2;
-        }
-
+        // --- LICZNIK ZAMÓWIEŃ (REALNY) ---
+        function initCounter() {
+            // Sprawdzamy czy licznik istnieje w pamięci
+            let count = localStorage.getItem('czernicaOrders');
+            
+            // Jeśli nie istnieje (pierwsze uruchomienie), ustawiamy 2
+            if (count === null) {
+                count = 2;
+                localStorage.setItem('czernicaOrders', count);
+            }
             
             document.getElementById('counter-value').innerText = count;
         }
@@ -1064,17 +1067,19 @@
             localStorage.setItem('czernicaOrders', count);
             
             let counterEl = document.getElementById('counter-value');
-            counterEl.innerText = count;
-            
-            // Efekt wizualny przy aktualizacji
-            counterEl.style.transition = "all 0.3s ease";
-            counterEl.style.color = "var(--secondary)";
-            counterEl.style.transform = "scale(1.2)";
-            
-            setTimeout(() => {
-                counterEl.style.color = "inherit";
-                counterEl.style.transform = "scale(1)";
-            }, 500);
+            if (counterEl) {
+                counterEl.innerText = count;
+                
+                // Efekt wizualny przy aktualizacji
+                counterEl.style.transition = "all 0.3s ease";
+                counterEl.style.color = "var(--secondary)";
+                counterEl.style.transform = "scale(1.2)";
+                
+                setTimeout(() => {
+                    counterEl.style.color = "inherit";
+                    counterEl.style.transform = "scale(1)";
+                }, 500);
+            }
         }
 
         // Inicjalizacja licznika przy wczytaniu strony
