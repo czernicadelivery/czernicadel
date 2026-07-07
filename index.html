@@ -1045,20 +1045,24 @@
             document.getElementById('est-cost').innerText = suma.toFixed(2);
         }
 
-         // --- LICZNIK ZAMÓWIEŃ (REALNY) ---
+                 // --- LICZNIK ZAMÓWIEŃ (REALNY) ---
         function initCounter() {
-            // Jeśli licznik nie istnieje, ustawiamy na 1. 
-            // Jeśli już jest w przeglądarce, pobieramy aktualną wartość.
-            let count = parseInt(localStorage.getItem('czernicaOrders')) || 1; 
+            // Ustawiamy wartość 2, jeśli licznik jeszcze nie istnieje
+            let count = parseInt(localStorage.getItem('czernicaOrders'));
+            
+            if (isNaN(count)) {
+                count = 2;
+                localStorage.setItem('czernicaOrders', count);
+            }
+            
             document.getElementById('counter-value').innerText = count;
         }
 
         // Tę funkcję wywołuj w miejscu, gdzie potwierdzasz wysłanie zamówienia
         function forceIncrementCounter() {
-            let count = parseInt(localStorage.getItem('czernicaOrders')) || 1;
+            let count = parseInt(localStorage.getItem('czernicaOrders')) || 2;
             count++; 
             
-            // Zapisujemy nową wartość w pamięci przeglądarki
             localStorage.setItem('czernicaOrders', count);
             
             let counterEl = document.getElementById('counter-value');
