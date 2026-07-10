@@ -539,8 +539,6 @@
     <script>
         // =========================================================
         // FIREBASE CONFIG - BAZA DANYCH
-        // Żeby opinie i ustawienia działały między urządzeniami, 
-        // utwórz projekt na firebase.google.com i wklej tu klucze!
         // =========================================================
         const firebaseConfig = {
             apiKey: "AIzaSyDL547VT5uy_hxyhEccpJJNcLIhhSsc3oQ",
@@ -584,49 +582,52 @@
 
         // --- START STRONY ---
         window.onload = function() {
-            checkTheme(); // Tryb ciemny
+            checkTheme();
             initCounter();
             checkStoreHours();
-            syncWithDatabase(); // Pobiera statusy z Firebase/Local
+            syncWithDatabase(); 
             checkHappyHour();
             calculate();
-            checkReturningUser(); // Auto-wypełnianie
+            checkReturningUser();
             
             setTimeout(() => { document.getElementById('welcome-modal').classList.add('active'); }, 3000);
         };
 
-        // --- TRYB CIEMNY (PO 16:00) ---
         function checkTheme() {
             let hour = new Date().getHours();
-            if (hour >= 16 || hour < 6) {
-                document.documentElement.setAttribute('data-theme', 'dark');
-            } else {
-                document.documentElement.removeAttribute('data-theme');
-            }
+            if (hour >= 16 || hour < 6) { document.documentElement.setAttribute('data-theme', 'dark'); } 
+            else { document.documentElement.removeAttribute('data-theme'); }
         }
 
-        // --- BAZA DANYCH (SYNCHRONIZACJA) ---
+        // --- BAZA DANYCH (SYNCHRONIZACJA) - NAPRAWIONA LOGIKA ---
         function syncWithDatabase() {
             if(db) {
-                // Opinie z Firebase
+                // Opinie
                 db.ref('opinie').on('value', snap => {
                     let data = snap.val();
                     let reviewsArray = data ? Object.values(data) : [];
                     localStorage.setItem('czernicaReviews', JSON.stringify(reviewsArray));
                     renderReviews(reviewsArray);
-                });
-                // Zamówienia z Firebase
+                }, err => console.error("Firebase zablokował odczyt opinii. Sprawdź Rules!", err));
+                
+                // Zamówienia
                 db.ref('zamowienia').on('value', snap => {
                     let data = snap.val();
                     renderOrders(data ? Object.values(data) : []);
                 });
-                // Ustawienia systemu (urlop, pogoda)
+
+                // Ustawienia systemu (Tu był główny błąd - jeśli baza jest pusta, kod się wieszał)
                 db.ref('ustawienia').on('value', snap => {
-                    let u = snap.val();
-                    if(u) {
-                        applySettings(u.isAvailable, u.returnTime, u.modalText, u.weatherFee);
-                    }
-                });
+                    let u = snap.val() || {}; // Zapobiega błędowi, gdy baza u = null
+                    
+                    let isAvail = u.hasOwnProperty('isAvailable') ? u.isAvailable : true;
+                    let retTime = u.hasOwnProperty('returnTime') ? u.returnTime : 'później';
+                    let mText = u.hasOwnProperty('modalText') ? u.modalText : null;
+                    let wFee = u.hasOwnProperty('weatherFee') ? u.weatherFee : false;
+                    
+                    applySettings(isAvail, retTime, mText, wFee);
+                }, err => console.error("Firebase zablokował odczyt ustawień.", err));
+                
             } else {
                 // Fallback do LocalStorage
                 let reviewsArray = JSON.parse(localStorage.getItem('czernicaReviews')) || [];
@@ -643,7 +644,6 @@
         }
 
         function applySettings(isAvailable, returnTime, modalText, weatherFee) {
-            // Status sklepu
             let now = new Date(); let hour = now.getHours();
             let isWorkingHours = (hour >= 11 && hour < 19);
             let orderBtn = document.getElementById('submit-btn');
@@ -661,23 +661,20 @@
                 orderBtn.disabled = false; orderBtn.innerHTML = "Wyślij zamówienie <i class='fas fa-paper-plane'></i>";
             }
 
-            // Tekst Popup
             let savedName = localStorage.getItem('czernica_name');
             if (savedName) {
-                // Nadpisane przez Auto-fill
+                // Auto-fill nadpisuje
             } else if (modalText && modalText.trim() !== "") {
                 document.getElementById('modal-text').innerText = modalText;
             } else {
                 document.getElementById('modal-text').innerText = modalTexts[Math.floor(Math.random() * modalTexts.length)];
             }
 
-            // Pogoda
             isWeatherBad = weatherFee;
             document.getElementById('weather-banner').style.display = isWeatherBad ? 'block' : 'none';
             calculate();
         }
 
-        // --- AUTO-WYPEŁNIANIE ---
         function checkReturningUser() {
             let savedName = localStorage.getItem('czernica_name');
             let savedAddress = localStorage.getItem('czernica_address');
@@ -688,7 +685,6 @@
             }
         }
 
-        // --- FUNKCJE UI ---
         function switchTab(tab, event) {
             addRipple(event);
             document.getElementById('order-panel').style.display = tab === 'order' ? 'block' : 'none';
@@ -738,7 +734,7 @@
             setTimeout(() => circle.remove(), 600);
         }
 
-        // --- OPINIE (LOGIKA) ---
+        // --- ZAPISYWANIE OPINII (DODANO OBSŁUGĘ BŁĘDÓW) ---
         function submitReview(e) {
             addRipple(e);
             let imie = document.getElementById('rev-imie').value.trim();
@@ -756,18 +752,28 @@
             };
 
             if(db) {
-                db.ref('opinie/' + reviewObj.id).set(reviewObj);
+                // Firebase wymaga odpowiednich reguł zapisu
+                db.ref('opinie/' + reviewObj.id).set(reviewObj)
+                  .then(() => {
+                      document.getElementById('rev-imie').value = '';
+                      document.getElementById('rev-nazwisko').value = '';
+                      document.getElementById('rev-tresc').value = '';
+                      alert("Dziękujemy za opinię!");
+                  })
+                  .catch(err => {
+                      console.error(err);
+                      alert("BŁĄD: Firebase zablokował dodanie opinii! Ustaw reguły '.write' na true w konsoli Firebase.");
+                  });
             } else {
                 let reviews = JSON.parse(localStorage.getItem('czernicaReviews')) || [];
                 reviews.push(reviewObj);
                 localStorage.setItem('czernicaReviews', JSON.stringify(reviews));
                 renderReviews(reviews);
+                document.getElementById('rev-imie').value = '';
+                document.getElementById('rev-nazwisko').value = '';
+                document.getElementById('rev-tresc').value = '';
+                alert("Dziękujemy za opinię! (Zapisano lokalnie)");
             }
-
-            document.getElementById('rev-imie').value = '';
-            document.getElementById('rev-nazwisko').value = '';
-            document.getElementById('rev-tresc').value = '';
-            alert("Dziękujemy za opinię!");
         }
 
         function renderReviews(reviews) {
@@ -813,7 +819,7 @@
             addRipple(event);
             if(confirm("Usunąć?")) {
                 if(db) {
-                    db.ref('opinie/' + id).remove();
+                    db.ref('opinie/' + id).remove().catch(err => alert("Błąd usuwania - brak uprawnień!"));
                 } else {
                     let reviews = JSON.parse(localStorage.getItem('czernicaReviews')) || [];
                     reviews = reviews.filter(r => r.id !== id);
@@ -844,7 +850,6 @@
             });
         }
 
-        // --- CENNIKI I LOGIKA DOSTAWY ---
         function checkStoreHours() {
             let now = new Date(); let day = now.getDay(); let hour = now.getHours();
             let czernicaRadio = document.querySelector('input[name="sklep"][value="1.0"]');
@@ -926,7 +931,6 @@
             
             if(!imie || !adres || !lista) { alert("Wypełnij wszystkie dane!"); return; }
 
-            // Zapamiętanie na urządzeniu (Autofill)
             localStorage.setItem('czernica_name', imie);
             localStorage.setItem('czernica_address', adres);
 
@@ -944,13 +948,14 @@
             let napiwekTekst = currentTip > 0 ? `%0A*Napiwek wliczony:* ${currentTip} zł 💚` : "";
             let pogodaTekst = isWeatherBad ? `%0A*Dopłata pogodowa:* +1,50 zł 🌧️` : "";
 
-            // Zapisz zamówienie do bazy w Panelu Admina
             let orderObj = {
                 id: Date.now(), imie: imie, adres: adres, lista: lista,
                 koszt: kosztDostawy, data: new Date().toLocaleString('pl-PL')
             };
-            if(db) { db.ref('zamowienia/' + orderObj.id).set(orderObj); }
-            else {
+            
+            if(db) { 
+                db.ref('zamowienia/' + orderObj.id).set(orderObj).catch(err => console.error(err)); 
+            } else {
                 let orders = JSON.parse(localStorage.getItem('czernicaOrdersData')) || [];
                 orders.push(orderObj);
                 localStorage.setItem('czernicaOrdersData', JSON.stringify(orders));
@@ -968,7 +973,7 @@
             forceIncrementCounter();
         }
 
-        // --- PANEL ADMINISTRATORA LOGIKA ---
+        // --- ZMIANA USTAWIEŃ ADMINA (DODANO BŁĘDY) ---
         function checkLogin(e) {
             addRipple(e);
             let user = document.getElementById('login-input').value;
@@ -983,34 +988,46 @@
             addRipple(e);
             let returnTime = document.getElementById('return-time-input').value || "wkrótce";
             if(db) {
-                db.ref('ustawienia').update({ isAvailable: isAvailable, returnTime: returnTime });
+                db.ref('ustawienia').update({ isAvailable: isAvailable, returnTime: returnTime })
+                  .then(() => alert(isAvailable ? "Dostawy WŁĄCZONE." : "Dostawy WYŁĄCZONE."))
+                  .catch(err => alert("Brak uprawnień bazy danych! Zmień reguły Firebase."));
             } else {
                 localStorage.setItem('isAvailable', isAvailable);
                 localStorage.setItem('returnTime', returnTime);
                 applySettings(isAvailable, returnTime, localStorage.getItem('czernicaModalText'), isWeatherBad);
+                alert(isAvailable ? "Dostawy WŁĄCZONE." : "Dostawy WYŁĄCZONE.");
             }
-            alert(isAvailable ? "Dostawy WŁĄCZONE." : "Dostawy WYŁĄCZONE.");
         }
 
         function updateSettings(e) {
             addRipple(e);
             let text = document.getElementById('admin-modal-text').value.trim();
             if(text) {
-                if(db) db.ref('ustawienia').update({ modalText: text });
-                else localStorage.setItem('czernicaModalText', text);
-                document.getElementById('admin-modal-text').value = '';
-                alert("Tekst zapisany pomyślnie!");
+                if(db) {
+                    db.ref('ustawienia').update({ modalText: text })
+                      .then(() => {
+                          document.getElementById('admin-modal-text').value = '';
+                          alert("Tekst zapisany pomyślnie!");
+                      }).catch(err => alert("Brak uprawnień bazy danych! Zmień reguły Firebase."));
+                } else {
+                    localStorage.setItem('czernicaModalText', text);
+                    document.getElementById('admin-modal-text').value = '';
+                    alert("Tekst zapisany pomyślnie!");
+                }
             }
         }
 
         function setWeatherFee(isActive, e) {
             addRipple(e);
-            if(db) db.ref('ustawienia').update({ weatherFee: isActive });
-            else {
+            if(db) {
+                db.ref('ustawienia').update({ weatherFee: isActive })
+                  .then(() => alert(isActive ? "Doliczono dopłatę za deszcz (+1,50 zł)" : "Wyłączono dopłatę deszczową."))
+                  .catch(err => alert("Brak uprawnień bazy danych! Zmień reguły Firebase."));
+            } else {
                 localStorage.setItem('weatherFee', isActive);
                 applySettings(localStorage.getItem('isAvailable') !== 'false', localStorage.getItem('returnTime'), null, isActive);
+                alert(isActive ? "Doliczono dopłatę za deszcz (+1,50 zł)" : "Wyłączono dopłatę deszczową.");
             }
-            alert(isActive ? "Doliczono dopłatę za deszcz (+1,50 zł)" : "Wyłączono dopłatę deszczową.");
         }
 
         function estimateCost() {
@@ -1022,7 +1039,6 @@
             document.getElementById('est-cost').innerText = suma.toFixed(2);
         }
 
-        // --- LICZNIK ZAMÓWIEŃ ---
         function initCounter() {
             let count = localStorage.getItem('czernicaOrders');
             if (count === null) { count = 2; localStorage.setItem('czernicaOrders', count); }
