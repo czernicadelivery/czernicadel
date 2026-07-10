@@ -7,20 +7,42 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- FIREBASE BAZA DANYCH -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
     <style>
         :root {
             --primary: #ff6600;
             --primary-light: #ff8533;
             --secondary: #25D366;
             --secondary-hover: #20b858;
-            --bg: #fdfbf7; /* Kremowe tło */
+            --bg: #fdfbf7; 
             --surface: #ffffff;
             --text: #1a1a1a;
             --danger: #dc3545;
             --radius: 16px;
             --shadow: 0 8px 24px rgba(0,0,0,0.06);
             --shadow-hover: 0 12px 32px rgba(255, 102, 0, 0.15);
+            --border: #e0e0e0;
         }
+
+        /* TRYB CIEMNY (PO 16:00) */
+        [data-theme="dark"] {
+            --bg: #121212;
+            --surface: #1e1e1e;
+            --text: #f5f5f5;
+            --shadow: 0 8px 24px rgba(0,0,0,0.4);
+            --border: #333333;
+        }
+        [data-theme="dark"] .order-counter { background: #2a1a0d; color: var(--primary-light); }
+        [data-theme="dark"] input, [data-theme="dark"] textarea, [data-theme="dark"] select { background: #2a2a2a; color: white; border-color: var(--border); }
+        [data-theme="dark"] .option-card, [data-theme="dark"] .rec-card { border-color: var(--border); }
+        [data-theme="dark"] .summary { border-color: var(--primary); background: #22150a; }
+        [data-theme="dark"] .modal-content { background: #1e1e1e; color: #f5f5f5; }
+        [data-theme="dark"] .checkbox-container { background: #2a2a2a; color: #ccc; border: 1px solid #444; }
+        [data-theme="dark"] .nav-buttons { background-color: var(--surface); }
+        [data-theme="dark"] .trust-badges { background-color: var(--surface); color: #aaa; }
         
         body {
             font-family: 'Poppins', sans-serif;
@@ -29,6 +51,7 @@
             padding: 0;
             color: var(--text);
             overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         /* Nagłówek i Logo */
@@ -46,12 +69,10 @@
             object-fit: contain;
             transition: transform 0.3s ease;
         }
-        .header img:hover {
-            transform: scale(1.05);
-        }
+        .header img:hover { transform: scale(1.05); }
 
         /* Paski statusu i Happy Hour */
-        .status-banner, .happy-hour-banner {
+        .status-banner, .happy-hour-banner, .weather-banner {
             text-align: center;
             padding: 12px;
             font-weight: 600;
@@ -60,6 +81,7 @@
         }
         .status-banner { background-color: var(--danger); color: white; display: none; }
         .happy-hour-banner { background-color: var(--primary); color: white; display: none; }
+        .weather-banner { background-color: #17a2b8; color: white; display: none; }
 
         @keyframes slideDown {
             from { transform: translateY(-100%); opacity: 0; }
@@ -100,36 +122,20 @@
             transition: all 0.3s ease;
             position: relative;
         }
-        .nav-buttons button.active {
-            color: var(--primary);
-        }
+        .nav-buttons button.active { color: var(--primary); }
         .nav-buttons button.active::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 20%;
-            width: 60%;
-            height: 3px;
-            background-color: var(--primary);
+            content: ''; position: absolute; bottom: 0; left: 20%;
+            width: 60%; height: 3px; background-color: var(--primary);
             border-radius: 3px 3px 0 0;
         }
 
-        .container {
-            padding: 10px 20px 40px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
+        .container { padding: 10px 20px 40px; max-width: 600px; margin: 0 auto; }
 
         /* Licznik zamówień */
         .order-counter {
-            text-align: center;
-            background: #fff3e6;
-            color: var(--primary);
-            padding: 10px;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 14px;
-            margin-bottom: 20px;
+            text-align: center; background: #fff3e6; color: var(--primary);
+            padding: 10px; border-radius: 50px; font-weight: 600;
+            font-size: 14px; margin-bottom: 20px;
             box-shadow: 0 2px 10px rgba(255, 102, 0, 0.1);
             animation: pulse 2s infinite;
         }
@@ -140,40 +146,20 @@
         }
 
         .section {
-            background: var(--surface);
-            padding: 25px;
-            border-radius: var(--radius);
-            margin-bottom: 25px;
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(0,0,0,0.03);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: var(--surface); padding: 25px; border-radius: var(--radius);
+            margin-bottom: 25px; box-shadow: var(--shadow);
+            border: 1px solid var(--border); transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        .section:hover {
-            box-shadow: var(--shadow-hover);
-        }
+        .section:hover { box-shadow: var(--shadow-hover); }
 
-        h2 { 
-            margin-top: 0; 
-            font-size: 18px; 
-            color: var(--text); 
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+        h2 { margin-top: 0; font-size: 18px; display: flex; align-items: center; gap: 10px; }
         h2 i { color: var(--primary); }
 
         /* Karty opcji */
         .option-card {
-            border: 2px solid #f0f0f0;
-            padding: 15px 20px;
-            border-radius: 12px;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            position: relative;
-            overflow: hidden;
+            border: 2px solid var(--border); padding: 15px 20px; border-radius: 12px;
+            margin-bottom: 12px; display: flex; align-items: center; cursor: pointer;
+            transition: all 0.2s ease; position: relative; overflow: hidden;
         }
         .option-card:hover { border-color: var(--primary-light); transform: translateY(-2px); }
         .option-card input:checked + div { color: var(--primary); }
@@ -187,134 +173,62 @@
         
         /* Pola tekstowe */
         input[type="text"], input[type="password"], input[type="datetime-local"], textarea, select {
-            width: 100%;
-            padding: 15px;
-            margin-top: 8px;
-            margin-bottom: 15px;
-            border: 1.5px solid #e0e0e0;
-            border-radius: 12px;
-            box-sizing: border-box;
-            font-family: inherit;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            background: #fafafa;
+            width: 100%; padding: 15px; margin-top: 8px; margin-bottom: 15px;
+            border: 1.5px solid var(--border); border-radius: 12px; box-sizing: border-box;
+            font-family: inherit; font-size: 14px; transition: all 0.3s ease; background: #fafafa;
         }
         input:focus, textarea:focus, select:focus { 
-            border-color: var(--primary); 
-            background: var(--surface);
-            outline: none; 
+            border-color: var(--primary); background: var(--surface); outline: none; 
             box-shadow: 0 0 0 4px rgba(255, 102, 0, 0.1);
         }
         
-        /* Sekcja Polecane (Kafelki) */
-        .recommendations {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
-        }
+        /* Sekcja Polecane */
+        .recommendations { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
         .rec-card {
-            background: var(--surface);
-            border: 2px solid #f0f0f0;
-            border-radius: 12px;
-            padding: 10px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            background: var(--surface); border: 2px solid var(--border); border-radius: 12px;
+            padding: 10px; text-align: center; cursor: pointer; transition: all 0.2s ease;
         }
-        .rec-card:hover {
-            border-color: var(--primary);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(255, 102, 0, 0.1);
-        }
-        .rec-card img {
-            width: 100%;
-            height: 70px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-bottom: 8px;
-        }
-        .rec-card span { display: block; font-size: 13px; font-weight: 600; color: var(--text); }
+        .rec-card:hover { border-color: var(--primary); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(255, 102, 0, 0.1); }
+        .rec-card img { width: 100%; height: 70px; object-fit: cover; border-radius: 8px; margin-bottom: 8px; }
+        .rec-card span { display: block; font-size: 13px; font-weight: 600; }
         .rec-card small { display: block; font-size: 11px; color: var(--primary); font-weight: bold; margin-top: 4px;}
 
         /* Napiwek */
         .tips-container { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;}
         .tip-btn {
-            flex: 1;
-            padding: 10px;
-            border: 2px solid #e0e0e0;
-            border-radius: 20px;
-            background: transparent;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-            color: #555;
-            font-family: inherit;
+            flex: 1; padding: 10px; border: 2px solid var(--border); border-radius: 20px;
+            background: transparent; font-weight: 600; cursor: pointer; transition: 0.3s; color: #555; font-family: inherit;
         }
-        .tip-btn.active {
-            border-color: var(--secondary);
-            background: rgba(37, 211, 102, 0.1);
-            color: var(--secondary);
-        }
+        .tip-btn.active { border-color: var(--secondary); background: rgba(37, 211, 102, 0.1); color: var(--secondary); }
 
         .checkbox-container {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            font-size: 13px;
-            color: #555;
-            margin-top: 15px;
-            background: #f9f9f9;
-            padding: 15px;
-            border-radius: 12px;
+            display: flex; align-items: flex-start; gap: 12px; font-size: 13px; color: #555;
+            margin-top: 15px; background: #f9f9f9; padding: 15px; border-radius: 12px;
         }
         .checkbox-container input { transform: scale(1.3); margin-top: 2px; accent-color: var(--primary);}
         
         .summary {
-            background-color: var(--surface);
-            border: 2px dashed var(--primary-light);
-            padding: 25px;
-            border-radius: var(--radius);
-            font-size: 18px;
-            font-weight: 600;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            background-color: var(--surface); border: 2px dashed var(--primary-light);
+            padding: 25px; border-radius: var(--radius); font-size: 18px; font-weight: 600;
+            text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
         }
         .total-price { font-size: 28px; color: var(--primary); font-weight: 800; display: block; margin: 10px 0;}
         .old-price { text-decoration: line-through; color: #999; font-size: 18px; margin-right: 10px; display: none;}
         
         .order-btn {
-            width: 100%;
-            background-color: var(--secondary);
-            color: white;
-            padding: 20px;
-            border: none;
-            border-radius: var(--radius);
-            font-size: 18px;
-            font-weight: 800;
-            cursor: pointer;
-            margin-top: 25px;
-            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+            width: 100%; background-color: var(--secondary); color: white; padding: 20px;
+            border: none; border-radius: var(--radius); font-size: 18px; font-weight: 800;
+            cursor: pointer; margin-top: 25px; box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);
+            transition: all 0.3s ease; position: relative; overflow: hidden;
         }
         .order-btn:hover { background-color: var(--secondary-hover); transform: translateY(-3px); box-shadow: 0 12px 25px rgba(37, 211, 102, 0.4); }
-        .order-btn:active { transform: translateY(1px); }
         .order-btn:disabled { background-color: #ccc; cursor: not-allowed; box-shadow: none; transform: none; }
         
-        /* Efekt fali (Ripple) przy klikaniu */
         .ripple {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.4);
-            transform: scale(0);
-            animation: ripple-anim 0.6s linear;
-            pointer-events: none;
+            position: absolute; border-radius: 50%; background: rgba(255, 255, 255, 0.4);
+            transform: scale(0); animation: ripple-anim 0.6s linear; pointer-events: none;
         }
-        @keyframes ripple-anim {
-            to { transform: scale(4); opacity: 0; }
-        }
+        @keyframes ripple-anim { to { transform: scale(4); opacity: 0; } }
 
         /* Popup */
         .modal-overlay {
@@ -325,55 +239,32 @@
         }
         .modal-overlay.active { opacity: 1; visibility: visible; }
         .modal-content {
-            background: white; padding: 30px; border-radius: 20px;
-            text-align: center; max-width: 80%; width: 300px;
-            transform: scale(0.8); transition: 0.3s;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            background: white; padding: 30px; border-radius: 20px; text-align: center;
+            max-width: 80%; width: 300px; transform: scale(0.8); transition: 0.3s; box-shadow: 0 20px 40px rgba(0,0,0,0.2);
         }
         .modal-overlay.active .modal-content { transform: scale(1); }
         .modal-content h3 { color: var(--primary); margin-top: 0; }
-        .modal-content p { font-size: 15px; color: #555; margin-bottom: 25px;}
+        .modal-content p { font-size: 15px; margin-bottom: 25px;}
         .modal-btn {
-            background: var(--primary); color: white; border: none;
-            padding: 12px 30px; border-radius: 50px; font-weight: bold;
-            cursor: pointer; transition: 0.2s; width: 100%;
+            background: var(--primary); color: white; border: none; padding: 12px 30px;
+            border-radius: 50px; font-weight: bold; cursor: pointer; transition: 0.2s; width: 100%;
         }
         .modal-btn:hover { background: var(--primary-light); }
 
-        /* Pływający przycisk WhatsApp */
         .floating-whatsapp {
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            background-color: #25D366;
-            color: white;
-            padding: 15px 20px;
-            border-radius: 50px;
-            font-size: 15px;
-            font-weight: bold;
-            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
-            text-decoration: none;
-            z-index: 999;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.3s ease;
+            position: fixed; bottom: 25px; right: 25px; background-color: #25D366; color: white;
+            padding: 15px 20px; border-radius: 50px; font-size: 15px; font-weight: bold;
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4); text-decoration: none; z-index: 999;
+            display: flex; align-items: center; gap: 10px; transition: all 0.3s ease;
         }
-        .floating-whatsapp:hover {
-            transform: scale(1.08) translateY(-3px);
-            color: white;
-            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.5);
-        }
-        .floating-whatsapp i {
-            font-size: 22px;
-        }
+        .floating-whatsapp:hover { transform: scale(1.08) translateY(-3px); color: white; box-shadow: 0 8px 25px rgba(37, 211, 102, 0.5); }
 
-        #driver-panel { display: none; }
-        #reviews-panel { display: none; }
-        #admin-dashboard { display: none; }
+        #driver-panel, #reviews-panel, #admin-dashboard { display: none; }
         .calc-result { font-weight: 800; color: var(--primary); font-size: 20px; margin-top: 15px; text-align: center; background: #fff3e6; padding: 15px; border-radius: 12px;}
-        
+        [data-theme="dark"] .calc-result { background: #2a1a0d; }
         .footer { text-align: center; font-size: 12px; color: #999; padding: 30px 20px; margin-bottom: 60px; }
+        
+        .admin-order-card { background: var(--surface); border: 1px solid var(--border); padding: 15px; border-radius: 10px; margin-bottom: 10px;}
     </style>
 </head>
 <body>
@@ -397,6 +288,10 @@
     
     <div id="status-banner" class="status-banner">
         <i class="fas fa-exclamation-triangle"></i> Przepraszamy, nie przyjmujemy zamówień. Wracamy: <span id="return-time-display">jutro</span>.
+    </div>
+
+    <div id="weather-banner" class="weather-banner">
+        <i class="fas fa-cloud-showers-heavy"></i> Trudne warunki pogodowe! Zwiększony koszt dostawy.
     </div>
 
     <div id="happy-hour-banner" class="happy-hour-banner"></div>
@@ -423,7 +318,7 @@
 
             <div id="hours-warning" class="section" style="background: #fff8e1; border-color: #ffc107; display: none;">
                 <strong style="color: #d39e00;"><i class="fas fa-clock"></i> Poza godzinami pracy!</strong><br>
-                <span style="font-size: 13px;">Jeździmy codziennie w godzinach 11:00 - 19:00. Wróc do nas w godzinach otwarcia!</span>
+                <span style="font-size: 13px; color: #333;">Jeździmy codziennie w godzinach 11:00 - 19:00. Wróc do nas w godzinach otwarcia!</span>
             </div>
 
             <div class="section">
@@ -451,20 +346,13 @@
                     <i class="fas fa-route"></i> 2. Czym dostarczyć? 
                     <span id="weekend-badge" class="badge-weekend">+0,50 zł Weekend</span>
                 </h2>
+                <!-- USUNIĘTO HULAJNOGĘ ZGODNIE Z PROŚBĄ -->
                 <label class="option-card" onclick="addRipple(event)">
                     <input type="radio" name="transport" value="2.0" checked onchange="calculate()" data-nazwa="Rower">
                     <i class="fas fa-bicycle"></i>
                     <div>
                         <strong>Rower (+2,00 zł)</strong>
                         <div class="note">Ekspresowa dostawa na sportowo.</div>
-                    </div>
-                </label>
-                <label class="option-card" onclick="addRipple(event)">
-                    <input type="radio" name="transport" value="1.0" onchange="calculate()" data-nazwa="Hulajnoga">
-                    <i class="fas fa-bolt"></i>
-                    <div>
-                        <strong>Hulajnoga (+1,00 zł)</strong>
-                        <div class="note">Wolny czas dostawy.</div>
                     </div>
                 </label>
             </div>
@@ -513,7 +401,7 @@
                     <option value="Gotówka">Gotówka przy odbiorze</option>
                 </select>
 
-                <div class="checkbox-container" style="background: #eef9f0; border: 1px solid #c3e6cb; margin-bottom: 15px;">
+                <div class="checkbox-container">
                     <input type="checkbox" id="bez-kontaktu">
                     <label for="bez-kontaktu"><i class="fas fa-door-closed" style="color:#25D366"></i> <strong>Zostaw zakupy pod drzwiami</strong> (Dostawa bezkontaktowa)</label>
                 </div>
@@ -586,8 +474,7 @@
             </div>
             
             <h3 style="color:#555; font-size:16px; margin-top:30px;"><i class="fas fa-comments"></i> Opinie naszych klientów:</h3>
-            <div id="reviews-list">
-                </div>
+            <div id="reviews-list"></div>
         </div>
 
         <div id="driver-panel">
@@ -601,11 +488,20 @@
             <div id="admin-dashboard">
                 <div class="section">
                     <h2>Zarządzanie Statusem <i class="fas fa-traffic-light"></i></h2>
-                    <p style="font-size: 13px; color: #666;">Zablokuj zamówienia, gdy masz przerwę lub urlop.</p>
+                    <p style="font-size: 13px; color: #666;">Zablokuj zamówienia, gdy masz przerwę lub urlop. Zapisuje się w bazie.</p>
                     <input type="text" id="return-time-input" placeholder="Kiedy wracasz? (np. jutro o 12:00)">
                     <div style="display:flex; gap:10px;">
-                        <button onclick="setStatus(false, event)" style="background: var(--danger); color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; flex:1; font-weight:bold; transition:0.3s;">Wyłącz dostawy</button>
-                        <button onclick="setStatus(true, event)" style="background: var(--secondary); color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; flex:1; font-weight:bold; transition:0.3s;">Włącz dostawy</button>
+                        <button onclick="setStatus(false, event)" style="background: var(--danger); color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; flex:1; font-weight:bold;">Wyłącz dostawy</button>
+                        <button onclick="setStatus(true, event)" style="background: var(--secondary); color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; flex:1; font-weight:bold;">Włącz dostawy</button>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>Warunki Pogodowe (Dopłata) <i class="fas fa-cloud-showers-heavy"></i></h2>
+                    <p style="font-size: 13px; color: #666;">Włącz, jeśli pada. Automatycznie doliczy klientom 1,50 zł do dostawy.</p>
+                    <div style="display:flex; gap:10px;">
+                        <button onclick="setWeatherFee(true, event)" style="background: #17a2b8; color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; flex:1; font-weight:bold;">Włącz deszcz</button>
+                        <button onclick="setWeatherFee(false, event)" style="background: #6c757d; color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; flex:1; font-weight:bold;">Wyłącz deszcz</button>
                     </div>
                 </div>
 
@@ -613,18 +509,22 @@
                     <h2>Ustawienia Strony <i class="fas fa-cogs"></i></h2>
                     <p style="font-size: 13px; color: #666;">Zmień tekst powitania w wyskakującym okienku (Popup).</p>
                     <input type="text" id="admin-modal-text" placeholder="Wpisz nowy tekst powitania...">
-                    <button onclick="updateSettings(event)" style="background: var(--primary); color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; width: 100%; font-weight:bold; margin-top:5px; transition:0.3s;">Zapisz tekst powitania</button>
+                    <button onclick="updateSettings(event)" style="background: var(--primary); color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; width: 100%; font-weight:bold; margin-top:5px;">Zapisz tekst powitania</button>
                 </div>
                 
                 <div class="section">
+                    <h2>Historia Zamówień <i class="fas fa-receipt"></i></h2>
+                    <p style="font-size: 13px; color: #666;">Ostatnie zrealizowane zamówienia.</p>
+                    <div id="admin-orders-list" style="max-height: 300px; overflow-y: auto;">Brak zamówień</div>
+                </div>
+
+                <div class="section">
                     <h2>Moderacja Opinii <i class="fas fa-trash-alt"></i></h2>
-                    <p style="font-size: 13px; color: #666;">Zarządzaj opiniami klientów. Możesz usunąć niechciane wpisy.</p>
                     <div id="admin-reviews-list" style="max-height: 300px; overflow-y: auto; padding-right:5px;"></div>
                 </div>
                 
                 <div class="section">
                     <h2>Kalkulator u Grażynki <i class="fas fa-calculator"></i></h2>
-                    <p style="font-size: 13px; color: #666;">Wklej listę zakupów od klienta, aby oszacować gotówkę do wzięcia.</p>
                     <textarea id="admin-list" rows="3" placeholder="Wklej listę tutaj..." onkeyup="estimateCost()"></textarea>
                     <div class="calc-result">Szacowany koszt koszyka:<br>~<span id="est-cost">0.00</span> zł</div>
                 </div>
@@ -637,9 +537,37 @@
     </div>
 
     <script>
+        // =========================================================
+        // FIREBASE CONFIG - BAZA DANYCH
+        // Żeby opinie i ustawienia działały między urządzeniami, 
+        // utwórz projekt na firebase.google.com i wklej tu klucze!
+        // =========================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyDL547VT5uy_hxyhEccpJJNcLIhhSsc3oQ",
+            authDomain: "czernicadel.firebaseapp.com",
+            databaseURL: "https://czernicadel-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "czernicadel",
+            storageBucket: "czernicadel.firebasestorage.app",
+            messagingSenderId: "624999194948",
+            appId: "1:624999194948:web:8a4e54a13ba6172c9c7711",
+            measurementId: "G-P2N6ZS8WPM"
+        };
+
+        let db = null;
+        try {
+            if(firebaseConfig.apiKey !== "ZMIEN_NA_SWOJ_KLUCZ") {
+                firebase.initializeApp(firebaseConfig);
+                db = firebase.database();
+                console.log("Firebase podłączone!");
+            } else {
+                console.warn("Brak kluczy Firebase. Używam LocalStorage (pamięć lokalna telefonu).");
+            }
+        } catch(e) { console.warn("Błąd Firebase. Lecimy na LocalStorage.", e); }
+
         // --- ZMIENNE GLOBALNE ---
         let currentTip = 0;
         let isHappyHour = false;
+        let isWeatherBad = false;
 
         const cennikGrazynki = {
             "chleb": 5.50, "bułka": 0.80, "mleko": 4.00, "jajka": 10.00, 
@@ -651,30 +579,114 @@
         const modalTexts = [
             "Dziś szybkie dostawy, zamów i ciesz się wolnym czasem! 🚀",
             "Zapomniałeś o czymś w sklepie? My nie zapomnimy! 🛒",
-            "Zrób listę, a my zajmiemy się resztą. Relaks w cenie! ☕",
-            "Gorąco? Zimne napoje i lody dowozimy ekspresem! 🍦"
+            "Zrób listę, a my zajmiemy się resztą. Relaks w cenie! ☕"
         ];
 
         // --- START STRONY ---
         window.onload = function() {
+            checkTheme(); // Tryb ciemny
             initCounter();
             checkStoreHours();
-            checkSystemStatus();
+            syncWithDatabase(); // Pobiera statusy z Firebase/Local
             checkHappyHour();
             calculate();
-            loadReviews(); // Załaduj opinie przy starcie
+            checkReturningUser(); // Auto-wypełnianie
             
-            // Popup ustawienia z panelu admina (lub losowe)
-            let customText = localStorage.getItem('czernicaModalText');
-            setTimeout(() => {
-                if(customText && customText.trim() !== "") {
-                    document.getElementById('modal-text').innerText = customText;
-                } else {
-                    document.getElementById('modal-text').innerText = modalTexts[Math.floor(Math.random() * modalTexts.length)];
-                }
-                document.getElementById('welcome-modal').classList.add('active');
-            }, 3000);
+            setTimeout(() => { document.getElementById('welcome-modal').classList.add('active'); }, 3000);
         };
+
+        // --- TRYB CIEMNY (PO 16:00) ---
+        function checkTheme() {
+            let hour = new Date().getHours();
+            if (hour >= 16 || hour < 6) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+            }
+        }
+
+        // --- BAZA DANYCH (SYNCHRONIZACJA) ---
+        function syncWithDatabase() {
+            if(db) {
+                // Opinie z Firebase
+                db.ref('opinie').on('value', snap => {
+                    let data = snap.val();
+                    let reviewsArray = data ? Object.values(data) : [];
+                    localStorage.setItem('czernicaReviews', JSON.stringify(reviewsArray));
+                    renderReviews(reviewsArray);
+                });
+                // Zamówienia z Firebase
+                db.ref('zamowienia').on('value', snap => {
+                    let data = snap.val();
+                    renderOrders(data ? Object.values(data) : []);
+                });
+                // Ustawienia systemu (urlop, pogoda)
+                db.ref('ustawienia').on('value', snap => {
+                    let u = snap.val();
+                    if(u) {
+                        applySettings(u.isAvailable, u.returnTime, u.modalText, u.weatherFee);
+                    }
+                });
+            } else {
+                // Fallback do LocalStorage
+                let reviewsArray = JSON.parse(localStorage.getItem('czernicaReviews')) || [];
+                renderReviews(reviewsArray);
+                let ordersArray = JSON.parse(localStorage.getItem('czernicaOrdersData')) || [];
+                renderOrders(ordersArray);
+                
+                let isAvail = localStorage.getItem('isAvailable') !== 'false';
+                let rTime = localStorage.getItem('returnTime') || 'później';
+                let mText = localStorage.getItem('czernicaModalText') || null;
+                let wFee = localStorage.getItem('weatherFee') === 'true';
+                applySettings(isAvail, rTime, mText, wFee);
+            }
+        }
+
+        function applySettings(isAvailable, returnTime, modalText, weatherFee) {
+            // Status sklepu
+            let now = new Date(); let hour = now.getHours();
+            let isWorkingHours = (hour >= 11 && hour < 19);
+            let orderBtn = document.getElementById('submit-btn');
+
+            if (!isAvailable) {
+                document.getElementById('status-banner').style.display = 'block';
+                document.getElementById('return-time-display').innerText = returnTime;
+                orderBtn.disabled = true; orderBtn.innerHTML = "Dostawy wstrzymane <i class='fas fa-ban'></i>";
+            } else if (!isWorkingHours) {
+                document.getElementById('hours-warning').style.display = 'block';
+                orderBtn.disabled = true; orderBtn.innerHTML = "Poza godzinami (11:00-19:00) <i class='fas fa-moon'></i>";
+            } else {
+                document.getElementById('status-banner').style.display = 'none';
+                document.getElementById('hours-warning').style.display = 'none';
+                orderBtn.disabled = false; orderBtn.innerHTML = "Wyślij zamówienie <i class='fas fa-paper-plane'></i>";
+            }
+
+            // Tekst Popup
+            let savedName = localStorage.getItem('czernica_name');
+            if (savedName) {
+                // Nadpisane przez Auto-fill
+            } else if (modalText && modalText.trim() !== "") {
+                document.getElementById('modal-text').innerText = modalText;
+            } else {
+                document.getElementById('modal-text').innerText = modalTexts[Math.floor(Math.random() * modalTexts.length)];
+            }
+
+            // Pogoda
+            isWeatherBad = weatherFee;
+            document.getElementById('weather-banner').style.display = isWeatherBad ? 'block' : 'none';
+            calculate();
+        }
+
+        // --- AUTO-WYPEŁNIANIE ---
+        function checkReturningUser() {
+            let savedName = localStorage.getItem('czernica_name');
+            let savedAddress = localStorage.getItem('czernica_address');
+            if (savedName && savedAddress) {
+                document.getElementById('imie').value = savedName;
+                document.getElementById('adres').value = savedAddress;
+                document.getElementById('modal-text').innerHTML = `<strong>Witaj ponownie, ${savedName}!</strong><br>Wypełniliśmy Twoje dane automatycznie.`;
+            }
+        }
 
         // --- FUNKCJE UI ---
         function switchTab(tab, event) {
@@ -682,15 +694,12 @@
             document.getElementById('order-panel').style.display = tab === 'order' ? 'block' : 'none';
             document.getElementById('reviews-panel').style.display = tab === 'reviews' ? 'block' : 'none';
             document.getElementById('driver-panel').style.display = tab === 'driver' ? 'block' : 'none';
-            
             document.getElementById('btn-order').className = tab === 'order' ? 'active' : '';
             document.getElementById('btn-reviews').className = tab === 'reviews' ? 'active' : '';
             document.getElementById('btn-driver').className = tab === 'driver' ? 'active' : '';
         }
 
-        function closeModal() {
-            document.getElementById('welcome-modal').classList.remove('active');
-        }
+        function closeModal() { document.getElementById('welcome-modal').classList.remove('active'); }
 
         function toggleTimePicker() {
             let val = document.getElementById('czas-dostawy').value;
@@ -699,13 +708,10 @@
 
         function addToCart(item) {
             const textarea = document.getElementById('lista');
-            if(textarea.value.length > 0) {
-                textarea.value += "\n- " + item;
-            } else {
-                textarea.value = "- " + item;
-            }
+            if(textarea.value.length > 0) { textarea.value += "\n- " + item; } 
+            else { textarea.value = "- " + item; }
             textarea.style.borderColor = "var(--secondary)";
-            setTimeout(() => textarea.style.borderColor = "#e0e0e0", 500);
+            setTimeout(() => textarea.style.borderColor = "var(--border)", 500);
         }
 
         function setTip(amount, btnElement) {
@@ -715,23 +721,19 @@
             calculate();
         }
 
-        // --- ANIMACJE (RIPPLE) ---
         function addRipple(e) {
             if(!e) return;
             const button = e.currentTarget;
             const circle = document.createElement("span");
             const diameter = Math.max(button.clientWidth, button.clientHeight);
             const radius = diameter / 2;
-
             const rect = button.getBoundingClientRect();
             circle.style.width = circle.style.height = `${diameter}px`;
             circle.style.left = `${e.clientX - rect.left - radius}px`;
             circle.style.top = `${e.clientY - rect.top - radius}px`;
             circle.classList.add("ripple");
-
             const existing = button.querySelector('.ripple');
             if(existing) existing.remove();
-
             button.appendChild(circle);
             setTimeout(() => circle.remove(), 600);
         }
@@ -742,147 +744,130 @@
             let imie = document.getElementById('rev-imie').value.trim();
             let nazwisko = document.getElementById('rev-nazwisko').value.trim();
             let tresc = document.getElementById('rev-tresc').value.trim();
-            let prod = document.getElementById('rev-produkt').value;
-            let cena = document.getElementById('rev-cena').value;
-            let dostawa = document.getElementById('rev-dostawa').value;
+            
+            if(!imie || !nazwisko || !tresc) { alert("Proszę wypełnić wszystkie pola!"); return; }
 
-            if(!imie || !nazwisko || !tresc) {
-                alert("Proszę wypełnić imię, nazwisko oraz treść opinii przed wysłaniem!");
-                return;
+            let reviewObj = {
+                id: Date.now(), imie: imie, nazwisko: nazwisko, tresc: tresc,
+                prod: parseInt(document.getElementById('rev-produkt').value),
+                cena: parseInt(document.getElementById('rev-cena').value),
+                dostawa: parseInt(document.getElementById('rev-dostawa').value),
+                date: new Date().toLocaleDateString('pl-PL')
+            };
+
+            if(db) {
+                db.ref('opinie/' + reviewObj.id).set(reviewObj);
+            } else {
+                let reviews = JSON.parse(localStorage.getItem('czernicaReviews')) || [];
+                reviews.push(reviewObj);
+                localStorage.setItem('czernicaReviews', JSON.stringify(reviews));
+                renderReviews(reviews);
             }
 
-            let reviews = JSON.parse(localStorage.getItem('czernicaReviews')) || [];
-            let dateStr = new Date().toLocaleDateString('pl-PL');
-            
-            reviews.push({ 
-                id: Date.now(), 
-                imie: imie, 
-                nazwisko: nazwisko, 
-                tresc: tresc, 
-                prod: parseInt(prod), 
-                cena: parseInt(cena), 
-                dostawa: parseInt(dostawa), 
-                date: dateStr 
-            });
-            
-            localStorage.setItem('czernicaReviews', JSON.stringify(reviews));
-
-            // Czyszczenie formularza
             document.getElementById('rev-imie').value = '';
             document.getElementById('rev-nazwisko').value = '';
             document.getElementById('rev-tresc').value = '';
-            
-            alert("Dziękujemy za zostawienie opinii!");
-            loadReviews();
+            alert("Dziękujemy za opinię!");
         }
 
-        function loadReviews() {
-            let reviews = JSON.parse(localStorage.getItem('czernicaReviews')) || [];
+        function renderReviews(reviews) {
             let listEl = document.getElementById('reviews-list');
             let adminListEl = document.getElementById('admin-reviews-list');
             
-            if(listEl) listEl.innerHTML = '';
-            if(adminListEl) adminListEl.innerHTML = '';
+            if(!listEl || !adminListEl) return;
+            listEl.innerHTML = ''; adminListEl.innerHTML = '';
 
             if(reviews.length === 0) {
-                if(listEl) listEl.innerHTML = '<div class="section" style="text-align:center; color:#888;">Jeszcze nikt nie dodał opinii. Bądź pierwszy!</div>';
-                if(adminListEl) adminListEl.innerHTML = '<p style="font-size:13px; color:#888;">Brak opinii do moderacji.</p>';
+                listEl.innerHTML = '<div class="section" style="text-align:center; color:#888;">Jeszcze nikt nie dodał opinii.</div>';
+                adminListEl.innerHTML = '<p style="font-size:13px; color:#888;">Brak opinii.</p>';
                 return;
             }
 
-            // Funkcja pomocnicza do rysowania gwiazdek
-            const drawStars = (count) => '⭐'.repeat(count);
+            const drawStars = (c) => '⭐'.repeat(c);
 
-            // Odwracamy tablicę, by najnowsze były na górze
             reviews.slice().reverse().forEach(r => {
-                // Generowanie opinii w zakładce dla klientów
-                let userHtml = `
+                listEl.innerHTML += `
                     <div class="section" style="padding: 20px; margin-bottom: 15px;">
                         <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
                             <strong style="color:var(--primary); font-size:16px;">${r.imie} ${r.nazwisko}</strong>
                             <small style="color:#aaa;">${r.date}</small>
                         </div>
-                        <div style="font-size:12px; color:#555; background:#f9f9f9; padding:10px; border-radius:8px; margin-bottom:10px;">
+                        <div style="font-size:12px; color:#555; background:var(--bg); padding:10px; border-radius:8px; margin-bottom:10px;">
                             <strong>Produkt:</strong> ${drawStars(r.prod)} <br>
                             <strong>Cena:</strong> ${drawStars(r.cena)} <br>
                             <strong>Dostawa:</strong> ${drawStars(r.dostawa)}
                         </div>
                         <p style="font-size:14px; margin:0; font-style:italic; line-height:1.5;">"${r.tresc}"</p>
-                    </div>
-                `;
-                if(listEl) listEl.innerHTML += userHtml;
+                    </div>`;
 
-                // Generowanie opinii w panelu admina (do usuwania)
-                let adminHtml = `
-                    <div style="border: 1px solid #e0e0e0; padding: 12px; margin-bottom: 10px; border-radius: 8px; background:#fafafa;">
-                        <strong style="color:var(--text);">${r.imie} ${r.nazwisko}</strong> <small style="color:#aaa;">(${r.date})</small>
-                        <p style="font-size:12px; margin:8px 0; color:#555;">"${r.tresc}"</p>
-                        <button onclick="deleteReview(${r.id}, event)" style="background:var(--danger); color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:12px; font-weight:bold;">Usuń opinię</button>
-                    </div>
-                `;
-                if(adminListEl) adminListEl.innerHTML += adminHtml;
+                adminListEl.innerHTML += `
+                    <div style="border: 1px solid var(--border); padding: 12px; margin-bottom: 10px; border-radius: 8px;">
+                        <strong>${r.imie} ${r.nazwisko}</strong> <small>(${r.date})</small>
+                        <p style="font-size:12px; margin:8px 0;">"${r.tresc}"</p>
+                        <button onclick="deleteReview(${r.id}, event)" style="background:var(--danger); color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer;">Usuń</button>
+                    </div>`;
             });
         }
 
-        // --- PANEL ADMINISTRATORA LOGIKA ---
         function deleteReview(id, event) {
             addRipple(event);
-            if(confirm("Czy na pewno chcesz usunąć tę opinię?")) {
-                let reviews = JSON.parse(localStorage.getItem('czernicaReviews')) || [];
-                reviews = reviews.filter(r => r.id !== id);
-                localStorage.setItem('czernicaReviews', JSON.stringify(reviews));
-                loadReviews(); // Odśwież widok
+            if(confirm("Usunąć?")) {
+                if(db) {
+                    db.ref('opinie/' + id).remove();
+                } else {
+                    let reviews = JSON.parse(localStorage.getItem('czernicaReviews')) || [];
+                    reviews = reviews.filter(r => r.id !== id);
+                    localStorage.setItem('czernicaReviews', JSON.stringify(reviews));
+                    renderReviews(reviews);
+                }
             }
         }
 
-        function updateSettings(e) {
-            addRipple(e);
-            let text = document.getElementById('admin-modal-text').value.trim();
-            if(text) {
-                localStorage.setItem('czernicaModalText', text);
-                document.getElementById('admin-modal-text').value = '';
-                alert("Nowy tekst powitania został zapisany pomyślnie!");
-            } else {
-                alert("Wpisz jakiś tekst przed zapisaniem.");
+        function renderOrders(orders) {
+            let adminOrdersEl = document.getElementById('admin-orders-list');
+            if(!adminOrdersEl) return;
+            adminOrdersEl.innerHTML = '';
+            
+            if(orders.length === 0) {
+                adminOrdersEl.innerHTML = '<p style="font-size:13px; color:#888;">Brak historii zamówień.</p>';
+                return;
             }
+
+            orders.slice().reverse().forEach(o => {
+                adminOrdersEl.innerHTML += `
+                    <div class="admin-order-card">
+                        <strong style="color:var(--primary);">${o.imie}</strong> - <small>${o.data}</small><br>
+                        <span style="font-size:12px;"><i class="fas fa-map-marker-alt"></i> ${o.adres}</span><br>
+                        <span style="font-size:12px;"><strong>Kwota dostawy:</strong> ${o.koszt} zł</span>
+                        <div style="font-size:12px; background:#f0f0f0; padding:5px; margin-top:5px; border-radius:5px; color:#333;">${o.lista}</div>
+                    </div>`;
+            });
         }
 
+        // --- CENNIKI I LOGIKA DOSTAWY ---
         function checkStoreHours() {
-            let now = new Date();
-            let day = now.getDay();
-            let hour = now.getHours();
-
+            let now = new Date(); let day = now.getDay(); let hour = now.getHours();
             let czernicaRadio = document.querySelector('input[name="sklep"][value="1.0"]');
             let czernicaCard = document.getElementById('czernica-card');
             let noteDiv = document.getElementById('czernica-note');
             let isWeekday = (day >= 1 && day <= 5);
 
             if (isWeekday && hour >= 12 && hour < 14) {
-                czernicaRadio.disabled = true;
-                czernicaCard.style.opacity = '0.5';
-                czernicaCard.style.pointerEvents = 'none';
-                noteDiv.innerText = "Przerwa kasjerki. Sklep od 14:00.";
-                noteDiv.style.display = 'block';
+                czernicaRadio.disabled = true; czernicaCard.style.opacity = '0.5'; czernicaCard.style.pointerEvents = 'none';
+                noteDiv.innerText = "Przerwa kasjerki. Sklep od 14:00."; noteDiv.style.display = 'block';
                 if (czernicaRadio.checked) document.querySelector('input[name="sklep"][value="2.0"]').checked = true;
             } else if (isWeekday && hour >= 18) {
-                czernicaRadio.disabled = true;
-                czernicaCard.style.opacity = '0.5';
-                czernicaCard.style.pointerEvents = 'none';
-                noteDiv.innerText = "Sklep czynny do 18:00.";
-                noteDiv.style.display = 'block';
+                czernicaRadio.disabled = true; czernicaCard.style.opacity = '0.5'; czernicaCard.style.pointerEvents = 'none';
+                noteDiv.innerText = "Sklep czynny do 18:00."; noteDiv.style.display = 'block';
                 if (czernicaRadio.checked) document.querySelector('input[name="sklep"][value="2.0"]').checked = true;
             } else {
-                czernicaRadio.disabled = false;
-                czernicaCard.style.opacity = '1';
-                czernicaCard.style.pointerEvents = 'auto';
+                czernicaRadio.disabled = false; czernicaCard.style.opacity = '1'; czernicaCard.style.pointerEvents = 'auto';
                 noteDiv.style.display = 'none';
             }
         }
 
         function checkHappyHour() {
-            const now = new Date();
-            const day = now.getDay(); 
-            const hour = now.getHours();
+            const now = new Date(); const day = now.getDay(); const hour = now.getHours();
             const banner = document.getElementById('happy-hour-banner');
 
             if(day === 1) { 
@@ -893,9 +878,8 @@
                     banner.innerHTML = "<i class='fas fa-clock'></i> Dziś 16:00 - 17:00 HAPPY HOUR! Zgarnij -35% na dostawę!";
                     banner.style.display = 'block';
                 } else if (hour === 16) { 
-                    banner.innerHTML = "🔥 HAPPY HOUR TRWA! Koszt dostawy został obniżony o 35%! 🔥";
+                    banner.innerHTML = "🔥 HAPPY HOUR TRWA! Koszt dostawy obniżony o 35%! 🔥";
                     banner.style.display = 'block';
-                    banner.style.backgroundColor = "var(--secondary)"; 
                     isHappyHour = true;
                 }
             }
@@ -904,17 +888,16 @@
         function calculate() {
             let sklepPrice = parseFloat(document.querySelector('input[name="sklep"]:checked').value);
             let transportPrice = parseFloat(document.querySelector('input[name="transport"]:checked').value);
-            let weekendFee = 0;
+            let weekendFee = 0; let weatherExtra = isWeatherBad ? 1.50 : 0;
 
             let today = new Date().getDay();
             if(today === 0 || today === 6) {
-                weekendFee = 0.50;
-                document.getElementById('weekend-badge').style.display = 'inline-block';
+                weekendFee = 0.50; document.getElementById('weekend-badge').style.display = 'inline-block';
             } else {
                 document.getElementById('weekend-badge').style.display = 'none';
             }
 
-            let deliveryBase = sklepPrice + transportPrice + weekendFee;
+            let deliveryBase = sklepPrice + transportPrice + weekendFee + weatherExtra;
             let oldTotalDisplay = document.getElementById('old-total');
             
             if(isHappyHour) {
@@ -929,37 +912,10 @@
             document.getElementById('total').innerText = finalTotal.toFixed(2);
         }
 
-        // --- SYSTEM STATYCZNY ---
-        function checkSystemStatus() {
-            let isAvailable = localStorage.getItem('isAvailable') !== 'false'; 
-            let returnTime = localStorage.getItem('returnTime') || 'później';
-            let now = new Date();
-            let hour = now.getHours();
-            let isWorkingHours = (hour >= 11 && hour < 19);
-            let orderBtn = document.getElementById('submit-btn');
-
-            if (!isAvailable) {
-                document.getElementById('status-banner').style.display = 'block';
-                document.getElementById('return-time-display').innerText = returnTime;
-                orderBtn.disabled = true;
-                orderBtn.innerHTML = "Dostawy wstrzymane <i class='fas fa-ban'></i>";
-            } else if (!isWorkingHours) {
-                document.getElementById('hours-warning').style.display = 'block';
-                orderBtn.disabled = true;
-                orderBtn.innerHTML = "Poza godzinami (11:00-19:00) <i class='fas fa-moon'></i>";
-            } else {
-                document.getElementById('status-banner').style.display = 'none';
-                document.getElementById('hours-warning').style.display = 'none';
-                orderBtn.disabled = false;
-                orderBtn.innerHTML = "Wyślij zamówienie <i class='fas fa-paper-plane' style='margin-left:5px;'></i>";
-            }
-        }
-
         function sendOrder(e) {
             addRipple(e);
             if(!document.getElementById('regulamin').checked) {
-                alert("Musisz zaakceptować zasady rozliczenia (zaznacz okienko pod formularzem).");
-                return;
+                alert("Musisz zaakceptować zasady rozliczenia!"); return;
             }
 
             let imie = document.getElementById('imie').value.trim();
@@ -968,72 +924,93 @@
             let platnosc = document.getElementById('platnosc').value;
             let kosztDostawy = document.getElementById('total').innerText;
             
-            // Pobieranie nowych danych: sklep, transport, czas, bezkontakt
+            if(!imie || !adres || !lista) { alert("Wypełnij wszystkie dane!"); return; }
+
+            // Zapamiętanie na urządzeniu (Autofill)
+            localStorage.setItem('czernica_name', imie);
+            localStorage.setItem('czernica_address', adres);
+
             let wybranySklep = document.querySelector('input[name="sklep"]:checked').getAttribute('data-nazwa');
             let wybranyTransport = document.querySelector('input[name="transport"]:checked').getAttribute('data-nazwa');
-            
             let trybCzasu = document.getElementById('czas-dostawy').value;
             let kiedyDostarczyc = "Jak najszybciej 🚀";
             if(trybCzasu === "planowana") {
                 let dataWartosc = document.getElementById('dokladny-czas').value;
-                if(!dataWartosc) {
-                    alert("Wybierz dokładną datę i godzinę, na którą chcesz dostawę!");
-                    return;
-                }
+                if(!dataWartosc) { alert("Wybierz dokładną datę!"); return; }
                 kiedyDostarczyc = dataWartosc.replace('T', ' o godz. ');
             }
 
             let bezKontaktu = document.getElementById('bez-kontaktu').checked ? "TAK (Zostaw pod drzwiami 🚪)" : "NIE";
+            let napiwekTekst = currentTip > 0 ? `%0A*Napiwek wliczony:* ${currentTip} zł 💚` : "";
+            let pogodaTekst = isWeatherBad ? `%0A*Dopłata pogodowa:* +1,50 zł 🌧️` : "";
 
-            if(!imie || !adres || !lista) {
-                alert("Wypełnij wszystkie dane (imię, adres, lista zakupów) przed zamówieniem!");
-                return;
+            // Zapisz zamówienie do bazy w Panelu Admina
+            let orderObj = {
+                id: Date.now(), imie: imie, adres: adres, lista: lista,
+                koszt: kosztDostawy, data: new Date().toLocaleString('pl-PL')
+            };
+            if(db) { db.ref('zamowienia/' + orderObj.id).set(orderObj); }
+            else {
+                let orders = JSON.parse(localStorage.getItem('czernicaOrdersData')) || [];
+                orders.push(orderObj);
+                localStorage.setItem('czernicaOrdersData', JSON.stringify(orders));
+                renderOrders(orders);
             }
 
-            let napiwekTekst = currentTip > 0 ? `%0A*Napiwek wliczony:* ${currentTip} zł 💚` : "";
-            let dwaNumerTelefonu = "48781469903"; 
-
             let wiadomosc = `📦 *NOWE ZAMÓWIENIE CZERNICA* 📦%0A%0A` +
-                            `*Klient:* ${imie}%0A` +
-                            `*Adres:* ${adres}%0A` +
-                            `*Sklep:* ${wybranySklep}%0A` +
-                            `*Transport:* ${wybranyTransport}%0A` +
-                            `*Kiedy dostarczyć:* ${kiedyDostarczyc}%0A` +
-                            `*Dostawa bezkontaktowa:* ${bezKontaktu}%0A` +
-                            `*Dostawa z napiwkiem:* ${kosztDostawy} zł%0A` +
-                            `*Płatność:* ${platnosc}${napiwekTekst}%0A%0A` +
-                            `*🛒 Lista zakupów:*%0A${lista}%0A%0A` +
-                            `🧾 *Informacja:* Generuję i dołączam paragon ze sklepu do Twoich zakupów!%0A%0A` +
-                            `Czekam na potwierdzenie!`;
+                            `*Klient:* ${imie}%0A*Adres:* ${adres}%0A*Sklep:* ${wybranySklep}%0A` +
+                            `*Transport:* ${wybranyTransport}%0A*Kiedy:* ${kiedyDostarczyc}%0A` +
+                            `*Bezkontaktowo:* ${bezKontaktu}%0A*Dostawa razem:* ${kosztDostawy} zł%0A` +
+                            `*Płatność:* ${platnosc}${napiwekTekst}${pogodaTekst}%0A%0A` +
+                            `*🛒 Lista zakupów:*%0A${lista}%0A%0ACzekam na potwierdzenie!`;
 
-            window.open(`https://wa.me/${dwaNumerTelefonu}?text=${wiadomosc}`, '_blank');
-            
+            window.open(`https://wa.me/48781469903?text=${wiadomosc}`, '_blank');
             forceIncrementCounter();
         }
 
-        // --- PANEL ADMINISTRATORA LOGOWANIE ---
+        // --- PANEL ADMINISTRATORA LOGIKA ---
         function checkLogin(e) {
             addRipple(e);
             let user = document.getElementById('login-input').value;
             let pass = document.getElementById('pass-input').value;
-            
             if(user === "781469903" && pass === "Lampa8472!") {
                 document.getElementById('login-section').style.display = 'none';
                 document.getElementById('admin-dashboard').style.display = 'block';
-            } else {
-                alert("Błędny login lub hasło!");
-            }
+            } else { alert("Błędny login lub hasło!"); }
         }
 
         function setStatus(isAvailable, e) {
             addRipple(e);
             let returnTime = document.getElementById('return-time-input').value || "wkrótce";
-            localStorage.setItem('isAvailable', isAvailable);
-            localStorage.setItem('returnTime', returnTime);
-            checkSystemStatus();
-            
-            if(isAvailable) alert("Dostawy WŁĄCZONE. Klienci mogą zamawiać.");
-            else alert("Dostawy WYŁĄCZONE. Komunikat widoczny na stronie.");
+            if(db) {
+                db.ref('ustawienia').update({ isAvailable: isAvailable, returnTime: returnTime });
+            } else {
+                localStorage.setItem('isAvailable', isAvailable);
+                localStorage.setItem('returnTime', returnTime);
+                applySettings(isAvailable, returnTime, localStorage.getItem('czernicaModalText'), isWeatherBad);
+            }
+            alert(isAvailable ? "Dostawy WŁĄCZONE." : "Dostawy WYŁĄCZONE.");
+        }
+
+        function updateSettings(e) {
+            addRipple(e);
+            let text = document.getElementById('admin-modal-text').value.trim();
+            if(text) {
+                if(db) db.ref('ustawienia').update({ modalText: text });
+                else localStorage.setItem('czernicaModalText', text);
+                document.getElementById('admin-modal-text').value = '';
+                alert("Tekst zapisany pomyślnie!");
+            }
+        }
+
+        function setWeatherFee(isActive, e) {
+            addRipple(e);
+            if(db) db.ref('ustawienia').update({ weatherFee: isActive });
+            else {
+                localStorage.setItem('weatherFee', isActive);
+                applySettings(localStorage.getItem('isAvailable') !== 'false', localStorage.getItem('returnTime'), null, isActive);
+            }
+            alert(isActive ? "Doliczono dopłatę za deszcz (+1,50 zł)" : "Wyłączono dopłatę deszczową.");
         }
 
         function estimateCost() {
@@ -1045,45 +1022,25 @@
             document.getElementById('est-cost').innerText = suma.toFixed(2);
         }
 
-        // --- LICZNIK ZAMÓWIEŃ (REALNY) ---
+        // --- LICZNIK ZAMÓWIEŃ ---
         function initCounter() {
-            // Sprawdzamy czy licznik istnieje w pamięci
             let count = localStorage.getItem('czernicaOrders');
-            
-            // Jeśli nie istnieje (pierwsze uruchomienie), ustawiamy 2
-            if (count === null) {
-                count = 2;
-                localStorage.setItem('czernicaOrders', count);
-            }
-            
+            if (count === null) { count = 2; localStorage.setItem('czernicaOrders', count); }
             document.getElementById('counter-value').innerText = count;
         }
 
-        // Tę funkcję wywołuj w miejscu, gdzie potwierdzasz wysłanie zamówienia
         function forceIncrementCounter() {
             let count = parseInt(localStorage.getItem('czernicaOrders')) || 2;
-            count++; 
-            
-            localStorage.setItem('czernicaOrders', count);
-            
+            count++; localStorage.setItem('czernicaOrders', count);
             let counterEl = document.getElementById('counter-value');
             if (counterEl) {
                 counterEl.innerText = count;
-                
-                // Efekt wizualny przy aktualizacji
                 counterEl.style.transition = "all 0.3s ease";
                 counterEl.style.color = "var(--secondary)";
                 counterEl.style.transform = "scale(1.2)";
-                
-                setTimeout(() => {
-                    counterEl.style.color = "inherit";
-                    counterEl.style.transform = "scale(1)";
-                }, 500);
+                setTimeout(() => { counterEl.style.color = "inherit"; counterEl.style.transform = "scale(1)"; }, 500);
             }
         }
-
-        // Inicjalizacja licznika przy wczytaniu strony
-        initCounter();
     </script>
 </body>
 </html>
