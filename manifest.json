@@ -1,0 +1,58 @@
+{
+  "name": "Czernica Delivery",
+  "short_name": "CzernicaDel",
+  "description": "Szybkie zakupy z dostawą do domu – Czernica i okolice",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fdfbf7",
+  "theme_color": "#ff6600",
+  "orientation": "portrait",
+  "lang": "pl",
+  "categories": ["shopping", "food"],
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-180.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "screenshot-mobile.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Formularz zamówienia Czernica Delivery"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Złóż zamówienie",
+      "short_name": "Zamów",
+      "description": "Przejdź od razu do składania zamówienia",
+      "url": "/?tab=order",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Moje konto",
+      "short_name": "Konto",
+      "description": "Sprawdź historię zamówień",
+      "url": "/?tab=account",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    }
+  ],
+  "prefer_related_applications": false
+}
