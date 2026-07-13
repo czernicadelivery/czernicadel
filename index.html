@@ -631,40 +631,56 @@
         // WERYFIKACJA OPINII (Sprawdza w bazie czy ID istnieje)
         // =========================================================
         function submitReview(e) {
-            addRipple(e);
-            let imie = document.getElementById('rev-imie').value.trim();
-            let nazwisko = document.getElementById('rev-nazwisko').value.trim();
-            let orderId = document.getElementById('rev-orderid').value.trim();
-            let tresc = document.getElementById('rev-tresc').value.trim();
-            
-            if(!imie || !nazwisko || !tresc || !orderId) { alert("Proszę wypełnić wszystkie pola, w tym ID Zamówienia!"); return; }
+    addRipple(e);
+    let imie = document.getElementById('rev-imie').value.trim();
+    let nazwisko = document.getElementById('rev-nazwisko').value.trim();
+    let orderId = document.getElementById('rev-orderid').value.trim();
+    let tresc = document.getElementById('rev-tresc').value.trim();
+    
+    if(!imie || !nazwisko || !tresc || !orderId) { 
+        alert("Proszę wypełnić wszystkie pola!"); 
+        return; 
+    }
 
-            let reviewObj = {
-                id: Date.now(), imie: imie, nazwisko: nazwisko, tresc: tresc, orderId: orderId,
-                prod: parseInt(document.getElementById('rev-produkt').value),
-                cena: parseInt(document.getElementById('rev-cena').value),
-                dostawa: parseInt(document.getElementById('rev-dostawa').value),
-                date: new Date().toLocaleDateString('pl-PL')
-            };
-
-            if(db) {
-                // Sprawdzamy czy zamówienie o takim ID istnieje w bazie
-                db.ref('zamowienia/' + orderId).once('value').then(snap => {
-                    if(!snap.exists()) {
-                        alert("Błąd: Nie znaleziono zamówienia o podanym ID! Opinia zablokowana.");
-                    } else {
-                        // Znaleziono, dodajemy
-                        db.ref('opinie/' + reviewObj.id).set(reviewObj).then(() => {
-                            document.getElementById('rev-imie').value = ''; document.getElementById('rev-nazwisko').value = '';
-                            document.getElementById('rev-orderid').value = ''; document.getElementById('rev-tresc').value = '';
-                            alert("Dziękujemy za zweryfikowaną opinię!");
-                        }).catch(err => alert("Błąd zapisu bazy danych."));
-                    }
-                }).catch(err => alert("Błąd połączenia z bazą podczas weryfikacji."));
+    // --- DODANA BLOKADA JEDNORAZOWOŚCI ---
+    if(db) {
+        db.ref('opinie').orderByChild('orderId').equalTo(orderId).once('value').then(snapshot => {
+            if(snapshot.exists()) {
+                alert("Błąd: Opinia dla tego numeru zamówienia już została dodana!");
             } else {
-                alert("Tryb lokalny. Opinia zablokowana, włącz bazę danych.");
+                // Jeśli nie ma opinii, sprawdzamy czy w ogóle zamówienie istnieje
+                db.ref('zamowienia/' + orderId).once('value').then(orderSnap => {
+                    if(!orderSnap.exists()) {
+                        alert("Błąd: Nie znaleziono takiego zamówienia!");
+                    } else {
+                        // Dopiero teraz wysyłamy opinię
+                        saveReviewToDb({ imie, nazwisko, orderId, tresc });
+                    }
+                });
             }
-        }
+        });
+    }
+}
+
+// Pomocnicza funkcja do zapisu (wklej ją pod funkcją submitReview)
+function saveReviewToDb(data) {
+    let reviewObj = {
+        id: Date.now(),
+        imie: data.imie,
+        nazwisko: data.nazwisko,
+        tresc: data.tresc,
+        orderId: data.orderId,
+        prod: parseInt(document.getElementById('rev-produkt').value),
+        cena: parseInt(document.getElementById('rev-cena').value),
+        dostawa: parseInt(document.getElementById('rev-dostawa').value),
+        date: new Date().toLocaleDateString('pl-PL')
+    };
+
+    db.ref('opinie/' + reviewObj.id).set(reviewObj).then(() => {
+        alert("Dziękujemy za opinię!");
+        location.reload(); // Odświeżenie by wyczyścić formularz
+    });
+}
 
         // =========================================================
         // WYŚWIETLANIE ZABEZPIECZONYCH DANYCH (Anty-Haker)
