@@ -7,9 +7,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- FIREBASE BAZA DANYCH -->
+    <!-- FIREBASE BAZA DANYCH I AUTORYZACJA -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
     <style>
         :root {
@@ -44,123 +45,38 @@
         [data-theme="dark"] .nav-buttons { background-color: var(--surface); }
         [data-theme="dark"] .trust-badges { background-color: var(--surface); color: #aaa; }
         
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg);
-            margin: 0;
-            padding: 0;
-            color: var(--text);
-            overflow-x: hidden;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        /* Nagłówek i Logo */
-        .header {
-            background-color: var(--surface);
-            padding: 15px;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .header img {
-            height: 60px;
-            object-fit: contain;
-            transition: transform 0.3s ease;
-        }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--bg); margin: 0; padding: 0; color: var(--text); overflow-x: hidden; transition: background-color 0.3s, color 0.3s; }
+        .header { background-color: var(--surface); padding: 15px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
+        .header img { height: 60px; object-fit: contain; transition: transform 0.3s ease; }
         .header img:hover { transform: scale(1.05); }
 
-        /* Paski statusu i Happy Hour */
-        .status-banner, .happy-hour-banner, .weather-banner {
-            text-align: center;
-            padding: 12px;
-            font-weight: 600;
-            font-size: 14px;
-            animation: slideDown 0.5s ease-out;
-        }
+        .status-banner, .happy-hour-banner, .weather-banner { text-align: center; padding: 12px; font-weight: 600; font-size: 14px; animation: slideDown 0.5s ease-out; }
         .status-banner { background-color: var(--danger); color: white; display: none; }
         .happy-hour-banner { background-color: var(--primary); color: white; display: none; }
         .weather-banner { background-color: #17a2b8; color: white; display: none; }
 
-        @keyframes slideDown {
-            from { transform: translateY(-100%); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
+        @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-        /* Trust Badges */
-        .trust-badges {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            background: var(--surface);
-            padding: 15px 10px;
-            font-size: 12px;
-            color: #555;
-            font-weight: 600;
-        }
+        .trust-badges { display: flex; justify-content: center; gap: 20px; background: var(--surface); padding: 15px 10px; font-size: 12px; color: #555; font-weight: 600; }
         .trust-badge i { color: var(--secondary); margin-right: 5px; font-size: 14px; }
 
-        /* Nawigacja */
-        .nav-buttons {
-            display: flex;
-            justify-content: center;
-            background-color: var(--surface);
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-        }
-        .nav-buttons button {
-            flex: 1;
-            padding: 15px 10px;
-            border: none;
-            background: none;
-            color: #888;
-            font-size: 14px;
-            cursor: pointer;
-            font-weight: 600;
-            font-family: inherit;
-            transition: all 0.3s ease;
-            position: relative;
-        }
+        .nav-buttons { display: flex; justify-content: center; background-color: var(--surface); margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+        .nav-buttons button { flex: 1; padding: 15px 10px; border: none; background: none; color: #888; font-size: 14px; cursor: pointer; font-weight: 600; font-family: inherit; transition: all 0.3s ease; position: relative; }
         .nav-buttons button.active { color: var(--primary); }
-        .nav-buttons button.active::after {
-            content: ''; position: absolute; bottom: 0; left: 20%;
-            width: 60%; height: 3px; background-color: var(--primary);
-            border-radius: 3px 3px 0 0;
-        }
+        .nav-buttons button.active::after { content: ''; position: absolute; bottom: 0; left: 20%; width: 60%; height: 3px; background-color: var(--primary); border-radius: 3px 3px 0 0; }
 
         .container { padding: 10px 20px 40px; max-width: 600px; margin: 0 auto; }
 
-        /* Licznik zamówień */
-        .order-counter {
-            text-align: center; background: #fff3e6; color: var(--primary);
-            padding: 10px; border-radius: 50px; font-weight: 600;
-            font-size: 14px; margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(255, 102, 0, 0.1);
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-            100% { transform: scale(1); }
-        }
+        .order-counter { text-align: center; background: #fff3e6; color: var(--primary); padding: 10px; border-radius: 50px; font-weight: 600; font-size: 14px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(255, 102, 0, 0.1); animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
 
-        .section {
-            background: var(--surface); padding: 25px; border-radius: var(--radius);
-            margin-bottom: 25px; box-shadow: var(--shadow);
-            border: 1px solid var(--border); transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
+        .section { background: var(--surface); padding: 25px; border-radius: var(--radius); margin-bottom: 25px; box-shadow: var(--shadow); border: 1px solid var(--border); transition: transform 0.3s ease, box-shadow 0.3s ease; }
         .section:hover { box-shadow: var(--shadow-hover); }
 
         h2 { margin-top: 0; font-size: 18px; display: flex; align-items: center; gap: 10px; }
         h2 i { color: var(--primary); }
 
-        /* Karty opcji */
-        .option-card {
-            border: 2px solid var(--border); padding: 15px 20px; border-radius: 12px;
-            margin-bottom: 12px; display: flex; align-items: center; cursor: pointer;
-            transition: all 0.2s ease; position: relative; overflow: hidden;
-        }
+        .option-card { border: 2px solid var(--border); padding: 15px 20px; border-radius: 12px; margin-bottom: 12px; display: flex; align-items: center; cursor: pointer; transition: all 0.2s ease; position: relative; overflow: hidden; }
         .option-card:hover { border-color: var(--primary-light); transform: translateY(-2px); }
         .option-card input:checked + div { color: var(--primary); }
         .option-card input:checked + div strong { color: var(--primary); }
@@ -171,99 +87,50 @@
         .note { font-size: 12px; color: #888; margin-top: 5px; font-weight: 400;}
         .badge-weekend { background: var(--danger); color: white; padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: bold; margin-left: 10px; display: none; }
         
-        /* Pola tekstowe */
-        input[type="text"], input[type="password"], input[type="datetime-local"], textarea, select {
-            width: 100%; padding: 15px; margin-top: 8px; margin-bottom: 15px;
-            border: 1.5px solid var(--border); border-radius: 12px; box-sizing: border-box;
-            font-family: inherit; font-size: 14px; transition: all 0.3s ease; background: #fafafa;
-        }
-        input:focus, textarea:focus, select:focus { 
-            border-color: var(--primary); background: var(--surface); outline: none; 
-            box-shadow: 0 0 0 4px rgba(255, 102, 0, 0.1);
-        }
+        input[type="text"], input[type="password"], input[type="datetime-local"], textarea, select { width: 100%; padding: 15px; margin-top: 8px; margin-bottom: 15px; border: 1.5px solid var(--border); border-radius: 12px; box-sizing: border-box; font-family: inherit; font-size: 14px; transition: all 0.3s ease; background: #fafafa; }
+        input:focus, textarea:focus, select:focus { border-color: var(--primary); background: var(--surface); outline: none; box-shadow: 0 0 0 4px rgba(255, 102, 0, 0.1); }
         
-        /* Sekcja Polecane */
         .recommendations { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
-        .rec-card {
-            background: var(--surface); border: 2px solid var(--border); border-radius: 12px;
-            padding: 10px; text-align: center; cursor: pointer; transition: all 0.2s ease;
-        }
+        .rec-card { background: var(--surface); border: 2px solid var(--border); border-radius: 12px; padding: 10px; text-align: center; cursor: pointer; transition: all 0.2s ease; }
         .rec-card:hover { border-color: var(--primary); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(255, 102, 0, 0.1); }
         .rec-card img { width: 100%; height: 70px; object-fit: cover; border-radius: 8px; margin-bottom: 8px; }
         .rec-card span { display: block; font-size: 13px; font-weight: 600; }
         .rec-card small { display: block; font-size: 11px; color: var(--primary); font-weight: bold; margin-top: 4px;}
 
-        /* Napiwek */
         .tips-container { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;}
-        .tip-btn {
-            flex: 1; padding: 10px; border: 2px solid var(--border); border-radius: 20px;
-            background: transparent; font-weight: 600; cursor: pointer; transition: 0.3s; color: #555; font-family: inherit;
-        }
+        .tip-btn { flex: 1; padding: 10px; border: 2px solid var(--border); border-radius: 20px; background: transparent; font-weight: 600; cursor: pointer; transition: 0.3s; color: #555; font-family: inherit; }
         .tip-btn.active { border-color: var(--secondary); background: rgba(37, 211, 102, 0.1); color: var(--secondary); }
 
-        .checkbox-container {
-            display: flex; align-items: flex-start; gap: 12px; font-size: 13px; color: #555;
-            margin-top: 15px; background: #f9f9f9; padding: 15px; border-radius: 12px;
-        }
+        .checkbox-container { display: flex; align-items: flex-start; gap: 12px; font-size: 13px; color: #555; margin-top: 15px; background: #f9f9f9; padding: 15px; border-radius: 12px; }
         .checkbox-container input { transform: scale(1.3); margin-top: 2px; accent-color: var(--primary);}
         
-        .summary {
-            background-color: var(--surface); border: 2px dashed var(--primary-light);
-            padding: 25px; border-radius: var(--radius); font-size: 18px; font-weight: 600;
-            text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-        }
+        .summary { background-color: var(--surface); border: 2px dashed var(--primary-light); padding: 25px; border-radius: var(--radius); font-size: 18px; font-weight: 600; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
         .total-price { font-size: 28px; color: var(--primary); font-weight: 800; display: block; margin: 10px 0;}
         .old-price { text-decoration: line-through; color: #999; font-size: 18px; margin-right: 10px; display: none;}
         
-        .order-btn {
-            width: 100%; background-color: var(--secondary); color: white; padding: 20px;
-            border: none; border-radius: var(--radius); font-size: 18px; font-weight: 800;
-            cursor: pointer; margin-top: 25px; box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);
-            transition: all 0.3s ease; position: relative; overflow: hidden;
-        }
+        .order-btn { width: 100%; background-color: var(--secondary); color: white; padding: 20px; border: none; border-radius: var(--radius); font-size: 18px; font-weight: 800; cursor: pointer; margin-top: 25px; box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3); transition: all 0.3s ease; position: relative; overflow: hidden; }
         .order-btn:hover { background-color: var(--secondary-hover); transform: translateY(-3px); box-shadow: 0 12px 25px rgba(37, 211, 102, 0.4); }
         .order-btn:disabled { background-color: #ccc; cursor: not-allowed; box-shadow: none; transform: none; }
         
-        .ripple {
-            position: absolute; border-radius: 50%; background: rgba(255, 255, 255, 0.4);
-            transform: scale(0); animation: ripple-anim 0.6s linear; pointer-events: none;
-        }
+        .ripple { position: absolute; border-radius: 50%; background: rgba(255, 255, 255, 0.4); transform: scale(0); animation: ripple-anim 0.6s linear; pointer-events: none; }
         @keyframes ripple-anim { to { transform: scale(4); opacity: 0; } }
 
-        /* Popup */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6); backdrop-filter: blur(5px);
-            display: flex; justify-content: center; align-items: center;
-            z-index: 1000; opacity: 0; visibility: hidden; transition: 0.3s;
-        }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; visibility: hidden; transition: 0.3s; }
         .modal-overlay.active { opacity: 1; visibility: visible; }
-        .modal-content {
-            background: white; padding: 30px; border-radius: 20px; text-align: center;
-            max-width: 80%; width: 300px; transform: scale(0.8); transition: 0.3s; box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-        }
+        .modal-content { background: white; padding: 30px; border-radius: 20px; text-align: center; max-width: 80%; width: 300px; transform: scale(0.8); transition: 0.3s; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
         .modal-overlay.active .modal-content { transform: scale(1); }
         .modal-content h3 { color: var(--primary); margin-top: 0; }
         .modal-content p { font-size: 15px; margin-bottom: 25px;}
-        .modal-btn {
-            background: var(--primary); color: white; border: none; padding: 12px 30px;
-            border-radius: 50px; font-weight: bold; cursor: pointer; transition: 0.2s; width: 100%;
-        }
+        .modal-btn { background: var(--primary); color: white; border: none; padding: 12px 30px; border-radius: 50px; font-weight: bold; cursor: pointer; transition: 0.2s; width: 100%; }
         .modal-btn:hover { background: var(--primary-light); }
 
-        .floating-whatsapp {
-            position: fixed; bottom: 25px; right: 25px; background-color: #25D366; color: white;
-            padding: 15px 20px; border-radius: 50px; font-size: 15px; font-weight: bold;
-            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4); text-decoration: none; z-index: 999;
-            display: flex; align-items: center; gap: 10px; transition: all 0.3s ease;
-        }
+        .floating-whatsapp { position: fixed; bottom: 25px; right: 25px; background-color: #25D366; color: white; padding: 15px 20px; border-radius: 50px; font-size: 15px; font-weight: bold; box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4); text-decoration: none; z-index: 999; display: flex; align-items: center; gap: 10px; transition: all 0.3s ease; }
         .floating-whatsapp:hover { transform: scale(1.08) translateY(-3px); color: white; box-shadow: 0 8px 25px rgba(37, 211, 102, 0.5); }
 
         #driver-panel, #reviews-panel, #admin-dashboard { display: none; }
         .calc-result { font-weight: 800; color: var(--primary); font-size: 20px; margin-top: 15px; text-align: center; background: #fff3e6; padding: 15px; border-radius: 12px;}
         [data-theme="dark"] .calc-result { background: #2a1a0d; }
         .footer { text-align: center; font-size: 12px; color: #999; padding: 30px 20px; margin-bottom: 60px; }
-        
         .admin-order-card { background: var(--surface); border: 1px solid var(--border); padding: 15px; border-radius: 10px; margin-bottom: 10px;}
     </style>
 </head>
@@ -342,11 +209,7 @@
             </div>
 
             <div class="section">
-                <h2>
-                    <i class="fas fa-route"></i> 2. Czym dostarczyć? 
-                    <span id="weekend-badge" class="badge-weekend">+0,50 zł Weekend</span>
-                </h2>
-                <!-- USUNIĘTO HULAJNOGĘ ZGODNIE Z PROŚBĄ -->
+                <h2><i class="fas fa-route"></i> 2. Czym dostarczyć? <span id="weekend-badge" class="badge-weekend">+0,50 zł Weekend</span></h2>
                 <label class="option-card" onclick="addRipple(event)">
                     <input type="radio" name="transport" value="2.0" checked onchange="calculate()" data-nazwa="Rower">
                     <i class="fas fa-bicycle"></i>
@@ -435,9 +298,10 @@
         <div id="reviews-panel">
             <div class="section">
                 <h2><i class="fas fa-star"></i> Zostaw swoją opinię</h2>
-                <p style="font-size:13px; color:#666;">Twoja opinia jest dla nas bardzo ważna!</p>
+                <p style="font-size:13px; color:#666;">Tylko osoby, które złożyły zamówienie mogą dodać opinię.</p>
                 <input type="text" id="rev-imie" placeholder="Twoje imię" required>
                 <input type="text" id="rev-nazwisko" placeholder="Twoje nazwisko" required>
+                <input type="text" id="rev-orderid" placeholder="Twój 6-cyfrowy Kod Zamówienia" maxlength="6" required style="border-color: var(--primary);">
                 
                 <label style="font-size:13px; color:#555; display:block; margin-top:10px; font-weight:bold;">Jakość produktów ze sklepu (1-5)</label>
                 <select id="rev-produkt">
@@ -479,16 +343,16 @@
 
         <div id="driver-panel">
             <div class="section" id="login-section">
-                <h2><i class="fas fa-lock"></i> Panel Administracyjny</h2>
-                <input type="text" id="login-input" placeholder="Login (Twój nr tel)">
-                <input type="password" id="pass-input" placeholder="Hasło">
+                <h2><i class="fas fa-lock"></i> Bezpieczny Panel Administratora</h2>
+                <input type="email" id="login-input" placeholder="Twój e-mail (ustawiony w Firebase)">
+                <input type="password" id="pass-input" placeholder="Twoje tajne hasło">
                 <button class="order-btn" style="margin-top: 10px; padding: 15px;" onclick="checkLogin(event)">Zaloguj się</button>
             </div>
             
             <div id="admin-dashboard">
                 <div class="section">
                     <h2>Zarządzanie Statusem <i class="fas fa-traffic-light"></i></h2>
-                    <p style="font-size: 13px; color: #666;">Zablokuj zamówienia, gdy masz przerwę lub urlop. Zapisuje się w bazie.</p>
+                    <p style="font-size: 13px; color: #666;">Zablokuj zamówienia, gdy masz przerwę lub urlop.</p>
                     <input type="text" id="return-time-input" placeholder="Kiedy wracasz? (np. jutro o 12:00)">
                     <div style="display:flex; gap:10px;">
                         <button onclick="setStatus(false, event)" style="background: var(--danger); color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; flex:1; font-weight:bold;">Wyłącz dostawy</button>
@@ -498,7 +362,7 @@
 
                 <div class="section">
                     <h2>Warunki Pogodowe (Dopłata) <i class="fas fa-cloud-showers-heavy"></i></h2>
-                    <p style="font-size: 13px; color: #666;">Włącz, jeśli pada. Automatycznie doliczy klientom 1,50 zł do dostawy.</p>
+                    <p style="font-size: 13px; color: #666;">Włącz, jeśli pada. Dolicza 1,50 zł do dostawy.</p>
                     <div style="display:flex; gap:10px;">
                         <button onclick="setWeatherFee(true, event)" style="background: #17a2b8; color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; flex:1; font-weight:bold;">Włącz deszcz</button>
                         <button onclick="setWeatherFee(false, event)" style="background: #6c757d; color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; flex:1; font-weight:bold;">Wyłącz deszcz</button>
@@ -507,14 +371,13 @@
 
                 <div class="section">
                     <h2>Ustawienia Strony <i class="fas fa-cogs"></i></h2>
-                    <p style="font-size: 13px; color: #666;">Zmień tekst powitania w wyskakującym okienku (Popup).</p>
+                    <p style="font-size: 13px; color: #666;">Zmień tekst powitania w popupie.</p>
                     <input type="text" id="admin-modal-text" placeholder="Wpisz nowy tekst powitania...">
                     <button onclick="updateSettings(event)" style="background: var(--primary); color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; width: 100%; font-weight:bold; margin-top:5px;">Zapisz tekst powitania</button>
                 </div>
                 
                 <div class="section">
                     <h2>Historia Zamówień <i class="fas fa-receipt"></i></h2>
-                    <p style="font-size: 13px; color: #666;">Ostatnie zrealizowane zamówienia.</p>
                     <div id="admin-orders-list" style="max-height: 300px; overflow-y: auto;">Brak zamówień</div>
                 </div>
 
@@ -524,9 +387,7 @@
                 </div>
                 
                 <div class="section">
-                    <h2>Kalkulator u Grażynki <i class="fas fa-calculator"></i></h2>
-                    <textarea id="admin-list" rows="3" placeholder="Wklej listę tutaj..." onkeyup="estimateCost()"></textarea>
-                    <div class="calc-result">Szacowany koszt koszyka:<br>~<span id="est-cost">0.00</span> zł</div>
+                    <button onclick="logout(event)" style="background: #333; color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; width: 100%; font-weight:bold;">Wyloguj się z panelu</button>
                 </div>
             </div>
         </div>
@@ -537,6 +398,14 @@
     </div>
 
     <script>
+        // =========================================================
+        // TARCZA ANTY-XSS (Zabezpiecza przed hakerami)
+        // =========================================================
+        function escapeHTML(str) {
+            if(!str) return "";
+            return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag));
+        }
+
         // =========================================================
         // FIREBASE CONFIG - BAZA DANYCH
         // =========================================================
@@ -552,27 +421,32 @@
         };
 
         let db = null;
+        let auth = null;
+
         try {
             if(firebaseConfig.apiKey !== "ZMIEN_NA_SWOJ_KLUCZ") {
                 firebase.initializeApp(firebaseConfig);
                 db = firebase.database();
-                console.log("Firebase podłączone!");
+                auth = firebase.auth();
+                console.log("Firebase podłączone i zabezpieczone!");
+
+                // Śledzenie stanu logowania administratora
+                auth.onAuthStateChanged(user => {
+                    if (user) {
+                        document.getElementById('login-section').style.display = 'none';
+                        document.getElementById('admin-dashboard').style.display = 'block';
+                    } else {
+                        document.getElementById('login-section').style.display = 'block';
+                        document.getElementById('admin-dashboard').style.display = 'none';
+                    }
+                });
+
             } else {
-                console.warn("Brak kluczy Firebase. Używam LocalStorage (pamięć lokalna telefonu).");
+                console.warn("Brak kluczy Firebase. Używam LocalStorage.");
             }
-        } catch(e) { console.warn("Błąd Firebase. Lecimy na LocalStorage.", e); }
+        } catch(e) { console.warn("Błąd Firebase.", e); }
 
-        // --- ZMIENNE GLOBALNE ---
-        let currentTip = 0;
-        let isHappyHour = false;
-        let isWeatherBad = false;
-
-        const cennikGrazynki = {
-            "chleb": 5.50, "bułka": 0.80, "mleko": 4.00, "jajka": 10.00, 
-            "masło": 7.50, "woda": 2.50, "sok": 5.00, "cukier": 6.00, 
-            "mąka": 4.00, "ser": 8.00, "szynka": 12.00, "pomidor": 3.00, "cola": 8.00,
-            "lody": 7.00
-        };
+        let currentTip = 0; let isHappyHour = false; let isWeatherBad = false;
 
         const modalTexts = [
             "Dziś szybkie dostawy, zamów i ciesz się wolnym czasem! 🚀",
@@ -580,16 +454,9 @@
             "Zrób listę, a my zajmiemy się resztą. Relaks w cenie! ☕"
         ];
 
-        // --- START STRONY ---
         window.onload = function() {
-            checkTheme();
-            initCounter();
-            checkStoreHours();
-            syncWithDatabase(); 
-            checkHappyHour();
-            calculate();
-            checkReturningUser();
-            
+            checkTheme(); initCounter(); checkStoreHours(); syncWithDatabase(); 
+            checkHappyHour(); calculate(); checkReturningUser();
             setTimeout(() => { document.getElementById('welcome-modal').classList.add('active'); }, 3000);
         };
 
@@ -599,47 +466,33 @@
             else { document.documentElement.removeAttribute('data-theme'); }
         }
 
-        // --- BAZA DANYCH (SYNCHRONIZACJA) - NAPRAWIONA LOGIKA ---
         function syncWithDatabase() {
             if(db) {
-                // Opinie
                 db.ref('opinie').on('value', snap => {
-                    let data = snap.val();
-                    let reviewsArray = data ? Object.values(data) : [];
-                    localStorage.setItem('czernicaReviews', JSON.stringify(reviewsArray));
+                    let data = snap.val(); let reviewsArray = data ? Object.values(data) : [];
                     renderReviews(reviewsArray);
-                }, err => console.error("Firebase zablokował odczyt opinii. Sprawdź Rules!", err));
-                
-                // Zamówienia
-                db.ref('zamowienia').on('value', snap => {
-                    let data = snap.val();
-                    renderOrders(data ? Object.values(data) : []);
                 });
-
-                // Ustawienia systemu (Tu był główny błąd - jeśli baza jest pusta, kod się wieszał)
+                db.ref('zamowienia').on('value', snap => {
+                    let data = snap.val(); renderOrders(data ? Object.values(data) : []);
+                });
                 db.ref('ustawienia').on('value', snap => {
-                    let u = snap.val() || {}; // Zapobiega błędowi, gdy baza u = null
-                    
-                    let isAvail = u.hasOwnProperty('isAvailable') ? u.isAvailable : true;
-                    let retTime = u.hasOwnProperty('returnTime') ? u.returnTime : 'później';
-                    let mText = u.hasOwnProperty('modalText') ? u.modalText : null;
-                    let wFee = u.hasOwnProperty('weatherFee') ? u.weatherFee : false;
-                    
-                    applySettings(isAvail, retTime, mText, wFee);
-                }, err => console.error("Firebase zablokował odczyt ustawień.", err));
-                
+                    let u = snap.val() || {}; 
+                    applySettings(
+                        u.hasOwnProperty('isAvailable') ? u.isAvailable : true,
+                        u.hasOwnProperty('returnTime') ? u.returnTime : 'później',
+                        u.hasOwnProperty('modalText') ? u.modalText : null,
+                        u.hasOwnProperty('weatherFee') ? u.weatherFee : false
+                    );
+                });
             } else {
-                // Fallback do LocalStorage
-                let reviewsArray = JSON.parse(localStorage.getItem('czernicaReviews')) || [];
-                renderReviews(reviewsArray);
-                let ordersArray = JSON.parse(localStorage.getItem('czernicaOrdersData')) || [];
-                renderOrders(ordersArray);
-                
-                let isAvail = localStorage.getItem('isAvailable') !== 'false';
-                let rTime = localStorage.getItem('returnTime') || 'później';
-                let mText = localStorage.getItem('czernicaModalText') || null;
-                let wFee = localStorage.getItem('weatherFee') === 'true';
-                applySettings(isAvail, rTime, mText, wFee);
+                renderReviews(JSON.parse(localStorage.getItem('czernicaReviews')) || []);
+                renderOrders(JSON.parse(localStorage.getItem('czernicaOrdersData')) || []);
+                applySettings(
+                    localStorage.getItem('isAvailable') !== 'false',
+                    localStorage.getItem('returnTime') || 'później',
+                    localStorage.getItem('czernicaModalText') || null,
+                    localStorage.getItem('weatherFee') === 'true'
+                );
             }
         }
 
@@ -650,7 +503,7 @@
 
             if (!isAvailable) {
                 document.getElementById('status-banner').style.display = 'block';
-                document.getElementById('return-time-display').innerText = returnTime;
+                document.getElementById('return-time-display').innerText = escapeHTML(returnTime);
                 orderBtn.disabled = true; orderBtn.innerHTML = "Dostawy wstrzymane <i class='fas fa-ban'></i>";
             } else if (!isWorkingHours) {
                 document.getElementById('hours-warning').style.display = 'block';
@@ -662,12 +515,8 @@
             }
 
             let savedName = localStorage.getItem('czernica_name');
-            if (savedName) {
-                // Auto-fill nadpisuje
-            } else if (modalText && modalText.trim() !== "") {
-                document.getElementById('modal-text').innerText = modalText;
-            } else {
-                document.getElementById('modal-text').innerText = modalTexts[Math.floor(Math.random() * modalTexts.length)];
+            if (!savedName) {
+                document.getElementById('modal-text').innerText = modalText && modalText.trim() !== "" ? escapeHTML(modalText) : modalTexts[Math.floor(Math.random() * modalTexts.length)];
             }
 
             isWeatherBad = weatherFee;
@@ -681,7 +530,7 @@
             if (savedName && savedAddress) {
                 document.getElementById('imie').value = savedName;
                 document.getElementById('adres').value = savedAddress;
-                document.getElementById('modal-text').innerHTML = `<strong>Witaj ponownie, ${savedName}!</strong><br>Wypełniliśmy Twoje dane automatycznie.`;
+                document.getElementById('modal-text').innerHTML = `<strong>Witaj ponownie, ${escapeHTML(savedName)}!</strong><br>Wypełniliśmy Twoje dane automatycznie.`;
             }
         }
 
@@ -696,232 +545,36 @@
         }
 
         function closeModal() { document.getElementById('welcome-modal').classList.remove('active'); }
-
-        function toggleTimePicker() {
-            let val = document.getElementById('czas-dostawy').value;
-            document.getElementById('date-picker-container').style.display = (val === 'planowana') ? 'block' : 'none';
-        }
-
+        function toggleTimePicker() { document.getElementById('date-picker-container').style.display = (document.getElementById('czas-dostawy').value === 'planowana') ? 'block' : 'none'; }
+        
         function addToCart(item) {
             const textarea = document.getElementById('lista');
-            if(textarea.value.length > 0) { textarea.value += "\n- " + item; } 
-            else { textarea.value = "- " + item; }
-            textarea.style.borderColor = "var(--secondary)";
-            setTimeout(() => textarea.style.borderColor = "var(--border)", 500);
+            textarea.value += (textarea.value.length > 0 ? "\n- " : "- ") + item;
         }
 
         function setTip(amount, btnElement) {
-            currentTip = amount;
-            document.querySelectorAll('.tip-btn').forEach(btn => btn.classList.remove('active'));
-            btnElement.classList.add('active');
-            calculate();
+            currentTip = amount; document.querySelectorAll('.tip-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active'); calculate();
         }
 
         function addRipple(e) {
             if(!e) return;
-            const button = e.currentTarget;
-            const circle = document.createElement("span");
-            const diameter = Math.max(button.clientWidth, button.clientHeight);
-            const radius = diameter / 2;
+            const button = e.currentTarget; const circle = document.createElement("span");
+            const diameter = Math.max(button.clientWidth, button.clientHeight); const radius = diameter / 2;
             const rect = button.getBoundingClientRect();
             circle.style.width = circle.style.height = `${diameter}px`;
-            circle.style.left = `${e.clientX - rect.left - radius}px`;
-            circle.style.top = `${e.clientY - rect.top - radius}px`;
+            circle.style.left = `${e.clientX - rect.left - radius}px`; circle.style.top = `${e.clientY - rect.top - radius}px`;
             circle.classList.add("ripple");
-            const existing = button.querySelector('.ripple');
-            if(existing) existing.remove();
-            button.appendChild(circle);
-            setTimeout(() => circle.remove(), 600);
+            const existing = button.querySelector('.ripple'); if(existing) existing.remove();
+            button.appendChild(circle); setTimeout(() => circle.remove(), 600);
         }
 
-        // --- ZAPISYWANIE OPINII (DODANO OBSŁUGĘ BŁĘDÓW) ---
-        function submitReview(e) {
-            addRipple(e);
-            let imie = document.getElementById('rev-imie').value.trim();
-            let nazwisko = document.getElementById('rev-nazwisko').value.trim();
-            let tresc = document.getElementById('rev-tresc').value.trim();
-            
-            if(!imie || !nazwisko || !tresc) { alert("Proszę wypełnić wszystkie pola!"); return; }
-
-            let reviewObj = {
-                id: Date.now(), imie: imie, nazwisko: nazwisko, tresc: tresc,
-                prod: parseInt(document.getElementById('rev-produkt').value),
-                cena: parseInt(document.getElementById('rev-cena').value),
-                dostawa: parseInt(document.getElementById('rev-dostawa').value),
-                date: new Date().toLocaleDateString('pl-PL')
-            };
-
-            if(db) {
-                // Firebase wymaga odpowiednich reguł zapisu
-                db.ref('opinie/' + reviewObj.id).set(reviewObj)
-                  .then(() => {
-                      document.getElementById('rev-imie').value = '';
-                      document.getElementById('rev-nazwisko').value = '';
-                      document.getElementById('rev-tresc').value = '';
-                      alert("Dziękujemy za opinię!");
-                  })
-                  .catch(err => {
-                      console.error(err);
-                      alert("BŁĄD: Firebase zablokował dodanie opinii! Ustaw reguły '.write' na true w konsoli Firebase.");
-                  });
-            } else {
-                let reviews = JSON.parse(localStorage.getItem('czernicaReviews')) || [];
-                reviews.push(reviewObj);
-                localStorage.setItem('czernicaReviews', JSON.stringify(reviews));
-                renderReviews(reviews);
-                document.getElementById('rev-imie').value = '';
-                document.getElementById('rev-nazwisko').value = '';
-                document.getElementById('rev-tresc').value = '';
-                alert("Dziękujemy za opinię! (Zapisano lokalnie)");
-            }
-        }
-
-        function renderReviews(reviews) {
-            let listEl = document.getElementById('reviews-list');
-            let adminListEl = document.getElementById('admin-reviews-list');
-            
-            if(!listEl || !adminListEl) return;
-            listEl.innerHTML = ''; adminListEl.innerHTML = '';
-
-            if(reviews.length === 0) {
-                listEl.innerHTML = '<div class="section" style="text-align:center; color:#888;">Jeszcze nikt nie dodał opinii.</div>';
-                adminListEl.innerHTML = '<p style="font-size:13px; color:#888;">Brak opinii.</p>';
-                return;
-            }
-
-            const drawStars = (c) => '⭐'.repeat(c);
-
-            reviews.slice().reverse().forEach(r => {
-                listEl.innerHTML += `
-                    <div class="section" style="padding: 20px; margin-bottom: 15px;">
-                        <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-                            <strong style="color:var(--primary); font-size:16px;">${r.imie} ${r.nazwisko}</strong>
-                            <small style="color:#aaa;">${r.date}</small>
-                        </div>
-                        <div style="font-size:12px; color:#555; background:var(--bg); padding:10px; border-radius:8px; margin-bottom:10px;">
-                            <strong>Produkt:</strong> ${drawStars(r.prod)} <br>
-                            <strong>Cena:</strong> ${drawStars(r.cena)} <br>
-                            <strong>Dostawa:</strong> ${drawStars(r.dostawa)}
-                        </div>
-                        <p style="font-size:14px; margin:0; font-style:italic; line-height:1.5;">"${r.tresc}"</p>
-                    </div>`;
-
-                adminListEl.innerHTML += `
-                    <div style="border: 1px solid var(--border); padding: 12px; margin-bottom: 10px; border-radius: 8px;">
-                        <strong>${r.imie} ${r.nazwisko}</strong> <small>(${r.date})</small>
-                        <p style="font-size:12px; margin:8px 0;">"${r.tresc}"</p>
-                        <button onclick="deleteReview(${r.id}, event)" style="background:var(--danger); color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer;">Usuń</button>
-                    </div>`;
-            });
-        }
-
-        function deleteReview(id, event) {
-            addRipple(event);
-            if(confirm("Usunąć?")) {
-                if(db) {
-                    db.ref('opinie/' + id).remove().catch(err => alert("Błąd usuwania - brak uprawnień!"));
-                } else {
-                    let reviews = JSON.parse(localStorage.getItem('czernicaReviews')) || [];
-                    reviews = reviews.filter(r => r.id !== id);
-                    localStorage.setItem('czernicaReviews', JSON.stringify(reviews));
-                    renderReviews(reviews);
-                }
-            }
-        }
-
-        function renderOrders(orders) {
-            let adminOrdersEl = document.getElementById('admin-orders-list');
-            if(!adminOrdersEl) return;
-            adminOrdersEl.innerHTML = '';
-            
-            if(orders.length === 0) {
-                adminOrdersEl.innerHTML = '<p style="font-size:13px; color:#888;">Brak historii zamówień.</p>';
-                return;
-            }
-
-            orders.slice().reverse().forEach(o => {
-                adminOrdersEl.innerHTML += `
-                    <div class="admin-order-card">
-                        <strong style="color:var(--primary);">${o.imie}</strong> - <small>${o.data}</small><br>
-                        <span style="font-size:12px;"><i class="fas fa-map-marker-alt"></i> ${o.adres}</span><br>
-                        <span style="font-size:12px;"><strong>Kwota dostawy:</strong> ${o.koszt} zł</span>
-                        <div style="font-size:12px; background:#f0f0f0; padding:5px; margin-top:5px; border-radius:5px; color:#333;">${o.lista}</div>
-                    </div>`;
-            });
-        }
-
-        function checkStoreHours() {
-            let now = new Date(); let day = now.getDay(); let hour = now.getHours();
-            let czernicaRadio = document.querySelector('input[name="sklep"][value="1.0"]');
-            let czernicaCard = document.getElementById('czernica-card');
-            let noteDiv = document.getElementById('czernica-note');
-            let isWeekday = (day >= 1 && day <= 5);
-
-            if (isWeekday && hour >= 12 && hour < 14) {
-                czernicaRadio.disabled = true; czernicaCard.style.opacity = '0.5'; czernicaCard.style.pointerEvents = 'none';
-                noteDiv.innerText = "Przerwa kasjerki. Sklep od 14:00."; noteDiv.style.display = 'block';
-                if (czernicaRadio.checked) document.querySelector('input[name="sklep"][value="2.0"]').checked = true;
-            } else if (isWeekday && hour >= 18) {
-                czernicaRadio.disabled = true; czernicaCard.style.opacity = '0.5'; czernicaCard.style.pointerEvents = 'none';
-                noteDiv.innerText = "Sklep czynny do 18:00."; noteDiv.style.display = 'block';
-                if (czernicaRadio.checked) document.querySelector('input[name="sklep"][value="2.0"]').checked = true;
-            } else {
-                czernicaRadio.disabled = false; czernicaCard.style.opacity = '1'; czernicaCard.style.pointerEvents = 'auto';
-                noteDiv.style.display = 'none';
-            }
-        }
-
-        function checkHappyHour() {
-            const now = new Date(); const day = now.getDay(); const hour = now.getHours();
-            const banner = document.getElementById('happy-hour-banner');
-
-            if(day === 1) { 
-                banner.innerHTML = "<i class='fas fa-clock'></i> Zapowiedź: Jutro o 16:00 HAPPY HOUR! Dostawa -35% taniej!";
-                banner.style.display = 'block';
-            } else if (day === 2) { 
-                if(hour < 16) {
-                    banner.innerHTML = "<i class='fas fa-clock'></i> Dziś 16:00 - 17:00 HAPPY HOUR! Zgarnij -35% na dostawę!";
-                    banner.style.display = 'block';
-                } else if (hour === 16) { 
-                    banner.innerHTML = "🔥 HAPPY HOUR TRWA! Koszt dostawy obniżony o 35%! 🔥";
-                    banner.style.display = 'block';
-                    isHappyHour = true;
-                }
-            }
-        }
-
-        function calculate() {
-            let sklepPrice = parseFloat(document.querySelector('input[name="sklep"]:checked').value);
-            let transportPrice = parseFloat(document.querySelector('input[name="transport"]:checked').value);
-            let weekendFee = 0; let weatherExtra = isWeatherBad ? 1.50 : 0;
-
-            let today = new Date().getDay();
-            if(today === 0 || today === 6) {
-                weekendFee = 0.50; document.getElementById('weekend-badge').style.display = 'inline-block';
-            } else {
-                document.getElementById('weekend-badge').style.display = 'none';
-            }
-
-            let deliveryBase = sklepPrice + transportPrice + weekendFee + weatherExtra;
-            let oldTotalDisplay = document.getElementById('old-total');
-            
-            if(isHappyHour) {
-                oldTotalDisplay.innerText = (deliveryBase + currentTip).toFixed(2) + " zł";
-                oldTotalDisplay.style.display = "inline";
-                deliveryBase = deliveryBase * 0.65; 
-            } else {
-                oldTotalDisplay.style.display = "none";
-            }
-
-            let finalTotal = deliveryBase + currentTip;
-            document.getElementById('total').innerText = finalTotal.toFixed(2);
-        }
-
+        // =========================================================
+        // WYSYŁANIE ZAMÓWIENIA + GENEROWANIE KODU
+        // =========================================================
         function sendOrder(e) {
             addRipple(e);
-            if(!document.getElementById('regulamin').checked) {
-                alert("Musisz zaakceptować zasady rozliczenia!"); return;
-            }
+            if(!document.getElementById('regulamin').checked) { alert("Musisz zaakceptować zasady rozliczenia!"); return; }
 
             let imie = document.getElementById('imie').value.trim();
             let adres = document.getElementById('adres').value.trim();
@@ -943,13 +596,13 @@
                 if(!dataWartosc) { alert("Wybierz dokładną datę!"); return; }
                 kiedyDostarczyc = dataWartosc.replace('T', ' o godz. ');
             }
-
             let bezKontaktu = document.getElementById('bez-kontaktu').checked ? "TAK (Zostaw pod drzwiami 🚪)" : "NIE";
-            let napiwekTekst = currentTip > 0 ? `%0A*Napiwek wliczony:* ${currentTip} zł 💚` : "";
-            let pogodaTekst = isWeatherBad ? `%0A*Dopłata pogodowa:* +1,50 zł 🌧️` : "";
+
+            // Zabezpieczenie: Losowy 6 cyfrowy numer zamówienia używany też do weryfikacji opinii
+            let uniqueOrderId = Math.floor(100000 + Math.random() * 900000).toString();
 
             let orderObj = {
-                id: Date.now(), imie: imie, adres: adres, lista: lista,
+                id: uniqueOrderId, imie: imie, adres: adres, lista: lista,
                 koszt: kosztDostawy, data: new Date().toLocaleString('pl-PL')
             };
             
@@ -957,63 +610,168 @@
                 db.ref('zamowienia/' + orderObj.id).set(orderObj).catch(err => console.error(err)); 
             } else {
                 let orders = JSON.parse(localStorage.getItem('czernicaOrdersData')) || [];
-                orders.push(orderObj);
-                localStorage.setItem('czernicaOrdersData', JSON.stringify(orders));
+                orders.push(orderObj); localStorage.setItem('czernicaOrdersData', JSON.stringify(orders));
                 renderOrders(orders);
             }
 
             let wiadomosc = `📦 *NOWE ZAMÓWIENIE CZERNICA* 📦%0A%0A` +
                             `*Klient:* ${imie}%0A*Adres:* ${adres}%0A*Sklep:* ${wybranySklep}%0A` +
+                            `*ID Zamówienia:* ${uniqueOrderId}%0A` +
                             `*Transport:* ${wybranyTransport}%0A*Kiedy:* ${kiedyDostarczyc}%0A` +
-                            `*Bezkontaktowo:* ${bezKontaktu}%0A*Dostawa razem:* ${kosztDostawy} zł%0A` +
-                            `*Płatność:* ${platnosc}${napiwekTekst}${pogodaTekst}%0A%0A` +
+                            `*Bezkontaktowo:* ${bezKontaktu}%0A*Dostawa:* ${kosztDostawy} zł%0A` +
+                            `*Płatność:* ${platnosc}%0A%0A` +
                             `*🛒 Lista zakupów:*%0A${lista}%0A%0ACzekam na potwierdzenie!`;
 
+            alert("SUKCES!\nTwoje ID Zamówienia to: " + uniqueOrderId + "\nZapisz go, będzie potrzebny by dodać opinię po dostawie!");
             window.open(`https://wa.me/48781469903?text=${wiadomosc}`, '_blank');
             forceIncrementCounter();
         }
 
-        // --- ZMIANA USTAWIEŃ ADMINA (DODANO BŁĘDY) ---
-        function checkLogin(e) {
+        // =========================================================
+        // WERYFIKACJA OPINII (Sprawdza w bazie czy ID istnieje)
+        // =========================================================
+        function submitReview(e) {
             addRipple(e);
-            let user = document.getElementById('login-input').value;
-            let pass = document.getElementById('pass-input').value;
-            if(user === "781469903" && pass === "Lampa8472!") {
-                document.getElementById('login-section').style.display = 'none';
-                document.getElementById('admin-dashboard').style.display = 'block';
-            } else { alert("Błędny login lub hasło!"); }
+            let imie = document.getElementById('rev-imie').value.trim();
+            let nazwisko = document.getElementById('rev-nazwisko').value.trim();
+            let orderId = document.getElementById('rev-orderid').value.trim();
+            let tresc = document.getElementById('rev-tresc').value.trim();
+            
+            if(!imie || !nazwisko || !tresc || !orderId) { alert("Proszę wypełnić wszystkie pola, w tym ID Zamówienia!"); return; }
+
+            let reviewObj = {
+                id: Date.now(), imie: imie, nazwisko: nazwisko, tresc: tresc, orderId: orderId,
+                prod: parseInt(document.getElementById('rev-produkt').value),
+                cena: parseInt(document.getElementById('rev-cena').value),
+                dostawa: parseInt(document.getElementById('rev-dostawa').value),
+                date: new Date().toLocaleDateString('pl-PL')
+            };
+
+            if(db) {
+                // Sprawdzamy czy zamówienie o takim ID istnieje w bazie
+                db.ref('zamowienia/' + orderId).once('value').then(snap => {
+                    if(!snap.exists()) {
+                        alert("Błąd: Nie znaleziono zamówienia o podanym ID! Opinia zablokowana.");
+                    } else {
+                        // Znaleziono, dodajemy
+                        db.ref('opinie/' + reviewObj.id).set(reviewObj).then(() => {
+                            document.getElementById('rev-imie').value = ''; document.getElementById('rev-nazwisko').value = '';
+                            document.getElementById('rev-orderid').value = ''; document.getElementById('rev-tresc').value = '';
+                            alert("Dziękujemy za zweryfikowaną opinię!");
+                        }).catch(err => alert("Błąd zapisu bazy danych."));
+                    }
+                }).catch(err => alert("Błąd połączenia z bazą podczas weryfikacji."));
+            } else {
+                alert("Tryb lokalny. Opinia zablokowana, włącz bazę danych.");
+            }
         }
 
+        // =========================================================
+        // WYŚWIETLANIE ZABEZPIECZONYCH DANYCH (Anty-Haker)
+        // =========================================================
+        function renderReviews(reviews) {
+            let listEl = document.getElementById('reviews-list');
+            let adminListEl = document.getElementById('admin-reviews-list');
+            if(!listEl || !adminListEl) return;
+            listEl.innerHTML = ''; adminListEl.innerHTML = '';
+
+            if(reviews.length === 0) { listEl.innerHTML = '<div class="section" style="text-align:center; color:#888;">Brak opinii.</div>'; return; }
+            const drawStars = (c) => '⭐'.repeat(c);
+
+            reviews.slice().reverse().forEach(r => {
+                // Używamy escapeHTML aby zablokować wrzucanie kodu do opinii
+                listEl.innerHTML += `
+                    <div class="section" style="padding: 20px; margin-bottom: 15px;">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                            <strong style="color:var(--primary); font-size:16px;">${escapeHTML(r.imie)} ${escapeHTML(r.nazwisko)} <i class="fas fa-check-circle" style="color:var(--secondary); font-size:12px;" title="Zweryfikowane zamówienie"></i></strong>
+                            <small style="color:#aaa;">${r.date}</small>
+                        </div>
+                        <div style="font-size:12px; color:#555; background:var(--bg); padding:10px; border-radius:8px; margin-bottom:10px;">
+                            <strong>Produkt:</strong> ${drawStars(r.prod)} <br>
+                            <strong>Cena:</strong> ${drawStars(r.cena)} <br>
+                            <strong>Dostawa:</strong> ${drawStars(r.dostawa)}
+                        </div>
+                        <p style="font-size:14px; margin:0; font-style:italic; line-height:1.5;">"${escapeHTML(r.tresc)}"</p>
+                    </div>`;
+
+                adminListEl.innerHTML += `
+                    <div style="border: 1px solid var(--border); padding: 12px; margin-bottom: 10px; border-radius: 8px;">
+                        <strong>${escapeHTML(r.imie)} ${escapeHTML(r.nazwisko)}</strong> <small>(${r.date})</small><br>
+                        <small>ID Zamówienia do opinii: ${escapeHTML(r.orderId)}</small>
+                        <p style="font-size:12px; margin:8px 0;">"${escapeHTML(r.tresc)}"</p>
+                        <button onclick="deleteReview(${r.id}, event)" style="background:var(--danger); color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer;">Usuń</button>
+                    </div>`;
+            });
+        }
+
+        function renderOrders(orders) {
+            let adminOrdersEl = document.getElementById('admin-orders-list');
+            if(!adminOrdersEl) return; adminOrdersEl.innerHTML = '';
+            
+            if(orders.length === 0) { adminOrdersEl.innerHTML = '<p style="font-size:13px; color:#888;">Brak historii.</p>'; return; }
+            orders.slice().reverse().forEach(o => {
+                // Używamy escapeHTML by chronić panel admina
+                adminOrdersEl.innerHTML += `
+                    <div class="admin-order-card">
+                        <strong style="color:var(--primary);">${escapeHTML(o.imie)}</strong> - <small>${o.data}</small><br>
+                        <span style="font-size:12px;"><i class="fas fa-hashtag"></i> ID: ${escapeHTML(o.id.toString())}</span><br>
+                        <span style="font-size:12px;"><i class="fas fa-map-marker-alt"></i> ${escapeHTML(o.adres)}</span><br>
+                        <span style="font-size:12px;"><strong>Koszt dostawy:</strong> ${escapeHTML(o.koszt.toString())} zł</span>
+                        <div style="font-size:12px; background:#f0f0f0; padding:5px; margin-top:5px; border-radius:5px; color:#333;">${escapeHTML(o.lista)}</div>
+                    </div>`;
+            });
+        }
+
+        function deleteReview(id, event) {
+            addRipple(event);
+            if(confirm("Na pewno usunąć opinię?")) {
+                if(db) db.ref('opinie/' + id).remove().catch(err => alert("Błąd usuwania!"));
+            }
+        }
+
+        // =========================================================
+        // BEZPIECZNE LOGOWANIE FIREBASE AUTH
+        // =========================================================
+        function checkLogin(e) {
+            addRipple(e);
+            let email = document.getElementById('login-input').value.trim();
+            let pass = document.getElementById('pass-input').value;
+            
+            if(!auth) { alert("Brak połączenia z Firebase Auth!"); return; }
+
+            auth.signInWithEmailAndPassword(email, pass)
+            .then(() => alert("Zalogowano pomyślnie!"))
+            .catch((error) => {
+                console.error(error);
+                alert("Błędny E-mail lub Hasło! Dostęp zablokowany.");
+            });
+        }
+
+        function logout(e) {
+            addRipple(e);
+            if(auth) auth.signOut().then(() => alert("Wylogowano!"));
+        }
+
+        // =========================================================
+        // ZARZĄDZANIE (TYLKO DLA ZALOGOWANEGO)
+        // =========================================================
         function setStatus(isAvailable, e) {
             addRipple(e);
             let returnTime = document.getElementById('return-time-input').value || "wkrótce";
             if(db) {
                 db.ref('ustawienia').update({ isAvailable: isAvailable, returnTime: returnTime })
-                  .then(() => alert(isAvailable ? "Dostawy WŁĄCZONE." : "Dostawy WYŁĄCZONE."))
-                  .catch(err => alert("Brak uprawnień bazy danych! Zmień reguły Firebase."));
-            } else {
-                localStorage.setItem('isAvailable', isAvailable);
-                localStorage.setItem('returnTime', returnTime);
-                applySettings(isAvailable, returnTime, localStorage.getItem('czernicaModalText'), isWeatherBad);
-                alert(isAvailable ? "Dostawy WŁĄCZONE." : "Dostawy WYŁĄCZONE.");
+                  .then(() => alert(isAvailable ? "WŁĄCZONE." : "WYŁĄCZONE."))
+                  .catch(err => alert("Odmowa dostępu! Zaloguj się poprawnie."));
             }
         }
 
         function updateSettings(e) {
             addRipple(e);
             let text = document.getElementById('admin-modal-text').value.trim();
-            if(text) {
-                if(db) {
-                    db.ref('ustawienia').update({ modalText: text })
-                      .then(() => {
-                          document.getElementById('admin-modal-text').value = '';
-                          alert("Tekst zapisany pomyślnie!");
-                      }).catch(err => alert("Brak uprawnień bazy danych! Zmień reguły Firebase."));
-                } else {
-                    localStorage.setItem('czernicaModalText', text);
-                    document.getElementById('admin-modal-text').value = '';
-                    alert("Tekst zapisany pomyślnie!");
-                }
+            if(text && db) {
+                db.ref('ustawienia').update({ modalText: text })
+                  .then(() => { document.getElementById('admin-modal-text').value = ''; alert("Zapisano!"); })
+                  .catch(err => alert("Odmowa dostępu!"));
             }
         }
 
@@ -1021,39 +779,75 @@
             addRipple(e);
             if(db) {
                 db.ref('ustawienia').update({ weatherFee: isActive })
-                  .then(() => alert(isActive ? "Doliczono dopłatę za deszcz (+1,50 zł)" : "Wyłączono dopłatę deszczową."))
-                  .catch(err => alert("Brak uprawnień bazy danych! Zmień reguły Firebase."));
-            } else {
-                localStorage.setItem('weatherFee', isActive);
-                applySettings(localStorage.getItem('isAvailable') !== 'false', localStorage.getItem('returnTime'), null, isActive);
-                alert(isActive ? "Doliczono dopłatę za deszcz (+1,50 zł)" : "Wyłączono dopłatę deszczową.");
+                  .then(() => alert(isActive ? "Doliczono dopłatę (+1,50 zł)" : "Wyłączono dopłatę."))
+                  .catch(err => alert("Odmowa dostępu!"));
             }
         }
 
-        function estimateCost() {
-            let text = document.getElementById('admin-list').value.toLowerCase();
-            let suma = 0;
-            for (let produkt in cennikGrazynki) {
-                if (text.includes(produkt)) suma += cennikGrazynki[produkt];
+        // =========================================================
+        // FUNKCJE POMOCNICZE
+        // =========================================================
+        function checkStoreHours() {
+            let now = new Date(); let day = now.getDay(); let hour = now.getHours();
+            let czernicaRadio = document.querySelector('input[name="sklep"][value="1.0"]');
+            let czernicaCard = document.getElementById('czernica-card'); let noteDiv = document.getElementById('czernica-note');
+            let isWeekday = (day >= 1 && day <= 5);
+
+            if (isWeekday && hour >= 12 && hour < 14) {
+                czernicaRadio.disabled = true; czernicaCard.style.opacity = '0.5'; czernicaCard.style.pointerEvents = 'none';
+                noteDiv.innerText = "Przerwa kasjerki. Sklep od 14:00."; noteDiv.style.display = 'block';
+                if (czernicaRadio.checked) document.querySelector('input[name="sklep"][value="2.0"]').checked = true;
+            } else if (isWeekday && hour >= 18) {
+                czernicaRadio.disabled = true; czernicaCard.style.opacity = '0.5'; czernicaCard.style.pointerEvents = 'none';
+                noteDiv.innerText = "Sklep czynny do 18:00."; noteDiv.style.display = 'block';
+                if (czernicaRadio.checked) document.querySelector('input[name="sklep"][value="2.0"]').checked = true;
+            } else {
+                czernicaRadio.disabled = false; czernicaCard.style.opacity = '1'; czernicaCard.style.pointerEvents = 'auto';
+                noteDiv.style.display = 'none';
             }
-            document.getElementById('est-cost').innerText = suma.toFixed(2);
+        }
+
+        function checkHappyHour() {
+            const now = new Date(); const day = now.getDay(); const hour = now.getHours();
+            const banner = document.getElementById('happy-hour-banner');
+
+            if(day === 1) { 
+                banner.innerHTML = "<i class='fas fa-clock'></i> Zapowiedź: Jutro o 16:00 HAPPY HOUR! Dostawa -35% taniej!"; banner.style.display = 'block';
+            } else if (day === 2) { 
+                if(hour < 16) { banner.innerHTML = "<i class='fas fa-clock'></i> Dziś 16:00 - 17:00 HAPPY HOUR! Zgarnij -35% na dostawę!"; banner.style.display = 'block'; }
+                else if (hour === 16) { banner.innerHTML = "🔥 HAPPY HOUR TRWA! Koszt dostawy obniżony o 35%! 🔥"; banner.style.display = 'block'; isHappyHour = true; }
+            }
+        }
+
+        function calculate() {
+            let sklepPrice = parseFloat(document.querySelector('input[name="sklep"]:checked').value);
+            let transportPrice = parseFloat(document.querySelector('input[name="transport"]:checked').value);
+            let weekendFee = 0; let weatherExtra = isWeatherBad ? 1.50 : 0;
+            let today = new Date().getDay();
+
+            if(today === 0 || today === 6) { weekendFee = 0.50; document.getElementById('weekend-badge').style.display = 'inline-block'; } 
+            else { document.getElementById('weekend-badge').style.display = 'none'; }
+
+            let deliveryBase = sklepPrice + transportPrice + weekendFee + weatherExtra;
+            let oldTotalDisplay = document.getElementById('old-total');
+            
+            if(isHappyHour) { oldTotalDisplay.innerText = (deliveryBase + currentTip).toFixed(2) + " zł"; oldTotalDisplay.style.display = "inline"; deliveryBase *= 0.65; } 
+            else { oldTotalDisplay.style.display = "none"; }
+
+            document.getElementById('total').innerText = (deliveryBase + currentTip).toFixed(2);
         }
 
         function initCounter() {
-            let count = localStorage.getItem('czernicaOrders');
-            if (count === null) { count = 2; localStorage.setItem('czernicaOrders', count); }
+            let count = localStorage.getItem('czernicaOrders') || 2;
             document.getElementById('counter-value').innerText = count;
         }
 
         function forceIncrementCounter() {
-            let count = parseInt(localStorage.getItem('czernicaOrders')) || 2;
-            count++; localStorage.setItem('czernicaOrders', count);
+            let count = parseInt(localStorage.getItem('czernicaOrders')) || 2; count++; localStorage.setItem('czernicaOrders', count);
             let counterEl = document.getElementById('counter-value');
             if (counterEl) {
-                counterEl.innerText = count;
-                counterEl.style.transition = "all 0.3s ease";
-                counterEl.style.color = "var(--secondary)";
-                counterEl.style.transform = "scale(1.2)";
+                counterEl.innerText = count; counterEl.style.transition = "all 0.3s ease";
+                counterEl.style.color = "var(--secondary)"; counterEl.style.transform = "scale(1.2)";
                 setTimeout(() => { counterEl.style.color = "inherit"; counterEl.style.transform = "scale(1)"; }, 500);
             }
         }
