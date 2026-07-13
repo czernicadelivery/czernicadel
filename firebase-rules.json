@@ -1,0 +1,65 @@
+{
+  "_INSTRUKCJA": "Wgraj te reguły do Firebase Console → Realtime Database → Reguły",
+
+  "rules": {
+
+    "admins": {
+      "$uid": {
+        ".read": "auth !== null && auth.uid === $uid",
+        ".write": false
+      }
+    },
+
+    "zamowienia": {
+      ".indexOn": ["uid", "timestamp", "status"],
+
+      "$orderId": {
+        ".read": "auth !== null && (root.child('admins').child(auth.uid).exists() || (data.child('uid').val() === auth.uid))",
+
+        ".write": "auth !== null || !data.exists()",
+
+        ".validate": "newData.hasChildren(['id', 'imie', 'adres', 'lista', 'koszt', 'data']) && newData.child('imie').val().length >= 2 && newData.child('imie').val().length <= 100 && newData.child('adres').val().length >= 5 && newData.child('adres').val().length <= 200 && newData.child('lista').val().length >= 3 && newData.child('lista').val().length <= 2000",
+
+        "status": {
+          ".write": "auth !== null && root.child('admins').child(auth.uid).exists()",
+          ".validate": "newData.val() === 'Przyjeto' || newData.val() === 'W drodze' || newData.val() === 'Dostarczone'"
+        }
+      }
+    },
+
+    "opinie": {
+      ".read": true,
+      ".indexOn": ["orderId", "date"],
+
+      "$reviewId": {
+        ".write": "auth !== null || !data.exists()",
+
+        ".validate": "newData.hasChildren(['id', 'imie', 'nazwisko', 'tresc', 'orderId', 'prod', 'cena', 'dostawa', 'date']) && newData.child('tresc').val().length >= 10 && newData.child('tresc').val().length <= 1000 && newData.child('prod').val() >= 1 && newData.child('prod').val() <= 5 && newData.child('cena').val() >= 1 && newData.child('cena').val() <= 5 && newData.child('dostawa').val() >= 1 && newData.child('dostawa').val() <= 5",
+
+        "$field": {
+          ".write": "auth !== null && root.child('admins').child(auth.uid).exists()"
+        }
+      }
+    },
+
+    "ustawienia": {
+      ".read": true,
+      ".write": "auth !== null && root.child('admins').child(auth.uid).exists()",
+      ".validate": "newData.hasChildren(['isAvailable'])"
+    },
+
+    "kody_rabatowe": {
+      ".read": true,
+      ".write": "auth !== null && root.child('admins').child(auth.uid).exists()",
+
+      "$code": {
+        ".validate": "newData.hasChildren(['percent']) && newData.child('percent').val() >= 1 && newData.child('percent').val() <= 99"
+      }
+    },
+
+    "$other": {
+      ".read": false,
+      ".write": false
+    }
+  }
+}
