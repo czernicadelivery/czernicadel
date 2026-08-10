@@ -371,24 +371,6 @@
         }
         .discount-badge.visible { display: block; }
 
-        /* AI ESTIMATE */
-        .ai-btn {
-            background: linear-gradient(135deg, #667eea, #764ba2); color: white;
-            border: none; padding: 12px 20px; border-radius: 12px; font-weight: 700;
-            cursor: pointer; font-family: inherit; font-size: 14px; margin-top: 5px;
-            width: 100%; transition: all 0.3s ease; display: flex; align-items: center;
-            justify-content: center; gap: 8px;
-        }
-        .ai-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102,126,234,0.3); }
-        .ai-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-        .ai-result {
-            background: linear-gradient(135deg, rgba(102,126,234,0.08), rgba(118,75,162,0.08));
-            border: 1px solid rgba(102,126,234,0.2); border-radius: 12px; padding: 15px;
-            margin-top: 12px; font-size: 14px; line-height: 1.6; display: none;
-        }
-        .ai-result.visible { display: block; animation: fadeIn 0.3s ease; }
-        .ai-spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.8s linear infinite; }
-
         /* HISTORY */
         .history-card {
             border: 1px solid var(--border); border-radius: 12px; padding: 15px;
@@ -490,6 +472,84 @@
         .install-banner span { font-size: 13px; font-weight: 600; flex: 1; }
         .install-close { background: none; border: none; color: white; font-size: 18px; cursor: pointer; }
         .install-btn { background: white; color: var(--primary); border: none; padding: 8px 16px; border-radius: 20px; font-weight: 700; cursor: pointer; font-size: 13px; }
+
+        /* =============================================
+           NEW FEATURES CSS
+        ============================================= */
+
+        /* QUEUE COUNTER */
+        .queue-counter {
+            text-align: center; background: rgba(23,162,184,0.1); color: #17a2b8;
+            padding: 10px; border-radius: 50px; font-weight: 600; font-size: 13px;
+            margin-bottom: 15px; border: 1px solid rgba(23,162,184,0.2);
+        }
+        [data-theme="dark"] .queue-counter { background: rgba(23,162,184,0.15); }
+
+        /* TIME SLOTS */
+        .slots-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px; }
+        .slot-btn {
+            border: 2px solid var(--border); background: var(--surface); color: var(--text);
+            padding: 12px 8px; border-radius: 10px; font-weight: 600; font-size: 13px;
+            cursor: pointer; font-family: inherit; transition: all 0.2s; position: relative;
+        }
+        .slot-btn:hover:not(:disabled) { border-color: var(--primary-light); transform: translateY(-2px); }
+        .slot-btn.selected { border-color: var(--primary); background: rgba(255,102,0,0.08); color: var(--primary); }
+        .slot-btn:disabled { opacity: 0.4; cursor: not-allowed; text-decoration: line-through; }
+        .slot-btn small { display: block; font-size: 10px; font-weight: 400; margin-top: 3px; color: #888; }
+
+        /* ORDER PROGRESS BAR */
+        .progress-bar { display: flex; align-items: center; margin: 14px 0 6px; }
+        .progress-step { flex: 1; text-align: center; position: relative; }
+        .progress-dot {
+            width: 22px; height: 22px; border-radius: 50%; background: var(--border);
+            display: flex; align-items: center; justify-content: center; margin: 0 auto 6px;
+            color: white; font-size: 11px; font-weight: 800; transition: background 0.3s;
+        }
+        .progress-step.done .progress-dot { background: var(--secondary); }
+        .progress-step.current .progress-dot { background: var(--primary); box-shadow: 0 0 0 4px rgba(255,102,0,0.2); }
+        .progress-line { position: absolute; top: 11px; left: -50%; width: 100%; height: 3px; background: var(--border); z-index: -1; }
+        .progress-step:first-child .progress-line { display: none; }
+        .progress-step.done .progress-line, .progress-step.current .progress-line { background: var(--secondary); }
+        .progress-label { font-size: 10px; color: #888; font-weight: 600; }
+        .progress-step.current .progress-label { color: var(--primary); }
+
+        /* REORDER BUTTON */
+        .reorder-btn {
+            background: none; border: 2px solid var(--primary); color: var(--primary);
+            padding: 8px 14px; border-radius: 20px; font-weight: 700; cursor: pointer;
+            font-family: inherit; font-size: 12px; margin-top: 10px; transition: all 0.2s;
+        }
+        .reorder-btn:hover { background: var(--primary); color: white; }
+
+        /* LOYALTY */
+        .loyalty-card {
+            background: linear-gradient(135deg, #ff6600, #ff8533); color: white;
+            border-radius: var(--radius); padding: 20px; margin-bottom: 20px;
+            box-shadow: 0 8px 20px rgba(255,102,0,0.25);
+        }
+        .loyalty-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .loyalty-title { font-weight: 800; font-size: 15px; display: flex; align-items: center; gap: 8px; }
+        .loyalty-count { font-size: 13px; font-weight: 700; opacity: 0.95; }
+        .loyalty-track { background: rgba(255,255,255,0.3); border-radius: 20px; height: 10px; overflow: hidden; }
+        .loyalty-fill { background: white; height: 100%; border-radius: 20px; transition: width 0.4s ease; }
+        .loyalty-note { font-size: 12px; margin-top: 10px; opacity: 0.95; }
+        .loyalty-reward-badge {
+            background: rgba(255,255,255,0.25); border: 1px solid rgba(255,255,255,0.5);
+            border-radius: 10px; padding: 10px; margin-top: 10px; font-size: 13px;
+            font-weight: 700; text-align: center;
+        }
+
+        /* DYNAMIC RECS LOADING */
+        .rec-card.rec-loading { opacity: 0.5; pointer-events: none; }
+
+        /* NOTIFY WA LINK (admin) */
+        .notify-wa-btn {
+            background: #25D366; color: white; border: none; padding: 6px 12px;
+            border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer;
+            font-family: inherit; margin-left: 8px; text-decoration: none; display: inline-flex;
+            align-items: center; gap: 4px;
+        }
+        .notify-wa-btn:hover { background: var(--secondary-hover); }
     </style>
 </head>
 <body>
@@ -583,6 +643,10 @@
             <i class="fas fa-shopping-bag"></i> Zrealizowaliśmy już <strong id="counter-value">...</strong> zamówień!
         </div>
 
+        <div class="queue-counter" id="queue-counter" style="display:none;">
+            <i class="fas fa-clock"></i> Aktualnie w kolejce: <strong id="queue-count">0</strong> zamówień
+        </div>
+
         <div id="hours-warning" class="section" style="background: #fff8e1; border-color: #ffc107; display: none;">
             <strong style="color: #d39e00;"><i class="fas fa-clock"></i> Poza godzinami pracy!</strong><br>
             <span style="font-size: 13px; color: #333;">Jeździmy codziennie 11:00–19:00. Wróć do nas w godzinach otwarcia!</span>
@@ -627,11 +691,15 @@
             <h2><i class="fas fa-clock"></i> 3. Kiedy dostarczyć?</h2>
             <select id="czas-dostawy" onchange="toggleTimePicker()">
                 <option value="szybko">Jak najszybciej (standardowo)</option>
-                <option value="planowana">Wybierz datę i godzinę (nawet na jutro)</option>
+                <option value="planowana">Wybierz slot czasowy (nawet na jutro)</option>
             </select>
             <div id="date-picker-container" style="display:none; margin-top:10px;">
-                <label style="font-size:12px; color:#666; font-weight:bold;">Wybierz dokładny termin:</label>
-                <input type="datetime-local" id="dokladny-czas">
+                <label style="font-size:12px; color:#666; font-weight:bold;">Wybierz datę:</label>
+                <input type="date" id="slot-date">
+                <label style="font-size:12px; color:#666; font-weight:bold;">Dostępne godziny:</label>
+                <div class="slots-grid" id="slots-grid">
+                    <p style="grid-column: 1/-1; font-size:12px; color:#aaa;">Wybierz datę, aby zobaczyć dostępne sloty.</p>
+                </div>
             </div>
         </div>
 
@@ -641,8 +709,8 @@
             <input type="text" id="imie" placeholder="Twoje imię i nazwisko" autocomplete="name" required>
             <input type="text" id="adres" placeholder="Dokładny adres dostawy" autocomplete="street-address" required>
 
-            <h3 style="font-size: 14px; margin: 15px 0 10px; color: #555;">Najczęściej zamawiane u nas <i class="fas fa-heart" style="color:var(--danger)"></i></h3>
-            <div class="recommendations">
+            <h3 style="font-size: 14px; margin: 15px 0 10px; color: #555;" id="rec-heading">Najczęściej zamawiane u nas <i class="fas fa-heart" style="color:var(--danger)"></i></h3>
+            <div class="recommendations" id="recommendations-grid">
                 <div class="rec-card" onclick="addToCart('Lody', this)">
                     <img src="IMG_9081.jpeg" alt="Lody" loading="lazy"
                          onerror="this.src='https://via.placeholder.com/150/ffeedd/ff6600?text=Lody'">
@@ -673,12 +741,6 @@
             </div>
 
             <textarea id="lista" rows="4" placeholder="Co mamy kupić? (np. 1x chleb jasny, 2x mleko 3.2%)"></textarea>
-
-            <!-- AI ESTIMATOR -->
-            <button class="ai-btn" id="ai-estimate-btn" onclick="estimateWithAI()">
-                <i class="fas fa-robot"></i> Szacuj koszt zakupów (AI)
-            </button>
-            <div class="ai-result" id="ai-result"></div>
 
             <!-- PAYMENT -->
             <h2 style="margin-top: 25px;"><i class="fas fa-wallet"></i> Płatność i opcje</h2>
@@ -837,6 +899,19 @@
                 </button>
             </div>
 
+            <!-- LOYALTY CARD -->
+            <div class="loyalty-card" id="loyalty-card" style="display:none;">
+                <div class="loyalty-header">
+                    <span class="loyalty-title"><i class="fas fa-gem"></i> Program lojalnościowy</span>
+                    <span class="loyalty-count" id="loyalty-count-text">0 / 10</span>
+                </div>
+                <div class="loyalty-track">
+                    <div class="loyalty-fill" id="loyalty-fill" style="width:0%;"></div>
+                </div>
+                <div class="loyalty-note" id="loyalty-note">Zamów 10 razy, a otrzymasz 5 zł rabatu na dostawę!</div>
+                <div class="loyalty-reward-badge" id="loyalty-reward-badge" style="display:none;"></div>
+            </div>
+
             <div class="section">
                 <h2><i class="fas fa-history"></i> Historia zamówień</h2>
                 <div id="history-loading" class="loading-spinner active">
@@ -992,12 +1067,14 @@
    and createElement.
 ========================================================= */
 const Security = (() => {
-    // Strip all HTML tags + dangerous chars from user input
+    // Strip only genuinely dangerous patterns; keep punctuation
+    // like " ' & that are common in real addresses/lists.
     function sanitizeInput(str) {
         if (str === null || str === undefined) return '';
         return String(str)
             .trim()
-            .replace(/[<>'";&\\]/g, '')
+            .replace(/</g, '')
+            .replace(/>/g, '')
             .replace(/javascript:/gi, '')
             .replace(/on\w+=/gi, '')
             .substring(0, 500);
@@ -1006,7 +1083,7 @@ const Security = (() => {
     // Validate common patterns
     const patterns = {
         name: /^[\p{L}\s\-\.]{2,100}$/u,
-        address: /^[\p{L}\d\s\-\.,\/]{5,200}$/u,
+        address: /^[\p{L}\d\s\-\.,\/'"&]{5,200}$/u,
         orderId: /^\d{6}$/,
         email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
         discountCode: /^[A-Z0-9]{3,20}$/
@@ -1059,8 +1136,7 @@ const DOM = (() => {
 ========================================================= */
 const CONFIG = {
     WHATSAPP_NUMBER: '48781469903',
-    GROQ_API_KEY: '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', // <- wstaw klucz Groq
-    WEATHER_API_KEY: '0b72f0646ae4131c46fe64730c9dc361', // <- wstaw klucz OpenWeatherMap
+    WEATHER_API_KEY: 'ZMIEN_NA_SWOJ_KLUCZ_OWM', // <- wstaw klucz OpenWeatherMap (zrotowany, patrz notatka bezpieczeństwa)
     WEATHER_CITY_ID: '760530', // Czernica, PL
     FIREBASE_CONFIG: {
         apiKey: "AIzaSyDL547VT5uy_hxyhEccpJJNcLIhhSsc3oQ",
@@ -1070,7 +1146,15 @@ const CONFIG = {
         storageBucket: "czernicadel.firebasestorage.app",
         messagingSenderId: "624999194948",
         appId: "1:624999194948:web:8a4e54a13ba6172c9c7711"
-    }
+    },
+    SLOT_DURATION_HOURS: 1,
+    SLOT_MAX_ORDERS: 3,
+    SLOT_START_HOUR: 11,
+    SLOT_END_HOUR: 19,
+    LOYALTY_TARGET: 10,
+    LOYALTY_REWARD_PERCENT: 100, // handled as flat 5 zł below
+    LOYALTY_REWARD_ZL: 5,
+    ORDER_COOLDOWN_MS: 45000
 };
 
 /* =========================================================
@@ -1088,7 +1172,11 @@ const State = {
     discountPercent: 0,
     discountCode: '',
     cart: [],
-    deferredInstall: null
+    deferredInstall: null,
+    selectedSlot: null,
+    lastOrderTimestamp: 0,
+    loyaltyCount: 0,
+    allOrdersCache: []
 };
 
 /* =========================================================
@@ -1298,11 +1386,13 @@ function loadUserHistory(uid) {
                 DOM.setHTML('history-list', container => {
                     container.appendChild(DOM.el('p', { style: { color: '#aaa', fontSize: '14px', textAlign: 'center', padding: '20px 0' } }, ['Brak historii zamówień. Złóż pierwsze zamówienie!']));
                 });
+                updateLoyaltyUI(0);
                 return;
             }
 
             const orders = Object.values(data).sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
             renderHistory(orders);
+            updateLoyaltyUI(orders.length);
         })
         .catch(err => {
             if (loadingEl) loadingEl.classList.remove('active');
@@ -1329,16 +1419,110 @@ function renderHistory(orders) {
             const addrEl = DOM.el('p', { style: { margin: '6px 0 4px', fontSize: '14px', fontWeight: '600' } }, [o.adres || '']);
             const listEl = DOM.el('p', { style: { margin: '0', fontSize: '12px', color: '#888', whiteSpace: 'pre-line' } }, [o.lista || '']);
             const kostEl = DOM.el('p', { style: { margin: '8px 0 4px', fontSize: '14px', fontWeight: '700', color: 'var(--primary)' } }, ['Dostawa: ' + (o.koszt || '-') + ' zł']);
+
+            const progress = buildProgressBar(o.status || 'Przyjeto');
+
+            const footerRow = DOM.el('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '8px', flexWrap: 'wrap', gap: '8px' } });
             const statusEl = DOM.el('span', { className: 'history-status ' + statusClass }, [o.status || 'Przyjęto']);
+            const reorderBtn = DOM.el('button', { className: 'reorder-btn' }, [' Zamów ponownie']);
+            const reorderIcon = DOM.el('i', { className: 'fas fa-redo', style: { marginRight: '5px' } });
+            reorderBtn.prepend(reorderIcon);
+            reorderBtn.addEventListener('click', () => reorderFromHistory(o));
+            footerRow.appendChild(statusEl);
+            footerRow.appendChild(reorderBtn);
 
             card.appendChild(header);
             card.appendChild(addrEl);
             card.appendChild(listEl);
             card.appendChild(kostEl);
-            card.appendChild(statusEl);
+            card.appendChild(progress);
+            card.appendChild(footerRow);
             container.appendChild(card);
         });
     });
+}
+
+/* Build a 3-step visual progress bar for order status */
+function buildProgressBar(status) {
+    const steps = [
+        { key: 'Przyjeto', label: 'Przyjęto', icon: '1' },
+        { key: 'W drodze', label: 'W drodze', icon: '2' },
+        { key: 'Dostarczone', label: 'Dostarczone', icon: '3' }
+    ];
+    const currentIdx = steps.findIndex(s => s.key === status);
+    const wrap = DOM.el('div', { className: 'progress-bar' });
+
+    steps.forEach((s, idx) => {
+        let stateClass = '';
+        if (currentIdx === -1) {
+            stateClass = idx === 0 ? 'current' : '';
+        } else if (idx < currentIdx) stateClass = 'done';
+        else if (idx === currentIdx) stateClass = 'current';
+
+        const stepEl = DOM.el('div', { className: 'progress-step ' + stateClass });
+        const line = DOM.el('div', { className: 'progress-line' });
+        const dot = DOM.el('div', { className: 'progress-dot' }, [stateClass === 'done' ? '✓' : s.icon]);
+        const label = DOM.el('div', { className: 'progress-label' }, [s.label]);
+        stepEl.appendChild(line);
+        stepEl.appendChild(dot);
+        stepEl.appendChild(label);
+        wrap.appendChild(stepEl);
+    });
+    return wrap;
+}
+
+/* Refill order form fields from a past order */
+function reorderFromHistory(order) {
+    switchTab('order', null);
+    const imieEl = document.getElementById('imie');
+    const adresEl = document.getElementById('adres');
+    const listaEl = document.getElementById('lista');
+    if (imieEl) imieEl.value = order.imie || imieEl.value;
+    if (adresEl) adresEl.value = order.adres || '';
+    if (listaEl) listaEl.value = order.lista || '';
+
+    // Try to restore store selection
+    if (order.sklep) {
+        const radios = document.querySelectorAll('input[name="sklep"]');
+        radios.forEach(r => { if (r.getAttribute('data-nazwa') === order.sklep) r.checked = true; });
+    }
+    calculate();
+    showToast('Dane z poprzedniego zamówienia wczytane', 'success');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* =========================================================
+   LOYALTY PROGRAM
+========================================================= */
+function updateLoyaltyUI(orderCount) {
+    State.loyaltyCount = orderCount;
+    const card = document.getElementById('loyalty-card');
+    if (!card) return;
+    card.style.display = 'block';
+
+    const target = CONFIG.LOYALTY_TARGET;
+    const progressCount = orderCount % target === 0 && orderCount > 0 ? target : orderCount % target;
+    const pct = Math.min(100, Math.round((progressCount / target) * 100));
+
+    DOM.setText('loyalty-count-text', `${progressCount} / ${target}`);
+    const fill = document.getElementById('loyalty-fill');
+    if (fill) fill.style.width = pct + '%';
+
+    const rewardBadge = document.getElementById('loyalty-reward-badge');
+    const note = document.getElementById('loyalty-note');
+    const earnedRewards = Math.floor(orderCount / target);
+
+    if (earnedRewards > 0) {
+        if (note) note.style.display = 'none';
+        if (rewardBadge) {
+            rewardBadge.style.display = 'block';
+            rewardBadge.textContent = '';
+            rewardBadge.appendChild(document.createTextNode(`🎁 Masz ${CONFIG.LOYALTY_REWARD_ZL} zł rabatu! Użyj kodu STALY${State.loyaltyCount} przy zamówieniu.`));
+        }
+    } else {
+        if (note) { note.style.display = 'block'; note.textContent = `Zamów ${target - progressCount} razy więcej, a otrzymasz ${CONFIG.LOYALTY_REWARD_ZL} zł rabatu na dostawę!`; }
+        if (rewardBadge) rewardBadge.style.display = 'none';
+    }
 }
 
 /* =========================================================
@@ -1414,103 +1598,149 @@ const Cart = (() => {
 })();
 
 /* =========================================================
-   AI GROQ PRICE ESTIMATOR
+   DYNAMIC RECOMMENDATIONS (based on real order history)
 ========================================================= */
-async function estimateWithAI() {
-    const lista = document.getElementById('lista').value.trim();
-    if (!lista) {
-        showToast('Najpierw wpisz listę zakupów!', 'error');
-        return;
-    }
+const DEFAULT_RECS = [
+    { name: 'Lody', img: 'IMG_9081.jpeg', price: '5–10 zł' },
+    { name: 'Świeży chleb', img: 'IMG_9082.jpeg', price: 'Wg paragonu' },
+    { name: 'Napoje (Tymbark/Woda/Cola)', img: 'IMG_9083.png', price: 'Wg paragonu' }
+];
 
-    const btn = document.getElementById('ai-estimate-btn');
-    const resultEl = document.getElementById('ai-result');
-    btn.disabled = true;
-    btn.textContent = '';
-    btn.appendChild(DOM.el('div', { className: 'ai-spinner' }));
-    btn.appendChild(document.createTextNode(' Szacowanie AI...'));
-    if (resultEl) resultEl.classList.remove('visible');
+function loadDynamicRecommendations() {
+    if (!State.db) return;
+    State.db.ref('zamowienia').limitToLast(100).once('value')
+        .then(snap => {
+            const data = snap.val();
+            if (!data) return; // keep static defaults
+            const orders = Object.values(data);
+            const counts = {};
+            orders.forEach(o => {
+                if (!o.lista) return;
+                o.lista.split('\n').forEach(line => {
+                    const cleaned = line.replace(/^\d+x?\s*/i, '').trim().toLowerCase();
+                    if (cleaned.length < 2) return;
+                    counts[cleaned] = (counts[cleaned] || 0) + 1;
+                });
+            });
+            const top = Object.entries(counts)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 3)
+                .map(([name]) => name.charAt(0).toUpperCase() + name.slice(1));
 
-    // If no Groq key, use mock response
-    if (CONFIG.GROQ_API_KEY === 'ZMIEN_NA_SWOJ_KLUCZ_GROQ') {
-        await new Promise(r => setTimeout(r, 1200));
-        const mock = generateMockEstimate(lista);
-        showAIResult(resultEl, mock);
-        btn.disabled = false;
-        btn.textContent = '';
-        btn.appendChild(DOM.el('i', { className: 'fas fa-robot' }));
-        btn.appendChild(document.createTextNode(' Szacuj koszt zakupów (AI)'));
-        return;
-    }
-
-    try {
-        const prompt = `Jesteś asystentem wyceny zakupów w małym wiejskim sklepie w Polsce.
-Na podstawie poniższej listy zakupów oszacuj przybliżony koszt każdego produktu i sumę całkowitą.
-Używaj aktualnych polskich cen rynkowych w sklepach spożywczych. Odpowiedz po polsku, krótko i czytelnie.
-
-Lista zakupów:
-${lista}
-
-Format odpowiedzi:
-• [produkt] — ok. [cena] zł
-• [produkt] — ok. [cena] zł
-...
-SZACOWANA SUMA: ok. X,XX zł
-(Plus koszt dostawy doliczony osobno)`;
-
-        const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${CONFIG.GROQ_API_KEY}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                model: 'llama3-8b-8192',
-                messages: [{ role: 'user', content: prompt }],
-                max_tokens: 400,
-                temperature: 0.3
-            })
-        });
-
-        if (!response.ok) throw new Error('Groq API error: ' + response.status);
-        const data = await response.json();
-        const text = data.choices?.[0]?.message?.content || 'Brak odpowiedzi';
-        showAIResult(resultEl, Security.sanitizeInput(text));
-    } catch (err) {
-        console.error('[Groq] Error:', err);
-        const mock = generateMockEstimate(lista);
-        showAIResult(resultEl, mock + '\n\n(Szacunek offline — brak połączenia z AI)');
-    }
-
-    btn.disabled = false;
-    btn.textContent = '';
-    btn.appendChild(DOM.el('i', { className: 'fas fa-robot' }));
-    btn.appendChild(document.createTextNode(' Szacuj koszt zakupów (AI)'));
+            if (top.length >= 3) {
+                renderRecommendations(top.map(name => ({ name, img: null, price: 'Wg paragonu' })));
+            }
+            // If fewer than 3 distinct popular items exist yet, keep the curated defaults.
+        })
+        .catch(() => { /* keep static defaults on failure */ });
 }
 
-function generateMockEstimate(lista) {
-    const lines = lista.split('\n').filter(l => l.trim());
-    let total = 0;
-    const items = lines.map(line => {
-        const cleaned = line.replace(/^\d+x?\s*/i, '').trim();
-        const qtyMatch = line.match(/^(\d+)/);
-        const qty = qtyMatch ? parseInt(qtyMatch[1]) : 1;
-        const basePrice = 3.5 + Math.random() * 6;
-        const price = Math.round(basePrice * qty * 10) / 10;
-        total += price;
-        return `• ${cleaned} — ok. ${price.toFixed(2)} zł`;
+function renderRecommendations(items) {
+    const grid = document.getElementById('recommendations-grid');
+    const heading = document.getElementById('rec-heading');
+    if (!grid) return;
+    if (heading) heading.lastChild && (heading.childNodes[0].textContent = 'Popularne u naszych klientów ');
+
+    grid.textContent = '';
+    items.forEach(item => {
+        const card = DOM.el('div', { className: 'rec-card' });
+        card.addEventListener('click', () => addToCart(item.name, card));
+
+        if (item.img) {
+            const img = DOM.el('img', { src: item.img, alt: item.name, loading: 'lazy' });
+            img.addEventListener('error', () => {
+                img.src = `https://via.placeholder.com/150/ffeedd/ff6600?text=${encodeURIComponent(item.name.slice(0, 10))}`;
+            });
+            card.appendChild(img);
+        } else {
+            const placeholder = DOM.el('div', { style: { width: '100%', height: '70px', borderRadius: '8px', marginBottom: '8px', background: 'linear-gradient(135deg,#fff3e6,#ffe0c2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px' } }, ['🛒']);
+            card.appendChild(placeholder);
+        }
+
+        card.appendChild(DOM.el('span', {}, [item.name]));
+        card.appendChild(DOM.el('small', {}, [item.price]));
+        card.appendChild(DOM.el('div', { className: 'add-badge' }, ['+']));
+        grid.appendChild(card);
     });
-    return items.join('\n') + `\n\nSZACOWANA SUMA: ok. ${total.toFixed(2)} zł\n(Plus koszt dostawy doliczony osobno)`;
 }
 
-function showAIResult(el, text) {
-    if (!el) return;
-    el.textContent = '';
-    const icon = DOM.el('div', { style: { marginBottom: '8px', fontWeight: '700', color: '#764ba2' } }, ['🤖 Szacunek AI:']);
-    const content = DOM.el('pre', { style: { whiteSpace: 'pre-wrap', fontFamily: 'inherit', margin: '0', fontSize: '13px', lineHeight: '1.7' } }, [text]);
-    el.appendChild(icon);
-    el.appendChild(content);
-    el.classList.add('visible');
+/* =========================================================
+   TIME SLOTS
+========================================================= */
+function buildSlotList() {
+    const slots = [];
+    for (let h = CONFIG.SLOT_START_HOUR; h < CONFIG.SLOT_END_HOUR; h += CONFIG.SLOT_DURATION_HOURS) {
+        const end = h + CONFIG.SLOT_DURATION_HOURS;
+        slots.push({ key: `${String(h).padStart(2, '0')}:00-${String(end).padStart(2, '0')}:00`, startHour: h });
+    }
+    return slots;
+}
+
+function onSlotDateChange() {
+    const dateInput = document.getElementById('slot-date');
+    const grid = document.getElementById('slots-grid');
+    if (!dateInput || !grid || !dateInput.value) return;
+
+    grid.textContent = '';
+    grid.appendChild(DOM.el('p', { style: { gridColumn: '1/-1', fontSize: '12px', color: '#aaa' } }, ['Ładowanie dostępności...']));
+
+    const dateStr = dateInput.value; // YYYY-MM-DD
+    const slots = buildSlotList();
+
+    const finishRender = (occupancy) => {
+        grid.textContent = '';
+        slots.forEach(slot => {
+            const count = occupancy[slot.key] || 0;
+            const isFull = count >= CONFIG.SLOT_MAX_ORDERS;
+            const btn = DOM.el('button', { className: 'slot-btn', type: 'button' }, [slot.key]);
+            const spotsLeft = DOM.el('small', {}, [isFull ? 'Zajęte' : `Wolne: ${CONFIG.SLOT_MAX_ORDERS - count}`]);
+            btn.appendChild(spotsLeft);
+            if (isFull) {
+                btn.disabled = true;
+            } else {
+                btn.addEventListener('click', () => selectSlot(dateStr, slot.key, btn));
+            }
+            grid.appendChild(btn);
+        });
+    };
+
+    if (!State.db) { finishRender({}); return; }
+
+    State.db.ref('zamowienia').orderByChild('slotDate').equalTo(dateStr).once('value')
+        .then(snap => {
+            const occupancy = {};
+            const data = snap.val();
+            if (data) {
+                Object.values(data).forEach(o => {
+                    if (o.slotKey) occupancy[o.slotKey] = (occupancy[o.slotKey] || 0) + 1;
+                });
+            }
+            finishRender(occupancy);
+        })
+        .catch(() => finishRender({}));
+}
+
+function selectSlot(dateStr, slotKey, btnEl) {
+    document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('selected'));
+    btnEl.classList.add('selected');
+    State.selectedSlot = { date: dateStr, key: slotKey };
+}
+
+/* =========================================================
+   QUEUE COUNTER (live)
+========================================================= */
+function initQueueCounter() {
+    if (!State.db) return;
+    State.db.ref('zamowienia').on('value', snap => {
+        const data = snap.val();
+        const orders = data ? Object.values(data) : [];
+        const active = orders.filter(o => o.status !== 'Dostarczone').length;
+        const el = document.getElementById('queue-counter');
+        const countEl = document.getElementById('queue-count');
+        if (countEl) countEl.textContent = String(active);
+        if (el) el.style.display = active > 0 ? 'block' : 'none';
+        State.allOrdersCache = orders;
+    });
 }
 
 /* =========================================================
@@ -1555,6 +1785,17 @@ function applyDiscountCode() {
 
     if (!code) { showToast('Wpisz kod rabatowy', 'error'); return; }
 
+    // Loyalty auto-generated code: STALY<n> grants flat LOYALTY_REWARD_ZL off
+    if (/^STALY\d+$/.test(code)) {
+        const n = parseInt(code.replace('STALY', ''), 10);
+        if (State.currentUser && n === State.loyaltyCount && Math.floor(n / CONFIG.LOYALTY_TARGET) > 0) {
+            applyFlatDiscount(CONFIG.LOYALTY_REWARD_ZL, code, badge);
+            return;
+        }
+        showToast('Ten kod lojalnościowy nie jest już aktywny', 'error');
+        return;
+    }
+
     if (!State.db) {
         checkDiscountLocally(code, badge);
         return;
@@ -1587,12 +1828,26 @@ function checkDiscountLocally(code, badge) {
 function applyDiscount(percent, code, badge) {
     State.discountPercent = parseInt(percent);
     State.discountCode = code;
+    State.flatDiscount = 0;
     if (badge) {
         badge.textContent = '';
         badge.appendChild(document.createTextNode(`✅ Kod "${code}" — ${percent}% rabatu na dostawę!`));
         badge.classList.add('visible');
     }
     showToast(`Kod ${code} aktywny! -${percent}% na dostawę`, 'success');
+    calculate();
+}
+
+function applyFlatDiscount(amountZl, code, badge) {
+    State.discountPercent = 0;
+    State.flatDiscount = amountZl;
+    State.discountCode = code;
+    if (badge) {
+        badge.textContent = '';
+        badge.appendChild(document.createTextNode(`✅ Kod "${code}" — ${amountZl} zł rabatu lojalnościowego!`));
+        badge.classList.add('visible');
+    }
+    showToast(`Nagroda lojalnościowa aktywna! -${amountZl} zł`, 'success');
     calculate();
 }
 
@@ -1623,9 +1878,12 @@ function calculate() {
         if (oldTotalEl) oldTotalEl.style.display = 'none';
     }
 
-    // Apply discount code
+    // Apply discount code (percent or flat)
     if (State.discountPercent > 0) {
         deliveryBase *= (1 - State.discountPercent / 100);
+    }
+    if (State.flatDiscount > 0) {
+        deliveryBase = Math.max(0, deliveryBase - State.flatDiscount);
     }
 
     const totalEl = document.getElementById('total');
@@ -1637,6 +1895,14 @@ function calculate() {
 ========================================================= */
 function sendOrder(e) {
     addRipple(e);
+
+    // Cooldown to prevent accidental/spam double-submits
+    const now = Date.now();
+    if (now - State.lastOrderTimestamp < CONFIG.ORDER_COOLDOWN_MS) {
+        const waitSec = Math.ceil((CONFIG.ORDER_COOLDOWN_MS - (now - State.lastOrderTimestamp)) / 1000);
+        showToast(`Poczekaj jeszcze ${waitSec}s przed kolejnym zamówieniem`, 'error');
+        return;
+    }
 
     if (!document.getElementById('regulamin').checked) {
         showToast('Musisz zaakceptować zasady rozliczenia!', 'error'); return;
@@ -1664,10 +1930,12 @@ function sendOrder(e) {
 
     const trybCzasu = document.getElementById('czas-dostawy').value;
     let kiedyDostarczyc = 'Jak najszybciej 🚀';
+    let slotDate = null, slotKey = null;
     if (trybCzasu === 'planowana') {
-        const datVal = document.getElementById('dokladny-czas').value;
-        if (!datVal) { showToast('Wybierz dokładną datę!', 'error'); return; }
-        kiedyDostarczyc = datVal.replace('T', ' o godz. ');
+        if (!State.selectedSlot) { showToast('Wybierz slot czasowy dostawy!', 'error'); return; }
+        slotDate = State.selectedSlot.date;
+        slotKey = State.selectedSlot.key;
+        kiedyDostarczyc = `${slotDate}, ${slotKey}`;
     }
 
     const uniqueOrderId = Math.floor(100000 + Math.random() * 900000).toString();
@@ -1683,6 +1951,8 @@ function sendOrder(e) {
         platnosc,
         bezKontaktu,
         kiedy: kiedyDostarczyc,
+        slotDate: slotDate,
+        slotKey: slotKey,
         napiwek: State.currentTip,
         kodRabatowy: State.discountCode || null,
         status: 'Przyjeto',
@@ -1698,10 +1968,15 @@ function sendOrder(e) {
     if (State.db) {
         State.db.ref('zamowienia/' + uniqueOrderId).set(orderObj)
             .then(() => { forceIncrementCounter(); })
-            .catch(err => console.error('[Orders] Save failed:', err));
+            .catch(err => {
+                console.error('[Orders] Save failed:', err);
+                showToast('Nie udało się zapisać zamówienia online — WhatsApp i tak zostanie wysłany. Zgłoś to kurierowi.', 'error');
+            });
     } else {
         forceIncrementCounter();
     }
+
+    State.lastOrderTimestamp = now;
 
     // Build WhatsApp message (plain text, no HTML)
     const napiwekInfo = State.currentTip > 0 ? `*Napiwek:* ${State.currentTip} zł%0A` : '';
@@ -1719,7 +1994,7 @@ function sendOrder(e) {
         `*Bezkontaktowo:* ${bezKontaktu}`,
         `*Dostawa:* ${kosztDostawy} zł`,
         State.currentTip > 0 ? `*Napiwek:* ${State.currentTip} zł` : '',
-        State.discountCode ? `*Kod rabatowy:* ${State.discountCode} (-${State.discountPercent}%)` : '',
+        State.discountCode ? `*Kod rabatowy:* ${State.discountCode}` : '',
         `*Płatność:* ${platnosc}`,
         '',
         '*🛒 Lista zakupów:*',
@@ -1742,7 +2017,8 @@ function sendOrder(e) {
     State.cart = [];
     Cart.render();
     document.getElementById('lista').value = '';
-    State.discountPercent = 0; State.discountCode = '';
+    State.discountPercent = 0; State.discountCode = ''; State.flatDiscount = 0;
+    State.selectedSlot = null;
     const discBadge = document.getElementById('discount-badge');
     if (discBadge) { discBadge.classList.remove('visible'); discBadge.textContent = ''; }
     document.getElementById('discount-code').value = '';
@@ -1783,6 +2059,7 @@ function submitReview(e) {
             const reviewObj = {
                 id: Date.now(),
                 imie, nazwisko, tresc, orderId,
+                uid: State.currentUser ? State.currentUser.uid : 'guest',
                 prod: parseInt(document.getElementById('rev-produkt').value),
                 cena: parseInt(document.getElementById('rev-cena').value),
                 dostawa: parseInt(document.getElementById('rev-dostawa').value),
@@ -1923,12 +2200,6 @@ function loadAdminData() {
         renderAdminOrders(orders);
     });
 
-    // Load reviews count
-    State.db.ref('opinie').on('value', snap => {
-        const count = snap.exists() ? Object.keys(snap.val()).length : 0;
-        DOM.setText('stat-reviews', count);
-    });
-
     // Load discount codes
     State.db.ref('kody_rabatowe').on('value', snap => {
         renderDiscountCodes(snap.val() || {});
@@ -1943,12 +2214,6 @@ function loadAdminData() {
             u.modalText || null,
             u.weatherFee || false
         );
-    });
-
-    // Load reviews
-    State.db.ref('opinie').on('value', snap => {
-        const data = snap.val();
-        renderReviews(data ? Object.values(data) : []);
     });
 }
 
@@ -1973,8 +2238,8 @@ function renderAdminOrders(orders) {
             const costEl = DOM.el('div', { style: { fontSize: '12px', fontWeight: '700', marginBottom: '8px' } }, ['Dostawa: ' + (o.koszt || '—') + ' zł | Płatność: ' + (o.platnosc || '—')]);
             const listaEl = DOM.el('div', { style: { fontSize: '12px', background: 'var(--bg)', padding: '8px', borderRadius: '6px', whiteSpace: 'pre-line', marginBottom: '10px' } }, [o.lista || '']);
 
-            // Status selector
-            const statusRow = DOM.el('div', { style: { display: 'flex', alignItems: 'center', gap: '8px' } });
+            // Status selector + WhatsApp notify shortcut
+            const statusRow = DOM.el('div', { style: { display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' } });
             const statusLabel = DOM.el('span', { style: { fontSize: '12px', color: '#888' } }, ['Status:']);
             const statusSel = DOM.el('select', { className: 'status-select' });
             ['Przyjeto', 'W drodze', 'Dostarczone'].forEach(s => {
@@ -1991,6 +2256,15 @@ function renderAdminOrders(orders) {
             });
             statusRow.appendChild(statusLabel);
             statusRow.appendChild(statusSel);
+
+            // WhatsApp "notify customer" quick link — opens wa.me with prefilled status message.
+            // Note: this only works if the courier's phone has the customer's number saved
+            // separately, since customer phone numbers are not collected by this form.
+            const notifyMsg = encodeURIComponent(`Cześć ${o.imie || ''}! Status Twojego zamówienia #${o.id}: ${statusSel.value}. — Czernica Delivery`);
+            const notifyLink = DOM.el('a', { className: 'notify-wa-btn', href: `https://wa.me/?text=${notifyMsg}`, target: '_blank', rel: 'noopener' }, [' Powiadom']);
+            const waIcon = DOM.el('i', { className: 'fab fa-whatsapp' });
+            notifyLink.prepend(waIcon);
+            statusRow.appendChild(notifyLink);
 
             card.appendChild(header); card.appendChild(idEl);
             card.appendChild(addrEl); card.appendChild(costEl);
@@ -2386,6 +2660,15 @@ window.onload = function () {
     checkReturningUser();
     checkWeatherAutomatically();
     initPWA();
+    initQueueCounter();
+    loadDynamicRecommendations();
+
+    const slotDateInput = document.getElementById('slot-date');
+    if (slotDateInput) {
+        const today = new Date();
+        slotDateInput.min = today.toISOString().split('T')[0];
+        slotDateInput.addEventListener('change', onSlotDateChange);
+    }
 
     setTimeout(() => {
         document.getElementById('welcome-modal').classList.add('active');
