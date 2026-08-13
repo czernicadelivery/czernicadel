@@ -22,6 +22,9 @@
         },
         "paczkomatKod": {
           ".validate": "newData.val().length >= 3 && newData.val().length <= 10"
+        },
+        "platnoscStatus": {
+          ".validate": "newData.val().length <= 200"
         }
       }
     },
@@ -48,6 +51,12 @@
       },
       "scheduleMode": {
         ".validate": "newData.val() === 'auto' || newData.val() === 'wakacje' || newData.val() === 'szkola'"
+      },
+      "maintenanceReopenAt": {
+        ".validate": "newData.val() === null || newData.val().length <= 30"
+      },
+      "blikNumber": {
+        ".validate": "newData.val().length <= 30"
       }
     },
     "kody_rabatowe": {
