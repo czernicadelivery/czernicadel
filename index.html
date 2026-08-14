@@ -228,23 +228,6 @@
         .mode-btn { flex: 1; padding: 14px; border: 2px solid var(--border); background: var(--bg); border-radius: 10px; font-weight: 700; cursor: pointer; font-family: inherit; font-size: 13px; color: var(--text); transition: all 0.2s; }
         .mode-btn.active { border-color: var(--primary); background: rgba(255,102,0,0.08); color: var(--primary); }
 
-        /* THEME SWITCH */
-        .theme-switch { position: relative; display: inline-block; width: 50px; height: 27px; flex-shrink: 0; }
-        .theme-switch input { opacity: 0; width: 0; height: 0; }
-        .theme-switch-slider {
-            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
-            background: #2a2a3a; transition: .3s; border-radius: 27px; display: flex;
-            align-items: center; justify-content: space-between; padding: 0 6px; box-sizing: border-box;
-        }
-        .theme-switch-slider i { font-size: 12px; color: #ffca28; z-index: 1; }
-        .theme-switch-slider i.moon-icon { color: #9aa0c0; }
-        .theme-switch-slider:before {
-            position: absolute; content: ""; height: 21px; width: 21px; left: 3px; top: 3px;
-            background: white; transition: .3s; border-radius: 50%; z-index: 2;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
-        .theme-switch input:checked + .theme-switch-slider:before { transform: translateX(23px); }
-
         /* LIVE STATUS BADGE */
         .status-badge-wrap { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; }
         .status-dot { width: 9px; height: 9px; border-radius: 50%; position: relative; flex-shrink: 0; }
@@ -274,22 +257,14 @@
         /* REORDER QUICK WIDGET */
         .quick-reorder-bar {
             display: none; align-items: center; justify-content: space-between; gap: 10px;
-            background: rgba(255,102,0,0.08); border: 1px dashed var(--primary-light);
-            border-radius: 12px; padding: 12px 16px; margin-bottom: 15px; font-size: 13px; font-weight: 600;
+            background: rgba(255,102,0,0.06); border: 1px dashed var(--border);
+            border-radius: 10px; padding: 9px 14px; margin-bottom: 15px; font-size: 12px; font-weight: 600; color: #888;
         }
         .quick-reorder-bar.visible { display: flex; }
         .quick-reorder-bar button {
-            background: var(--primary); color: white; border: none; padding: 8px 14px;
-            border-radius: 20px; font-weight: 700; cursor: pointer; font-family: inherit; font-size: 12px; white-space: nowrap;
+            background: var(--primary); color: white; border: none; padding: 6px 12px;
+            border-radius: 20px; font-weight: 700; cursor: pointer; font-family: inherit; font-size: 11px; white-space: nowrap;
         }
-
-        /* SHARE BUTTON */
-        .share-btn {
-            background: none; border: 2px solid var(--border); color: var(--text);
-            padding: 6px 12px; border-radius: 50px; font-size: 11px; font-weight: 700;
-            cursor: pointer; font-family: inherit; display: inline-flex; align-items: center; gap: 5px;
-        }
-        .share-btn:hover { border-color: var(--primary); color: var(--primary); }
 
         /* SMART PRICE ESTIMATOR */
         .price-estimate-box {
@@ -300,16 +275,16 @@
         .price-estimate-box.visible { display: block; animation: fadeIn 0.3s ease; }
 
         /* PAYMENT CHOICE CARDS */
-        .payment-choice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0 5px; }
+        .payment-choice-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 10px 0 5px; }
         .payment-choice-card {
-            border: 2px solid var(--border); border-radius: 12px; padding: 14px 12px; text-align: center;
+            border: 2px solid var(--border); border-radius: 12px; padding: 12px 8px; text-align: center;
             cursor: pointer; transition: all 0.2s; background: var(--surface);
         }
         .payment-choice-card:hover { border-color: var(--primary-light); }
         .payment-choice-card.selected { border-color: var(--primary); background: rgba(255,102,0,0.06); }
-        .payment-choice-card i { font-size: 22px; color: var(--primary); margin-bottom: 6px; display: block; }
-        .payment-choice-card strong { font-size: 12.5px; display: block; }
-        .payment-choice-card small { font-size: 10.5px; color: #888; display: block; margin-top: 3px; }
+        .payment-choice-card i { font-size: 20px; color: var(--primary); margin-bottom: 5px; display: block; }
+        .payment-choice-card strong { font-size: 11.5px; display: block; }
+        .payment-choice-card small { font-size: 9.5px; color: #888; display: block; margin-top: 2px; }
         #qr-canvas-container { text-align: center; margin-top: 12px; }
         #qr-canvas-container canvas, #qr-canvas-container img { border-radius: 10px; }
         .blik-details-box {
@@ -326,6 +301,16 @@
             border-radius: 8px; cursor: pointer; font-size: 12px; flex-shrink: 0;
         }
         .blik-copy-btn:hover { background: var(--primary-light); }
+        .payment-safety-note {
+            background: rgba(220,53,69,0.06); border: 1px solid rgba(220,53,69,0.25);
+            border-radius: 10px; padding: 12px 14px; font-size: 12px; color: #a33; margin-top: 10px; line-height: 1.5;
+        }
+        [data-theme="dark"] .payment-safety-note { color: #ff8a8a; }
+        .cash-info-box {
+            background: rgba(37,211,102,0.08); border: 1px solid rgba(37,211,102,0.25);
+            border-radius: 10px; padding: 12px 14px; font-size: 13px; color: #1a7a44; margin-top: 10px;
+        }
+        [data-theme="dark"] .cash-info-box { color: #7fe3af; }
 
         /* MAINTENANCE MODE OVERLAY */
         .maintenance-overlay {
@@ -333,29 +318,19 @@
             display: none; align-items: center; justify-content: center; padding: 20px; text-align: center;
         }
         .maintenance-overlay.active { display: flex; }
-        .maintenance-box { background: var(--surface); color: var(--text); border-radius: 20px; padding: 35px 25px; max-width: 340px; width: 100%; }
-        .maintenance-box i { font-size: 42px; color: var(--danger); margin-bottom: 12px; }
+        .maintenance-box { background: var(--surface); color: var(--text); border-radius: 20px; padding: 35px 25px 25px; max-width: 340px; width: 100%; position: relative; }
+        .maintenance-box i.fa-mug-hot { font-size: 42px; color: var(--danger); margin-bottom: 12px; }
         .maintenance-box h3 { margin: 0 0 10px; }
         .maintenance-countdown { font-size: 26px; font-weight: 800; color: var(--primary); margin: 16px 0 6px; font-family: monospace; }
-
-        /* LIVE TRACKING SIMULATOR */
-        .tracking-sim { display: none; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 18px; margin: 20px 0; box-shadow: var(--shadow); }
-        .tracking-sim.visible { display: block; animation: fadeSlideUp 0.4s ease-out; }
-        .tracking-steps { display: flex; justify-content: space-between; position: relative; margin-top: 10px; }
-        .tracking-steps::before { content: ''; position: absolute; top: 20px; left: 5%; right: 5%; height: 4px; background: var(--border); z-index: 0; border-radius: 4px; }
-        .tracking-steps .track-fill { position: absolute; top: 20px; left: 5%; height: 4px; background: var(--secondary); z-index: 0; border-radius: 4px; transition: width 0.6s ease; width: 0%; }
-        .track-step { position: relative; z-index: 1; text-align: center; flex: 1; }
-        .track-step .track-icon {
-            width: 40px; height: 40px; border-radius: 50%; background: var(--border); color: #999;
-            display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; font-size: 16px; transition: all 0.4s;
+        .maintenance-close-btn {
+            position: absolute; top: 12px; right: 12px; background: var(--bg); border: 1px solid var(--border);
+            width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 15px; color: #888;
+            display: flex; align-items: center; justify-content: center;
         }
-        .track-step.active .track-icon { background: var(--secondary); color: white; transform: scale(1.15); }
-        .track-step.done .track-icon { background: var(--secondary); color: white; }
-        .track-step span { font-size: 10px; font-weight: 700; color: #888; }
-        .track-step.active span { color: var(--secondary); }
+        .maintenance-close-btn:hover { color: var(--danger); border-color: var(--danger); }
+        .maintenance-lock-note { font-size: 11px; color: #aaa; margin-top: 14px; }
 
-        /* CONFETTI CANVAS */
-        #confetti-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 5000; }
+        /* CONFETTI CANVAS removed with gamification cut */
     </style>
 </head>
 <body>
@@ -365,6 +340,16 @@
         <h3><i class="fas fa-bolt"></i> Hej!</h3>
         <p id="modal-text">Dziś szybkie dostawy, zamów i ciesz się wolnym czasem!</p>
         <button class="modal-btn" onclick="closeModal()">Rozumiem!</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="payment-confirm-modal">
+    <div class="modal-content">
+        <div style="font-size: 40px; margin-bottom: 8px;">💸</div>
+        <h3>Czy na pewno wysłałeś płatność?</h3>
+        <p id="payment-confirm-text" style="font-size:14px;">Zanim wyślesz zamówienie, upewnij się że przelew / BLIK zostały wykonane. Nie marnujmy czasu kuriera — jeśli jeszcze nie zapłaciłeś, zrób to teraz, a potem potwierdź.</p>
+        <button class="modal-btn" onclick="confirmPaymentAndSend()" style="margin-bottom:10px;">Tak, zapłaciłem — wyślij zamówienie</button>
+        <button class="modal-btn" onclick="closePaymentConfirmModal()" style="background:#888;">Jeszcze nie, wracam</button>
     </div>
 </div>
 
@@ -396,12 +381,6 @@
          onerror="this.style.display='none'; document.getElementById('header-logo-text').style.display='block';">
     <span class="header-logo-text" id="header-logo-text">📦 Czernica Delivery</span>
     <div class="header-actions">
-        <label class="theme-switch" title="Przełącz motyw">
-            <input type="checkbox" id="theme-switch-input" onchange="toggleThemeSwitch()">
-            <span class="theme-switch-slider">
-                <i class="fas fa-sun"></i><i class="fas fa-moon moon-icon"></i>
-            </span>
-        </label>
         <button class="header-btn" id="account-btn" onclick="switchTab('account', event)">
             <i class="fas fa-user" style="margin-right:5px;"></i><span id="account-btn-text">Konto</span>
         </button>
@@ -415,6 +394,9 @@
 
 <div class="maintenance-overlay" id="maintenance-overlay">
     <div class="maintenance-box">
+        <button class="maintenance-close-btn" onclick="dismissMaintenanceOverlay()" title="Zamknij" aria-label="Zamknij">
+            <i class="fas fa-times"></i>
+        </button>
         <i class="fas fa-mug-hot"></i>
         <h3>Chwilowo zamknięte</h3>
         <p id="maintenance-reason-text" style="font-size:14px; color:#888;">Strona jest obecnie zamknięta.</p>
@@ -422,10 +404,9 @@
             <div style="font-size:12px; color:#888;">Otwieramy za:</div>
             <div class="maintenance-countdown" id="maintenance-countdown">--:--:--</div>
         </div>
+        <div class="maintenance-lock-note">Możesz przeglądać stronę, ale zamówienia są zablokowane do otwarcia.</div>
     </div>
 </div>
-
-<canvas id="confetti-canvas"></canvas>
 
 <div id="status-banner" class="status-banner">
     <i class="fas fa-exclamation-triangle"></i> Przepraszamy, nie przyjmujemy zamówień. Wracamy: <span id="return-time-display">jutro</span>.
@@ -455,12 +436,8 @@
 
     <div id="order-panel">
 
-        <div style="display:flex; justify-content:flex-end; margin-bottom:10px;">
-            <button class="share-btn" onclick="shareSite()"><i class="fas fa-share-alt"></i> Udostępnij stronę</button>
-        </div>
-
         <div class="quick-reorder-bar" id="quick-reorder-bar">
-            <span>🔄 Masz zapisane ostatnie zamówienie</span>
+            <span>Masz zapisane ostatnie zamówienie</span>
             <button onclick="loadLastOrderQuick()">Wczytaj</button>
         </div>
 
@@ -490,8 +467,11 @@
             </label>
             <div class="subopt-box" id="subopt-paczkomat">
                 <div class="subopt-title">Dane do odbioru paczki</div>
+                <input type="text" id="paczkomat-imie" placeholder="Imię i nazwisko odbierającego" autocomplete="name">
                 <input type="tel" id="paczkomat-telefon" placeholder="Numer telefonu zamawiającego" autocomplete="tel">
-                <input type="text" id="paczkomat-kod" placeholder="Kod odbioru (SMS / Aplikacja)" maxlength="10">
+                <input type="text" id="paczkomat-kod" placeholder="Kod odbioru (6-9 cyfr, z SMS/aplikacji)" maxlength="9" inputmode="numeric">
+                <input type="number" id="paczkomat-pobranie" placeholder="Kwota pobrania za paczkę (zł) — jeśli dotyczy, opcjonalnie" min="0" step="0.01">
+                <div class="note" style="margin-top:-8px;">Jeśli Twoja paczka jest za pobraniem, wpisz kwotę widoczną w aplikacji InPost — doliczymy ją do rozliczenia.</div>
             </div>
 
             <label class="option-card" id="option-czernica" onclick="addRipple(event)">
@@ -608,25 +588,25 @@
             <textarea id="lista" rows="4" placeholder="Co mamy kupić? (np. 1x chleb jasny, 2x mleko 3.2%)" oninput="updatePriceEstimate()"></textarea>
             <div class="price-estimate-box" id="price-estimate-box"></div>
 
-            <h2 style="margin-top: 25px;"><i class="fas fa-wallet"></i> Płatność i opcje</h2>
-            <select id="platnosc">
-                <option value="BLIK">BLIK na telefon (Preferowane i bezpieczne)</option>
-                <option value="Gotówka">Gotówka przy odbiorze</option>
-            </select>
-
-            <h3 style="font-size: 14px; margin: 15px 0 8px; color: #555;">Jak chcesz rozliczyć dostawę?</h3>
+            <h2 style="margin-top: 25px;"><i class="fas fa-wallet"></i> 5. Jak zapłacisz?</h2>
             <div class="payment-choice-grid">
                 <div class="payment-choice-card selected" id="payment-choice-blik" onclick="selectPaymentChoice('blik')">
                     <i class="fas fa-bolt"></i>
-                    <strong>Szybki BLIK</strong>
-                    <small>Przedpłata, ekspresowa realizacja ⚡</small>
+                    <strong>BLIK</strong>
+                    <small>Od razu wyruszam</small>
                 </div>
-                <div class="payment-choice-card" id="payment-choice-courier" onclick="selectPaymentChoice('courier')">
+                <div class="payment-choice-card" id="payment-choice-transfer" onclick="selectPaymentChoice('transfer')">
+                    <i class="fas fa-university"></i>
+                    <strong>Przelew</strong>
+                    <small>Od razu wyruszam</small>
+                </div>
+                <div class="payment-choice-card" id="payment-choice-cash" onclick="selectPaymentChoice('cash')">
                     <i class="fab fa-whatsapp"></i>
-                    <strong>Dogadanie z kurierem</strong>
-                    <small>WhatsApp / Gotówka / Po paragonie 💬</small>
+                    <strong>Gotówka</strong>
+                    <small>Dogadanie na WhatsApp</small>
                 </div>
             </div>
+
             <div id="blik-details-container" style="display:none;">
                 <div class="blik-details-box" id="blik-details-box">
                     <p style="font-size:12px; color:#888; margin:0 0 10px;">Dane do szybkiego przelewu BLIK — <strong>przepisz je ręcznie w swojej aplikacji bankowej:</strong></p>
@@ -638,22 +618,22 @@
                         </div>
                     </div>
                     <div class="blik-detail-row">
-                        <span class="blik-detail-label">Kwota</span>
+                        <span class="blik-detail-label">Odbiorca</span>
+                        <div class="blik-detail-value-row">
+                            <span class="blik-detail-value" id="blik-detail-owner" style="font-size:14px;">—</span>
+                            <button type="button" class="blik-copy-btn" onclick="copyBlikField('owner')"><i class="fas fa-copy"></i></button>
+                        </div>
+                    </div>
+                    <div class="blik-detail-row">
+                        <span class="blik-detail-label">Kwota do zapłaty (dostawa + szacunek zakupów)</span>
                         <div class="blik-detail-value-row">
                             <span class="blik-detail-value" id="blik-detail-amount">—</span>
                             <button type="button" class="blik-copy-btn" onclick="copyBlikField('amount')"><i class="fas fa-copy"></i></button>
                         </div>
                     </div>
-                    <div class="blik-detail-row">
-                        <span class="blik-detail-label">Tytuł przelewu</span>
-                        <div class="blik-detail-value-row">
-                            <span class="blik-detail-value" id="blik-detail-title">—</span>
-                            <button type="button" class="blik-copy-btn" onclick="copyBlikField('title')"><i class="fas fa-copy"></i></button>
-                        </div>
-                    </div>
                 </div>
                 <button type="button" id="blik-copy-all-btn" class="discount-apply-btn" style="width:100%; margin-top:10px;">
-                    <i class="fas fa-copy"></i> Kopiuj wszystkie dane do przelewu
+                    <i class="fas fa-copy"></i> Kopiuj wszystkie dane
                 </button>
                 <details id="qr-canvas-container" style="margin-top:10px;">
                     <summary style="font-size:12px; color:#888; cursor:pointer;">Masz drugie urządzenie? Pokaż kod QR do zeskanowania</summary>
@@ -661,6 +641,48 @@
                         <div id="qr-canvas"></div>
                     </div>
                 </details>
+                <div class="payment-safety-note"
+                    <i class="fas fa-shield-alt"></i> Kwota zawiera bezpieczny margines na wypadek, gdyby zakupy okazały się droższe niż szacunek. <strong>Jeśli zapłacisz za dużo, zawsze natychmiast zwracamy różnicę</strong> - po zakupie zawsze zwracamy od razu nadwyżkę na te same konto/numer/adres
+                </div>
+            </div>
+
+            <div id="transfer-details-container" style="display:none;">
+                <div class="blik-details-box">
+                    <p style="font-size:12px; color:#888; margin:0 0 10px;">Dane do zwykłego przelewu bankowego:</p>
+                    <div class="blik-detail-row">
+                        <span class="blik-detail-label">Numer konta</span>
+                        <div class="blik-detail-value-row">
+                            <span class="blik-detail-value" id="transfer-detail-account" style="font-size:13px;">—</span>
+                            <button type="button" class="blik-copy-btn" onclick="copyTransferField('account')"><i class="fas fa-copy"></i></button>
+                        </div>
+                    </div>
+                    <div class="blik-detail-row">
+                        <span class="blik-detail-label">Imię i nazwisko odbiorcy</span>
+                        <div class="blik-detail-value-row">
+                            <span class="blik-detail-value" id="transfer-detail-owner" style="font-size:14px;">—</span>
+                            <button type="button" class="blik-copy-btn" onclick="copyTransferField('owner')"><i class="fas fa-copy"></i></button>
+                        </div>
+                    </div>
+                    <div class="blik-detail-row">
+                        <span class="blik-detail-label">Kwota do zapłaty (dostawa + szacunek zakupów)</span>
+                        <div class="blik-detail-value-row">
+                            <span class="blik-detail-value" id="transfer-detail-amount">—</span>
+                            <button type="button" class="blik-copy-btn" onclick="copyTransferField('amount')"><i class="fas fa-copy"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" id="transfer-copy-all-btn" class="discount-apply-btn" style="width:100%; margin-top:10px;">
+                    <i class="fas fa-copy"></i> Kopiuj wszystkie dane
+                </button>
+                <div class="payment-safety-note">
+                    <i class="fas fa-shield-alt"></i> Kwota zawiera bezpieczny margines na wypadek, gdyby zakupy okazały się droższe niż szacunek. <strong>Jeśli zapłacisz za dużo, zawsze natychmiast zwracamy różnicę</strong> — wystarczy że po dostawie wyślesz nam zdjęcie paragonu na WhatsApp.
+                </div>
+            </div>
+
+            <div id="cash-details-container" style="display:none;">
+                <div class="cash-info-box">
+                    <i class="fas fa-comment-dots"></i> Zapłacisz gotówką przy odbiorze. Szczegóły (dokładna kwota, drobne) ustalimy na WhatsApp po złożeniu zamówienia.
+                </div>
             </div>
 
             <div class="checkbox-container">
@@ -685,17 +707,6 @@
             <div class="checkbox-container">
                 <input type="checkbox" id="regulamin" required>
                 <label for="regulamin">Oświadczam, że zapłacę za zakupy zgodnie z paragonem ze sklepu oraz doliczonym kosztem dostawy.</label>
-            </div>
-        </div>
-
-        <div class="tracking-sim" id="tracking-sim">
-            <h3 style="font-size:14px; margin:0 0 5px;"><i class="fas fa-route" style="color:var(--primary);"></i> Śledzenie zamówienia <span id="tracking-order-id" style="color:#888; font-weight:400;"></span></h3>
-            <div class="tracking-steps">
-                <div class="track-fill" id="tracking-fill"></div>
-                <div class="track-step" id="track-step-0"><div class="track-icon"><i class="fas fa-check"></i></div><span>Przyjęte</span></div>
-                <div class="track-step" id="track-step-1"><div class="track-icon"><i class="fas fa-store"></i></div><span>Odbieranie</span></div>
-                <div class="track-step" id="track-step-2"><div class="track-icon"><i class="fas fa-bicycle"></i></div><span>W drodze</span></div>
-                <div class="track-step" id="track-step-3"><div class="track-icon"><i class="fas fa-flag-checkered"></i></div><span>Dostarczono</span></div>
             </div>
         </div>
 
@@ -944,11 +955,13 @@
             </div>
 
             <div class="section">
-                <h2><i class="fas fa-qrcode"></i> Dane do płatności BLIK</h2>
-                <p style="font-size:13px; color:#888;">Te dane widzi klient jako twarde dane do przelewu (tekst + QR).</p>
+                <h2><i class="fas fa-qrcode"></i> Dane do płatności</h2>
+                <p style="font-size:13px; color:#888;">Te dane widzi klient jako twarde dane do przelewu / BLIK-a.</p>
                 <input type="text" id="admin-blik-number" placeholder="Numer telefonu BLIK (np. 500 600 700)">
-                <input type="text" id="admin-bank-account" placeholder="Numer konta bankowego (opcjonalnie, np. do zwykłego przelewu)">
-                <input type="text" id="admin-account-owner" placeholder="Odbiorca / właściciel konta (opcjonalnie)">
+                <input type="text" id="admin-bank-account" placeholder="Numer konta bankowego (do zwykłego przelewu)">
+                <input type="text" id="admin-account-owner" placeholder="Odbiorca / właściciel konta i BLIK-a (imię i nazwisko)">
+                <label style="font-size:12px; color:#666; font-weight:bold;">Margines bezpieczeństwa na szacunku zakupów (%):</label>
+                <input type="number" id="admin-safety-margin" placeholder="np. 20" min="0" max="100" value="20">
                 <button class="btn-admin-action" onclick="saveBlikNumber(event)" style="width:100%; padding:12px;">
                     <i class="fas fa-save"></i> Zapisz dane płatności
                 </button>
@@ -1040,7 +1053,8 @@ const Security = (() => {
         orderId: /^\d{6}$/,
         email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
         discountCode: /^[A-Z0-9]{3,20}$/,
-        phone: /^[\d\s\+\-()]{6,20}$/
+        phone: /^[\d\s\+\-()]{6,20}$/,
+        pickupCode: /^\d{6,9}$/
     };
 
     function validate(type, value) {
@@ -1120,16 +1134,49 @@ const CONFIG = {
     DEFAULT_BLIK_NUMBER: '+48 781 469 903',
     DEFAULT_BANK_ACCOUNT: '',
     DEFAULT_ACCOUNT_OWNER: 'Karol Bezak',
+    DEFAULT_SAFETY_MARGIN_PERCENT: 20,
+    // Keyword price table for the Smart Price Estimator.
+    // Covers common grocery items, popular brand names, and common
+    // misspellings/variants so the estimator matches real shopping lists.
+    // Prices are approximate zł per typical single unit/pack.
     PRICE_KEYWORDS: {
-        'chleb': 6, 'bułki': 5, 'bagietka': 4,
-        'mleko': 4.5, 'masło': 7, 'jajka': 12, 'jaja': 12, 'ser': 10, 'jogurt': 3,
-        'olej': 8, 'mąka': 5, 'cukier': 5, 'ryż': 6, 'makaron': 5,
-        'woda': 4, 'cola': 6, 'sok': 5, 'napój': 5, 'napoje': 5, 'piwo': 5,
-        'chipsy': 6, 'paluszki': 4, 'czekolada': 6, 'ciastka': 8, 'lody': 8,
-        'kawa': 15, 'herbata': 10, 'cukierki': 6,
-        'wędlina': 12, 'szynka': 12, 'kiełbasa': 10, 'kurczak': 18, 'mięso': 20,
-        'pomidory': 6, 'ogórki': 5, 'ziemniaki': 6, 'cebula': 3, 'owoce': 10, 'warzywa': 8,
-        'papierosy': 20, 'zapałki': 3
+        // Pieczywo
+        'chleb': 6, 'chleba': 6, 'bułki': 5, 'bułka': 2, 'bagietka': 4, 'bagietki': 4,
+        'rogal': 3, 'rogaliki': 6, 'tost': 5, 'tosty': 5, 'kajzerka': 2,
+        // Nabiał
+        'mleko': 4.5, 'maślanka': 4, 'kefir': 4, 'śmietana': 5, 'śmietanka': 5,
+        'masło': 7, 'margaryna': 6, 'jajka': 12, 'jaja': 12, 'jajko': 2,
+        'ser': 10, 'ser żółty': 12, 'twaróg': 6, 'serek': 3, 'serki': 3,
+        'jogurt': 3, 'jogurty': 3, 'danonki': 8, 'danio': 3, 'aktivia': 4,
+        // Podstawowe produkty sypkie / oleje
+        'olej': 8, 'oliwa': 15, 'mąka': 5, 'cukier': 5, 'sól': 3, 'ryż': 6,
+        'makaron': 5, 'kasza': 5, 'płatki': 8, 'musli': 10,
+        // Napoje
+        'woda': 4, 'woda niegazowana': 4, 'woda gazowana': 4, 'cisowianka': 5, 'żywiec zdrój': 5,
+        'cola': 6, 'coca cola': 7, 'coca-cola': 7, 'kola': 6, 'pepsi': 6,
+        'sok': 5, 'sok pomarańczowy': 6, 'sok jabłkowy': 5, 'tymbark': 5, 'kubuś': 4,
+        'napój': 5, 'napoje': 5, 'oranżada': 4, 'lipton': 6, 'piwo': 5, 'piwa': 5,
+        'energetyk': 6, 'red bull': 8, 'tiger': 4, 'monster': 8,
+        // Przekąski / słodycze
+        'chipsy': 6, 'lays': 7, 'crunchips': 7, 'paluszki': 4, 'krakersy': 5,
+        'czekolada': 6, 'wedel': 6, 'milka': 6, 'ptasie mleczko': 12, 'ptasie mleczka': 12,
+        'ciastka': 8, 'delicje': 7, 'oreo': 6, 'wafle': 5, 'prince polo': 2,
+        'lody': 8, 'lody familijne': 15, 'magnum': 6, 'cornetto': 5,
+        'cukierki': 6, 'żelki': 6, 'haribo': 7, 'guma do żucia': 4,
+        // Kawa / herbata
+        'kawa': 15, 'nescafe': 18, 'jacobs': 18, 'herbata': 10, 'lipton herbata': 8, 'cukier w kostkach': 6,
+        // Mięso / wędliny
+        'wędlina': 12, 'szynka': 12, 'kiełbasa': 10, 'parówki': 8, 'boczek': 12,
+        'kurczak': 18, 'filet z kurczaka': 20, 'mięso mielone': 18, 'mięso': 20, 'schab': 20,
+        // Warzywa / owoce
+        'pomidory': 6, 'pomidor': 2, 'ogórki': 5, 'ogórek': 2, 'ziemniaki': 6,
+        'cebula': 3, 'marchew': 4, 'sałata': 4, 'papryka': 6, 'banany': 6,
+        'jabłka': 6, 'cytryny': 5, 'owoce': 10, 'warzywa': 8,
+        // Chemia domowa / higiena (często dokupowane razem z zakupami)
+        'papier toaletowy': 12, 'ręcznik papierowy': 8, 'płyn do naczyń': 6,
+        'proszek do prania': 20, 'pasta do zębów': 8, 'szampon': 12, 'mydło': 5,
+        // Inne
+        'papierosy': 20, 'zapałki': 3, 'zapalniczka': 5, 'karma dla psa': 25, 'karma dla kota': 20
     }
 };
 
@@ -1202,15 +1249,17 @@ const State = {
     pickupEnabled: { paczkomat: true, czernica: true, janowek: true, grubego: true },
     scheduleModeOverride: null,
     grubegoQty: { male: 0, duze: 0 },
-    paymentChoice: 'blik',
+    paymentChoice: 'blik', // 'blik' | 'transfer' | 'cash'
     blikNumber: '',
     bankAccount: '',
     accountOwner: '',
+    safetyMarginPercent: CONFIG.DEFAULT_SAFETY_MARGIN_PERCENT,
+    estimatedGroceryCost: 0,
     maintenanceReason: '',
     maintenanceReopenAt: null,
     maintenanceCountdownInterval: null,
-    audioCtx: null,
-    blikQrRendered: false
+    isCurrentlyAvailable: true,
+    pendingOrderSubmit: null
 };
 
 /* =========================================================
@@ -1475,6 +1524,7 @@ function reorderFromHistory(order) {
         const radio = document.querySelector(`input[name="sklep"][value="${order.punktKey}"]`);
         if (radio && !radio.disabled) { radio.checked = true; onPickupChange(); }
     }
+    updatePriceEstimate();
     calculate();
     showToast('Dane z poprzedniego zamówienia wczytane', 'success');
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1557,104 +1607,10 @@ const Cart = (() => {
         const textarea = document.getElementById('lista');
         if (!textarea || State.cart.length === 0) return;
         textarea.value = State.cart.map(i => `${i.qty}x ${i.name}`).join('\n');
+        updatePriceEstimate();
     }
     return { add, remove, render };
 })();
-
-/* =========================================================
-   SOUND EFFECTS (Web Audio API — simple generated beeps)
-========================================================= */
-function ensureAudioCtx() {
-    if (!State.audioCtx) {
-        try { State.audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
-        catch (e) { return null; }
-    }
-    return State.audioCtx;
-}
-
-function playTone(freq, durationMs, type) {
-    const ctx = ensureAudioCtx();
-    if (!ctx) return;
-    try {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = type || 'sine';
-        osc.frequency.value = freq;
-        gain.gain.setValueAtTime(0.08, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + durationMs / 1000);
-        osc.connect(gain); gain.connect(ctx.destination);
-        osc.start();
-        osc.stop(ctx.currentTime + durationMs / 1000);
-    } catch (e) { /* ignore audio errors */ }
-}
-
-function playClickSound() { playTone(880, 90, 'sine'); }
-function playSuccessSound() {
-    playTone(660, 120, 'sine');
-    setTimeout(() => playTone(880, 160, 'sine'), 120);
-    setTimeout(() => playTone(1100, 220, 'sine'), 260);
-}
-
-/* =========================================================
-   THEME SWITCH (Dark/Light) — persisted in localStorage
-========================================================= */
-function applyStoredTheme() {
-    const saved = localStorage.getItem('czernica_theme');
-    const switchInput = document.getElementById('theme-switch-input');
-    if (saved === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        if (switchInput) switchInput.checked = true;
-    } else if (saved === 'light') {
-        document.documentElement.removeAttribute('data-theme');
-        if (switchInput) switchInput.checked = false;
-    } else {
-        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-        if (switchInput) switchInput.checked = isDark;
-    }
-}
-
-function toggleThemeSwitch() {
-    const switchInput = document.getElementById('theme-switch-input');
-    const isDark = switchInput && switchInput.checked;
-    if (isDark) document.documentElement.setAttribute('data-theme', 'dark');
-    else document.documentElement.removeAttribute('data-theme');
-    localStorage.setItem('czernica_theme', isDark ? 'dark' : 'light');
-    playClickSound();
-}
-
-/* =========================================================
-   LIVE STATUS BADGE (OTWARTE / ZAMKNIĘTE)
-========================================================= */
-function updateLiveStatusBadge(isAvailable) {
-    const dot = document.getElementById('live-status-dot');
-    const text = document.getElementById('live-status-text');
-    if (!dot || !text) return;
-    const isOpenNow = isAvailable && Schedule.isWithinWorkingHours();
-    dot.className = 'status-dot ' + (isOpenNow ? 'open' : 'closed');
-    text.className = 'status-badge-text ' + (isOpenNow ? 'open' : 'closed');
-    text.textContent = isOpenNow ? '🟢 OTWARTE TERAZ' : '🔴 ZAMKNIĘTE';
-}
-
-/* =========================================================
-   SHARE BUTTON
-========================================================= */
-function shareSite() {
-    playClickSound();
-    const shareData = {
-        title: 'Czernica Delivery',
-        text: 'Szybkie zakupy z dostawą do domu – Czernica i okolice',
-        url: window.location.href
-    };
-    if (navigator.share) {
-        navigator.share(shareData).catch(() => {});
-    } else if (navigator.clipboard) {
-        navigator.clipboard.writeText(window.location.href)
-            .then(() => showToast('Link skopiowany do schowka! 📋', 'success'))
-            .catch(() => showToast('Nie udało się skopiować linku', 'error'));
-    } else {
-        showToast('Udostępnianie niedostępne w tej przeglądarce', 'info');
-    }
-}
 
 /* =========================================================
    QUICK 1-CLICK RE-ORDER (from localStorage)
@@ -1692,163 +1648,159 @@ function loadLastOrderQuick() {
         }
         updatePriceEstimate();
         calculate();
-        showToast('Wczytano ostatnie zamówienie 🔄', 'success');
-        playClickSound();
+        showToast('Wczytano ostatnie zamówienie', 'success');
     } catch (e) { /* corrupted local data — ignore */ }
 }
 
 /* =========================================================
-   SMART PRICE ESTIMATOR — keyword-based, +15% buffer
+   SMART PRICE ESTIMATOR — keyword-based, with admin-configurable
+   safety margin baked into the number shown to the customer.
 ========================================================= */
 function updatePriceEstimate() {
     const box = document.getElementById('price-estimate-box');
     const textarea = document.getElementById('lista');
-    if (!box || !textarea) return;
+    if (!box || !textarea) { State.estimatedGroceryCost = 0; return; }
     const text = textarea.value.toLowerCase();
 
-    if (!text.trim()) { box.classList.remove('visible'); return; }
+    if (!text.trim()) { box.classList.remove('visible'); State.estimatedGroceryCost = 0; refreshPaymentDetails(); return; }
 
     let total = 0;
     let matched = 0;
-    Object.entries(CONFIG.PRICE_KEYWORDS).forEach(([keyword, price]) => {
-        const re = new RegExp('(\\d+)\\s*x?\\s*' + keyword + '|' + keyword, 'gi');
+    const matchedKeywords = new Set();
+    // Sort keywords longest-first so multi-word entries (e.g. "coca cola")
+    // are tried before their shorter substrings (e.g. "cola").
+    const sortedKeywords = Object.keys(CONFIG.PRICE_KEYWORDS).sort((a, b) => b.length - a.length);
+
+    sortedKeywords.forEach(keyword => {
+        if (matchedKeywords.has(keyword)) return;
+        const escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const re = new RegExp('(\\d+)\\s*x?\\s*' + escaped + '|' + escaped, 'gi');
         const matches = text.match(re);
         if (matches) {
+            // Avoid double-counting a substring keyword already covered by a longer match
+            const alreadyCovered = [...matchedKeywords].some(k => k.includes(keyword) || keyword.includes(k));
+            if (alreadyCovered) return;
             matches.forEach(m => {
                 const qtyMatch = m.match(/^(\d+)/);
                 const qty = qtyMatch ? parseInt(qtyMatch[1]) : 1;
-                total += price * qty;
+                total += CONFIG.PRICE_KEYWORDS[keyword] * qty;
                 matched++;
             });
+            matchedKeywords.add(keyword);
         }
     });
 
-    if (matched === 0) { box.classList.remove('visible'); return; }
+    if (matched === 0) { box.classList.remove('visible'); State.estimatedGroceryCost = 0; refreshPaymentDetails(); return; }
 
-    const withBuffer = total * 1.15;
+    const marginPct = State.safetyMarginPercent !== undefined ? State.safetyMarginPercent : CONFIG.DEFAULT_SAFETY_MARGIN_PERCENT;
+    const withBuffer = total * (1 + marginPct / 100);
+    State.estimatedGroceryCost = withBuffer;
+
     box.textContent = '';
-    box.appendChild(document.createTextNode(`📊 Szacowany koszt produktów: ok. ${withBuffer.toFixed(0)} zł. Rozliczenie co do grosza nastąpi na podstawie paragonu przy odbiorze!`));
+    box.appendChild(document.createTextNode(`📊 Szacowany koszt produktów: ok. ${withBuffer.toFixed(0)} zł (z marginesem bezpieczeństwa). Rozliczenie co do grosza nastąpi na podstawie paragonu — nadpłatę zawsze zwracamy od razu.`));
     box.classList.add('visible');
+
+    refreshPaymentDetails();
 }
 
 /* =========================================================
-   PAYMENT CHOICE (BLIK vs Dogadanie z kurierem)
-   Hard transfer data — phone number (BLIK), bank account (backup
-   for regular transfer), amount and transfer title — are always
-   shown as plain, copyable text. The QR code is only a convenience
-   extra for a second device and is generated on demand, not on
-   every keystroke.
+   PAYMENT CHOICE (BLIK / Przelew / Gotówka)
+   All hard transfer data — phone number, bank account, recipient
+   name, and amount (delivery + estimated groceries) — is always
+   shown as plain, copyable text. The QR code (BLIK only) is an
+   optional extra for a second device.
 ========================================================= */
 function selectPaymentChoice(choice) {
     State.paymentChoice = choice;
     document.getElementById('payment-choice-blik').classList.toggle('selected', choice === 'blik');
-    document.getElementById('payment-choice-courier').classList.toggle('selected', choice === 'courier');
-    const detailsContainer = document.getElementById('blik-details-container');
-    if (detailsContainer) detailsContainer.style.display = (choice === 'blik') ? 'block' : 'none';
-    if (choice === 'blik') refreshPaymentDetails();
-    playClickSound();
+    document.getElementById('payment-choice-transfer').classList.toggle('selected', choice === 'transfer');
+    document.getElementById('payment-choice-cash').classList.toggle('selected', choice === 'cash');
+
+    document.getElementById('blik-details-container').style.display = (choice === 'blik') ? 'block' : 'none';
+    document.getElementById('transfer-details-container').style.display = (choice === 'transfer') ? 'block' : 'none';
+    document.getElementById('cash-details-container').style.display = (choice === 'cash') ? 'block' : 'none';
+
+    refreshPaymentDetails();
 }
 
-/* Rebuilds the text values shown to the customer. Cheap — safe to
-   call from calculate() on every recompute. QR generation is kept
-   separate (see maybeRenderBlikQr) so it doesn't run on every keystroke. */
-function refreshPaymentDetails() {
-    if (State.paymentChoice !== 'blik') return;
+/* Total the customer needs to pay upfront for BLIK/transfer:
+   delivery cost (from #total) + estimated grocery cost (with margin). */
+function getUpfrontPaymentAmount() {
+    const deliveryCost = parseFloat(document.getElementById('total')?.textContent || '0') || 0;
+    return deliveryCost + (State.estimatedGroceryCost || 0);
+}
 
-    const amount = document.getElementById('total') ? document.getElementById('total').textContent : '0.00';
+function refreshPaymentDetails() {
+    const amount = getUpfrontPaymentAmount().toFixed(2);
     const blikNumber = State.blikNumber || CONFIG.DEFAULT_BLIK_NUMBER;
     const bankAccount = State.bankAccount || CONFIG.DEFAULT_BANK_ACCOUNT;
     const owner = State.accountOwner || CONFIG.DEFAULT_ACCOUNT_OWNER;
-    const title = 'Czernica Delivery';
 
-    const numberEl = document.getElementById('blik-detail-number');
-    const amountEl = document.getElementById('blik-detail-amount');
-    const titleEl = document.getElementById('blik-detail-title');
-
-    if (numberEl) numberEl.textContent = blikNumber || 'Skontaktuj się przez WhatsApp';
-    if (amountEl) amountEl.textContent = amount + ' zł';
-    if (titleEl) titleEl.textContent = title;
-
-    renderBankAccountRow(bankAccount, owner);
-    maybeRenderBlikQr(blikNumber, bankAccount, amount, title);
-}
-
-/* Adds/refreshes an optional "Numer konta bankowego" row when the
-   admin has configured one — a fallback for a plain bank transfer
-   when a BLIK phone push isn't convenient. */
-function renderBankAccountRow(bankAccount, owner) {
-    const box = document.getElementById('blik-details-box');
-    if (!box) return;
-    let row = document.getElementById('blik-detail-row-account');
-
-    if (!bankAccount) {
-        if (row) row.remove();
-        return;
-    }
-
-    if (!row) {
-        row = DOM.el('div', { className: 'blik-detail-row', id: 'blik-detail-row-account' });
-        row.appendChild(DOM.el('span', { className: 'blik-detail-label' }, ['Numer konta bankowego' + (owner ? ' — ' + owner : '')]));
-        const valueRow = DOM.el('div', { className: 'blik-detail-value-row' });
-        valueRow.appendChild(DOM.el('span', { className: 'blik-detail-value', id: 'blik-detail-account' }, [bankAccount]));
-        const copyBtn = DOM.el('button', { type: 'button', className: 'blik-copy-btn' }, [DOM.el('i', { className: 'fas fa-copy' })]);
-        copyBtn.addEventListener('click', () => copyBlikField('account'));
-        valueRow.appendChild(copyBtn);
-        row.appendChild(valueRow);
-        box.appendChild(row);
-    } else {
-        const label = row.querySelector('.blik-detail-label');
-        const value = document.getElementById('blik-detail-account');
-        if (label) label.textContent = 'Numer konta bankowego' + (owner ? ' — ' + owner : '');
-        if (value) value.textContent = bankAccount;
+    if (State.paymentChoice === 'blik') {
+        const numberEl = document.getElementById('blik-detail-number');
+        const ownerEl = document.getElementById('blik-detail-owner');
+        const amountEl = document.getElementById('blik-detail-amount');
+        if (numberEl) numberEl.textContent = blikNumber || 'Skontaktuj się przez WhatsApp';
+        if (ownerEl) ownerEl.textContent = owner || '—';
+        if (amountEl) amountEl.textContent = amount + ' zł';
+        maybeRenderBlikQr(blikNumber, amount, owner);
+    } else if (State.paymentChoice === 'transfer') {
+        const accEl = document.getElementById('transfer-detail-account');
+        const ownerEl = document.getElementById('transfer-detail-owner');
+        const amountEl = document.getElementById('transfer-detail-amount');
+        if (accEl) accEl.textContent = bankAccount || 'Skontaktuj się przez WhatsApp';
+        if (ownerEl) ownerEl.textContent = owner || '—';
+        if (amountEl) amountEl.textContent = amount + ' zł';
     }
 }
 
 function copyBlikField(field) {
-    const map = { number: 'blik-detail-number', amount: 'blik-detail-amount', title: 'blik-detail-title', account: 'blik-detail-account' };
+    const map = { number: 'blik-detail-number', owner: 'blik-detail-owner', amount: 'blik-detail-amount' };
     const el = document.getElementById(map[field]);
     if (!el) return;
-    const text = el.textContent;
-    copyTextToClipboard(text);
+    copyTextToClipboard(el.textContent);
 }
 
-/* Copies every visible payment field at once, formatted as one block,
-   so the customer doesn't have to tap each field separately. */
-function copyAllPaymentDetails() {
-    const blikNumber = document.getElementById('blik-detail-number')?.textContent || '';
+function copyTransferField(field) {
+    const map = { account: 'transfer-detail-account', owner: 'transfer-detail-owner', amount: 'transfer-detail-amount' };
+    const el = document.getElementById(map[field]);
+    if (!el) return;
+    copyTextToClipboard(el.textContent);
+}
+
+function copyAllBlikDetails() {
+    const number = document.getElementById('blik-detail-number')?.textContent || '';
+    const owner = document.getElementById('blik-detail-owner')?.textContent || '';
     const amount = document.getElementById('blik-detail-amount')?.textContent || '';
-    const title = document.getElementById('blik-detail-title')?.textContent || '';
-    const accountEl = document.getElementById('blik-detail-account');
-    const lines = [
-        `Numer BLIK: ${blikNumber}`,
-        `Kwota: ${amount}`,
-        `Tytuł: ${title}`
-    ];
-    if (accountEl) lines.splice(1, 0, `Konto bankowe: ${accountEl.textContent}`);
-    copyTextToClipboard(lines.join('\n'));
+    copyTextToClipboard(`Numer BLIK: ${number}\nOdbiorca: ${owner}\nKwota: ${amount}`);
+}
+
+function copyAllTransferDetails() {
+    const account = document.getElementById('transfer-detail-account')?.textContent || '';
+    const owner = document.getElementById('transfer-detail-owner')?.textContent || '';
+    const amount = document.getElementById('transfer-detail-amount')?.textContent || '';
+    copyTextToClipboard(`Numer konta: ${account}\nOdbiorca: ${owner}\nKwota: ${amount}`);
 }
 
 function copyTextToClipboard(text) {
     if (navigator.clipboard) {
         navigator.clipboard.writeText(text)
-            .then(() => showToast('Skopiowano: ' + text.split('\n')[0] + (text.includes('\n') ? '…' : ''), 'success'))
+            .then(() => showToast('Skopiowano', 'success'))
             .catch(() => showToast('Nie udało się skopiować', 'error'));
     } else {
         showToast('Kopiowanie niedostępne w tej przeglądarce', 'info');
     }
-    playClickSound();
 }
 
-/* QR is a convenience extra only — generated on demand (when the
-   <details> panel is opened) rather than on every calculate() call,
-   and only re-rendered when the underlying data actually changed. */
-function maybeRenderBlikQr(blikNumber, bankAccount, amount, title) {
+/* QR is a convenience extra only — generated on demand when the
+   <details> panel is opened, not on every keystroke. */
+function maybeRenderBlikQr(blikNumber, amount, owner) {
     const detailsEl = document.getElementById('qr-canvas-container');
-    if (!detailsEl || !detailsEl.open) { State.blikQrRendered = false; return; }
-    renderBlikQr(blikNumber, bankAccount, amount, title);
+    if (!detailsEl || !detailsEl.open) return;
+    renderBlikQr(blikNumber, amount, owner);
 }
 
-function renderBlikQr(blikNumber, bankAccount, amount, title) {
+function renderBlikQr(blikNumber, amount, owner) {
     const target = document.getElementById('qr-canvas');
     if (!target) return;
     if (typeof QRCode === 'undefined') {
@@ -1857,120 +1809,66 @@ function renderBlikQr(blikNumber, bankAccount, amount, title) {
         return;
     }
     target.textContent = '';
-    if (!blikNumber && !bankAccount) {
+    if (!blikNumber) {
         target.appendChild(DOM.el('p', { style: { fontSize: '12px', color: '#aaa' } }, ['Dane płatności nie są jeszcze skonfigurowane — skontaktuj się przez WhatsApp.']));
         return;
     }
-    // Plain-text payload of the same details shown above — not a
-    // scannable bank-initiated-payment standard, just a convenient
-    // way to read the numbers on a second device.
-    const lines = [`Numer BLIK: ${blikNumber || '—'}`];
-    if (bankAccount) lines.push(`Konto: ${bankAccount}`);
-    lines.push(`Kwota: ${amount} zł`, `Tytuł: ${title}`);
-    new QRCode(target, { text: lines.join('\n'), width: 150, height: 150, colorDark: '#1a1a1a', colorLight: '#ffffff' });
-    State.blikQrRendered = true;
+    const payload = `BLIK\nNumer: ${blikNumber}\nOdbiorca: ${owner}\nKwota: ${amount} zł`;
+    new QRCode(target, { text: payload, width: 150, height: 150, colorDark: '#1a1a1a', colorLight: '#ffffff' });
 }
 
-function showBlikInstructionModal(amount) {
-    const blikNumber = State.blikNumber || CONFIG.DEFAULT_BLIK_NUMBER || '— (skontaktuj się przez WhatsApp) —';
-    const successTextEl = document.getElementById('success-modal-text');
-    if (successTextEl) {
-        successTextEl.textContent = `Przelej kwotę ${amount} zł na numer BLIK: ${blikNumber}. Po zaksięgowaniu od razu ruszamy na rower! 🚴‍♂️`;
-    }
+function saveBlikNumber(e) {
+    addRipple(e);
+    const numberInput = document.getElementById('admin-blik-number');
+    const accountInput = document.getElementById('admin-bank-account');
+    const ownerInput = document.getElementById('admin-account-owner');
+    const marginInput = document.getElementById('admin-safety-margin');
+    const number = Security.sanitizeInput(numberInput ? numberInput.value : '');
+    const account = Security.sanitizeInput(accountInput ? accountInput.value : '');
+    const owner = Security.sanitizeInput(ownerInput ? ownerInput.value : '');
+    const margin = marginInput ? parseFloat(marginInput.value) : CONFIG.DEFAULT_SAFETY_MARGIN_PERCENT;
+    if (!State.db) { showToast('Firebase niedostępny', 'error'); return; }
+    State.db.ref('ustawienia').update({
+        blikNumber: number, bankAccount: account, accountOwner: owner,
+        safetyMarginPercent: isNaN(margin) ? CONFIG.DEFAULT_SAFETY_MARGIN_PERCENT : margin
+    })
+        .then(() => showToast('Dane płatności zapisane', 'success'))
+        .catch(() => showToast('Odmowa dostępu', 'error'));
 }
 
 /* =========================================================
-   LIVE TRACKING SIMULATOR (client-side visual only)
+   PRE-SUBMIT PAYMENT CONFIRMATION
+   For BLIK/transfer, ask the customer to confirm they actually
+   paid before we send the order and open WhatsApp — avoids
+   wasting the courier's time on unpaid "already sent" orders.
 ========================================================= */
-function startTrackingSimulator(orderId) {
-    const sim = document.getElementById('tracking-sim');
-    if (!sim) return;
-    sim.classList.add('visible');
-    DOM.setText('tracking-order-id', '#' + orderId);
+function openPaymentConfirmModal(submitFn) {
+    State.pendingOrderSubmit = submitFn;
+    const textEl = document.getElementById('payment-confirm-text');
+    if (textEl) {
+        const label = State.paymentChoice === 'blik' ? 'BLIK' : 'przelew';
+        textEl.textContent = `Zanim wyślesz zamówienie, upewnij się że ${label} został wykonany. Nie marnujmy czasu kuriera — jeśli jeszcze nie zapłaciłeś, zrób to teraz, a potem potwierdź.`;
+    }
+    document.getElementById('payment-confirm-modal').classList.add('active');
+}
 
-    const steps = [0, 1, 2, 3];
-    const fill = document.getElementById('tracking-fill');
-    steps.forEach(i => {
-        const el = document.getElementById('track-step-' + i);
-        if (el) el.classList.remove('active', 'done');
-    });
+function closePaymentConfirmModal() {
+    document.getElementById('payment-confirm-modal').classList.remove('active');
+    State.pendingOrderSubmit = null;
+}
 
-    let current = 0;
-    const advance = () => {
-        for (let i = 0; i < current; i++) {
-            const el = document.getElementById('track-step-' + i);
-            if (el) { el.classList.remove('active'); el.classList.add('done'); }
-        }
-        const activeEl = document.getElementById('track-step-' + current);
-        if (activeEl) activeEl.classList.add('active');
-        if (fill) fill.style.width = (current / (steps.length - 1) * 90) + '%';
-        current++;
-        if (current < steps.length) setTimeout(advance, 3200);
-    };
-    advance();
-
-    sim.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+function confirmPaymentAndSend() {
+    document.getElementById('payment-confirm-modal').classList.remove('active');
+    const fn = State.pendingOrderSubmit;
+    State.pendingOrderSubmit = null;
+    if (fn) fn();
 }
 
 /* =========================================================
-   GAMIFICATION — CONFETTI (lightweight canvas implementation)
-========================================================= */
-function fireConfetti() {
-    const canvas = document.getElementById('confetti-canvas');
-    if (!canvas) return;
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    const ctx = canvas.getContext('2d');
-    const colors = ['#ff6600', '#ff8533', '#25D366', '#17a2b8', '#ffca28'];
-    const particles = Array.from({ length: 120 }, () => ({
-        x: Math.random() * canvas.width,
-        y: -20 - Math.random() * canvas.height * 0.3,
-        r: 4 + Math.random() * 5,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        vy: 2 + Math.random() * 3,
-        vx: -1.5 + Math.random() * 3,
-        rot: Math.random() * 360,
-        vRot: -6 + Math.random() * 12
-    }));
-
-    let frame = 0;
-    const maxFrames = 160;
-    function tick() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        particles.forEach(p => {
-            p.x += p.vx; p.y += p.vy; p.rot += p.vRot;
-            ctx.save();
-            ctx.translate(p.x, p.y);
-            ctx.rotate(p.rot * Math.PI / 180);
-            ctx.fillStyle = p.color;
-            ctx.fillRect(-p.r / 2, -p.r / 2, p.r, p.r * 0.6);
-            ctx.restore();
-        });
-        frame++;
-        if (frame < maxFrames) requestAnimationFrame(tick);
-        else ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
-    tick();
-}
-
-function checkLoyaltyConfettiTrigger(localOrderCount) {
-    if (localOrderCount === 3) {
-        fireConfetti();
-        showToast('🔥 Stały klient! Masz 50% zniżki na tę dostawę!', 'success');
-        State.discountPercent = 50;
-        State.discountCode = 'STALY-KLIENT';
-        calculate();
-        const badge = document.getElementById('discount-badge');
-        if (badge) {
-            badge.textContent = '';
-            badge.appendChild(document.createTextNode('🔥 Stały klient! -50% na tę dostawę (automatycznie)'));
-            badge.classList.add('visible');
-        }
-    }
-}
-
-/* =========================================================
-   MAINTENANCE MODE — overlay + live countdown
+   MAINTENANCE MODE — overlay + live countdown + dismissible X
+   Orders stay blocked regardless of whether the overlay is
+   dismissed; dismissing only hides the overlay for this browser
+   session (sessionStorage), so it returns on next page load.
 ========================================================= */
 function applyMaintenanceMode(isAvailable, reason, reopenAtIso) {
     const overlay = document.getElementById('maintenance-overlay');
@@ -1984,10 +1882,12 @@ function applyMaintenanceMode(isAvailable, reason, reopenAtIso) {
 
     if (isAvailable) {
         if (overlay) overlay.classList.remove('active');
+        sessionStorage.removeItem('czernica_maintenance_dismissed');
         return;
     }
 
-    if (overlay) overlay.classList.add('active');
+    const dismissed = sessionStorage.getItem('czernica_maintenance_dismissed') === 'true';
+    if (overlay && !dismissed) overlay.classList.add('active');
     if (reasonText) reasonText.textContent = reason && reason.trim() ? reason : 'Strona jest obecnie zamknięta.';
 
     if (reopenAtIso) {
@@ -2017,18 +1917,24 @@ function applyMaintenanceMode(isAvailable, reason, reopenAtIso) {
     }
 }
 
-function saveBlikNumber(e) {
-    addRipple(e);
-    const numberInput = document.getElementById('admin-blik-number');
-    const accountInput = document.getElementById('admin-bank-account');
-    const ownerInput = document.getElementById('admin-account-owner');
-    const number = Security.sanitizeInput(numberInput ? numberInput.value : '');
-    const account = Security.sanitizeInput(accountInput ? accountInput.value : '');
-    const owner = Security.sanitizeInput(ownerInput ? ownerInput.value : '');
-    if (!State.db) { showToast('Firebase niedostępny', 'error'); return; }
-    State.db.ref('ustawienia').update({ blikNumber: number, bankAccount: account, accountOwner: owner })
-        .then(() => showToast('Dane płatności zapisane', 'success'))
-        .catch(() => showToast('Odmowa dostępu', 'error'));
+function dismissMaintenanceOverlay() {
+    sessionStorage.setItem('czernica_maintenance_dismissed', 'true');
+    const overlay = document.getElementById('maintenance-overlay');
+    if (overlay) overlay.classList.remove('active');
+    showToast('Przeglądasz stronę, ale zamówienia są nadal zablokowane do otwarcia', 'info');
+}
+
+/* =========================================================
+   LIVE STATUS BADGE (OTWARTE / ZAMKNIĘTE)
+========================================================= */
+function updateLiveStatusBadge(isAvailable) {
+    const dot = document.getElementById('live-status-dot');
+    const text = document.getElementById('live-status-text');
+    if (!dot || !text) return;
+    const isOpenNow = isAvailable && Schedule.isWithinWorkingHours();
+    dot.className = 'status-dot ' + (isOpenNow ? 'open' : 'closed');
+    text.className = 'status-badge-text ' + (isOpenNow ? 'open' : 'closed');
+    text.textContent = isOpenNow ? 'OTWARTE TERAZ' : 'ZAMKNIĘTE';
 }
 
 /* =========================================================
@@ -2049,7 +1955,7 @@ function notifyDiscordWebhook(orderObj, kosztDostawy) {
                 { name: 'Adres / dane', value: orderObj.adres || '—', inline: false },
                 { name: 'Lista zakupów', value: (orderObj.lista || '—').substring(0, 900), inline: false },
                 { name: 'Koszt dostawy', value: kosztDostawy + ' zł', inline: true },
-                { name: 'Płatność', value: (orderObj.platnosc || '—') + ' / ' + (State.paymentChoice === 'blik' ? 'BLIK przedpłata' : 'Dogadanie z kurierem'), inline: true }
+                { name: 'Płatność', value: orderObj.platnoscStatus || '—', inline: true }
             ],
             timestamp: new Date().toISOString()
         }]
@@ -2071,7 +1977,7 @@ function notifyEmailCopy(orderObj, kosztDostawy) {
             address: orderObj.adres,
             shopping_list: orderObj.lista,
             delivery_cost: kosztDostawy,
-            payment: orderObj.platnosc
+            payment: orderObj.platnoscStatus
         }, CONFIG.EMAILJS_PUBLIC_KEY).catch(err => console.warn('[EmailJS] Send failed:', err.message));
     } catch (e) { console.warn('[EmailJS] Not available:', e.message); }
 }
@@ -2136,16 +2042,23 @@ function onPickupChange() {
     const listaEl = document.getElementById('lista');
     const priceEstimateBox = document.getElementById('price-estimate-box');
     const adresEl = document.getElementById('adres');
+    const recHeading = document.getElementById('rec-heading');
+    const recGrid = document.getElementById('recommendations-grid');
+    const isPaczkomat = (val === 'paczkomat');
+
     if (listaEl) {
-        const isPaczkomat = (val === 'paczkomat');
         listaEl.style.display = isPaczkomat ? 'none' : 'block';
         listaEl.required = !isPaczkomat;
         if (isPaczkomat && priceEstimateBox) priceEstimateBox.classList.remove('visible');
     }
     if (adresEl) {
-        adresEl.style.display = (val === 'paczkomat') ? 'none' : 'block';
-        adresEl.required = (val !== 'paczkomat');
+        adresEl.style.display = isPaczkomat ? 'none' : 'block';
+        adresEl.required = !isPaczkomat;
     }
+    // Recommendations (rec-cards) don't apply to a locker pickup —
+    // there's no shopping list to add items to.
+    if (recHeading) recHeading.style.display = isPaczkomat ? 'none' : '';
+    if (recGrid) recGrid.style.display = isPaczkomat ? 'none' : '';
 
     calculate();
 }
@@ -2396,6 +2309,16 @@ function calculate() {
     }
 
     let deliveryBase = sklepPrice + transportPrice + weekendFee + weatherExtra;
+
+    // Paczkomat cash-on-delivery amount (COD via InPost) is added on top,
+    // it is not part of the "delivery cost" itself but the customer still
+    // needs to know the total they'll owe.
+    let paczkomatPobranie = 0;
+    if (sklepKey === 'paczkomat') {
+        const pobranieInput = document.getElementById('paczkomat-pobranie');
+        paczkomatPobranie = pobranieInput && pobranieInput.value ? (parseFloat(pobranieInput.value) || 0) : 0;
+    }
+
     const oldTotalEl = document.getElementById('old-total');
 
     if (State.isHappyHour) {
@@ -2409,7 +2332,7 @@ function calculate() {
     if (State.flatDiscount > 0) deliveryBase = Math.max(0, deliveryBase - State.flatDiscount);
 
     const totalEl = document.getElementById('total');
-    if (totalEl) totalEl.textContent = (deliveryBase + State.currentTip).toFixed(2);
+    if (totalEl) totalEl.textContent = (deliveryBase + State.currentTip + paczkomatPobranie).toFixed(2);
 
     refreshPaymentDetails();
 }
@@ -2419,7 +2342,6 @@ function calculate() {
 ========================================================= */
 function sendOrder(e) {
     addRipple(e);
-    playClickSound();
 
     const now = Date.now();
     if (now - State.lastOrderTimestamp < CONFIG.ORDER_COOLDOWN_MS) {
@@ -2428,10 +2350,72 @@ function sendOrder(e) {
         return;
     }
 
+    if (!State.isCurrentlyAvailable) {
+        showToast('Zamówienia są chwilowo wstrzymane — spróbuj ponownie po otwarciu', 'error');
+        return;
+    }
+
     if (!document.getElementById('regulamin').checked) {
         showToast('Musisz zaakceptować zasady rozliczenia!', 'error'); return;
     }
 
+    // Validate everything up-front; only after validation passes do we
+    // either show the payment confirmation modal (BLIK/transfer) or send directly (cash).
+    const validation = validateOrderForm();
+    if (!validation.ok) {
+        showToast(validation.message, 'error');
+        return;
+    }
+
+    if (State.paymentChoice === 'blik' || State.paymentChoice === 'transfer') {
+        openPaymentConfirmModal(() => executeSendOrder());
+    } else {
+        executeSendOrder();
+    }
+}
+
+/* Runs all form checks without mutating anything or sending — used so
+   we can show the payment confirmation modal only after the order is
+   known to be valid, and reuse the same checks for the actual submit. */
+function validateOrderForm() {
+    const selectedSklep = document.querySelector('input[name="sklep"]:checked');
+    const sklepKey = selectedSklep ? selectedSklep.value : '';
+
+    const imie = Security.sanitizeInput(document.getElementById('imie').value);
+    if (!imie || imie.length < 2) return { ok: false, message: 'Podaj swoje imię i nazwisko' };
+
+    if (sklepKey === 'paczkomat') {
+        const paczkomatImie = Security.sanitizeInput(document.getElementById('paczkomat-imie').value);
+        const paczkomatTelefon = Security.sanitizeInput(document.getElementById('paczkomat-telefon').value);
+        const paczkomatKod = Security.sanitizeInput(document.getElementById('paczkomat-kod').value);
+        if (!paczkomatImie || paczkomatImie.length < 2) return { ok: false, message: 'Podaj imię i nazwisko odbierającego paczkę' };
+        if (!Security.validate('phone', paczkomatTelefon)) return { ok: false, message: 'Podaj poprawny numer telefonu' };
+        if (!Security.validate('pickupCode', paczkomatKod)) return { ok: false, message: 'Kod odbioru to 6-9 cyfr' };
+    } else {
+        const adres = Security.sanitizeInput(document.getElementById('adres').value);
+        if (!adres || adres.length < 5) return { ok: false, message: 'Podaj dokładny adres dostawy' };
+    }
+
+    if (sklepKey === 'grubego') {
+        const lista = Security.sanitizeInput(document.getElementById('lista').value);
+        const grubegoInne = Security.sanitizeInput(document.getElementById('grubego-inne').value);
+        if (State.grubegoQty.male === 0 && State.grubegoQty.duze === 0 && !grubegoInne && !lista) {
+            return { ok: false, message: 'Wybierz coś z menu Bara u Grubego' };
+        }
+    } else if (sklepKey !== 'paczkomat') {
+        const lista = Security.sanitizeInput(document.getElementById('lista').value);
+        if (!lista || lista.length < 3) return { ok: false, message: 'Wpisz co mamy kupić!' };
+    }
+
+    const trybCzasu = document.getElementById('czas-dostawy').value;
+    if (trybCzasu === 'planowana' && !State.selectedSlot) {
+        return { ok: false, message: 'Wybierz slot czasowy dostawy!' };
+    }
+
+    return { ok: true };
+}
+
+function executeSendOrder() {
     const submitBtn = document.getElementById('submit-btn');
     const restoreSubmitBtn = () => {
         if (submitBtn) {
@@ -2449,21 +2433,19 @@ function sendOrder(e) {
     const selectedSklep = document.querySelector('input[name="sklep"]:checked');
     const sklepKey = selectedSklep ? selectedSklep.value : '';
     const wybranySklep = selectedSklep ? selectedSklep.getAttribute('data-nazwa') : '—';
-
     const imie = Security.sanitizeInput(document.getElementById('imie').value);
-    if (!imie || imie.length < 2) { showToast('Podaj swoje imię i nazwisko', 'error'); restoreSubmitBtn(); return; }
 
     let adres = '';
-    let paczkomatTelefon = '', paczkomatKod = '';
+    let paczkomatImie = '', paczkomatTelefon = '', paczkomatKod = '', paczkomatPobranie = '';
     if (sklepKey === 'paczkomat') {
+        paczkomatImie = Security.sanitizeInput(document.getElementById('paczkomat-imie').value);
         paczkomatTelefon = Security.sanitizeInput(document.getElementById('paczkomat-telefon').value);
         paczkomatKod = Security.sanitizeInput(document.getElementById('paczkomat-kod').value);
-        if (!Security.validate('phone', paczkomatTelefon)) { showToast('Podaj poprawny numer telefonu', 'error'); restoreSubmitBtn(); return; }
-        if (!paczkomatKod || paczkomatKod.length < 3) { showToast('Podaj kod odbioru paczki', 'error'); restoreSubmitBtn(); return; }
+        const pobranieVal = document.getElementById('paczkomat-pobranie').value;
+        paczkomatPobranie = pobranieVal ? parseFloat(pobranieVal).toFixed(2) : '';
         adres = 'Odbiór: Paczkomat InPost Czernica';
     } else {
         adres = Security.sanitizeInput(document.getElementById('adres').value);
-        if (!adres || adres.length < 5) { showToast('Podaj dokładny adres dostawy', 'error'); restoreSubmitBtn(); return; }
     }
 
     let lista = Security.sanitizeInput(document.getElementById('lista').value);
@@ -2473,14 +2455,10 @@ function sendOrder(e) {
         if (State.grubegoQty.male > 0) grubegoParts.push(`${State.grubegoQty.male}x Frytki Małe`);
         if (State.grubegoQty.duze > 0) grubegoParts.push(`${State.grubegoQty.duze}x Frytki Duże`);
         if (grubegoInne) grubegoParts.push(grubegoInne);
-        if (grubegoParts.length === 0 && !lista) { showToast('Wybierz coś z menu Bara u Grubego', 'error'); restoreSubmitBtn(); return; }
         lista = [grubegoParts.join(', '), lista].filter(Boolean).join(' | ');
     }
-    if (sklepKey !== 'grubego' && sklepKey !== 'paczkomat' && (!lista || lista.length < 3)) {
-        showToast('Wpisz co mamy kupić!', 'error'); restoreSubmitBtn(); return;
-    }
 
-    const platnosc = document.getElementById('platnosc').value;
+    const platnosc = State.paymentChoice;
     const kosztDostawy = document.getElementById('total').textContent;
     const selectedTransport = document.querySelector('input[name="transport"]:checked');
     const wybranyTransport = selectedTransport ? selectedTransport.getAttribute('data-nazwa') : '—';
@@ -2489,8 +2467,7 @@ function sendOrder(e) {
     const trybCzasu = document.getElementById('czas-dostawy').value;
     let kiedyDostarczyc = 'Jak najszybciej 🚀';
     let slotDate = null, slotKey = null;
-    if (trybCzasu === 'planowana') {
-        if (!State.selectedSlot) { showToast('Wybierz slot czasowy dostawy!', 'error'); return; }
+    if (trybCzasu === 'planowana' && State.selectedSlot) {
         slotDate = State.selectedSlot.date; slotKey = State.selectedSlot.key;
         kiedyDostarczyc = `${slotDate}, ${slotKey}`;
     }
@@ -2498,9 +2475,10 @@ function sendOrder(e) {
     const uniqueOrderId = Math.floor(100000 + Math.random() * 900000).toString();
     const timestamp = Date.now();
 
-    const paymentStatusLabel = State.paymentChoice === 'blik'
-        ? 'BLIK Przedpłata (Do natychmiastowej realizacji)'
-        : 'Płatność do ustalenia na WhatsApp / Przy odbiorze';
+    let paymentStatusLabel;
+    if (platnosc === 'blik') paymentStatusLabel = 'ZAPŁACONE — BLIK wysłany przez klienta (do natychmiastowej realizacji)';
+    else if (platnosc === 'transfer') paymentStatusLabel = 'ZAPŁACONE — Przelew wysłany przez klienta (do natychmiastowej realizacji)';
+    else paymentStatusLabel = 'Gotówka — płatność do ustalenia na WhatsApp / przy odbiorze';
 
     const orderObj = {
         id: uniqueOrderId,
@@ -2520,7 +2498,12 @@ function sendOrder(e) {
         data: new Date().toLocaleString('pl-PL'),
         timestamp
     };
-    if (sklepKey === 'paczkomat') { orderObj.paczkomatTelefon = paczkomatTelefon; orderObj.paczkomatKod = paczkomatKod; }
+    if (sklepKey === 'paczkomat') {
+        orderObj.paczkomatImie = paczkomatImie;
+        orderObj.paczkomatTelefon = paczkomatTelefon;
+        orderObj.paczkomatKod = paczkomatKod;
+        if (paczkomatPobranie) orderObj.paczkomatPobranie = paczkomatPobranie;
+    }
 
     localStorage.setItem('czernica_name', imie);
     if (sklepKey !== 'paczkomat') localStorage.setItem('czernica_address', adres);
@@ -2536,36 +2519,41 @@ function sendOrder(e) {
         forceIncrementCounter();
     }
 
-    State.lastOrderTimestamp = now;
+    State.lastOrderTimestamp = Date.now();
+
+    const paidLine = platnosc === 'blik' ? '✅ *ZAPŁACONE BLIK-IEM — od razu wyruszam!*'
+        : platnosc === 'transfer' ? '✅ *ZAPŁACONE PRZELEWEM — od razu wyruszam!*'
+        : '💬 *Gotówka — dogadanie na WhatsApp*';
 
     const wiadomosc = [
         '📦 *NOWE ZAMÓWIENIE CZERNICA* 📦', '',
+        paidLine, '',
         `*Klient:* ${imie}`,
         `*Punkt:* ${wybranySklep}`,
+        sklepKey === 'paczkomat' ? `*Odbierający:* ${paczkomatImie}` : '',
         sklepKey === 'paczkomat' ? `*Telefon:* ${paczkomatTelefon}` : `*Adres:* ${adres}`,
         sklepKey === 'paczkomat' ? `*Kod odbioru:* ${paczkomatKod}` : '',
+        sklepKey === 'paczkomat' && paczkomatPobranie ? `*Pobranie za paczkę:* ${paczkomatPobranie} zł` : '',
         `*ID Zamówienia:* ${uniqueOrderId}`,
         `*Transport:* ${wybranyTransport}`,
         `*Kiedy:* ${kiedyDostarczyc}`,
         `*Bezkontaktowo:* ${bezKontaktu}`,
-        `*Dostawa:* ${kosztDostawy} zł`,
+        `*Kwota:* ${kosztDostawy} zł`,
         State.currentTip > 0 ? `*Napiwek:* ${State.currentTip} zł` : '',
         State.discountCode ? `*Kod rabatowy:* ${State.discountCode}` : '',
-        `*Płatność:* ${platnosc} — ${paymentStatusLabel}`, '',
-        '*🛒 Lista zakupów:*', lista, '',
+        '', '*🛒 Lista zakupów:*', lista, '',
         'Czekam na potwierdzenie!'
     ].filter(l => l !== null && l !== '').join('%0A');
 
     const successTextEl = document.getElementById('success-modal-text');
     const successIdEl = document.getElementById('success-order-id');
-    if (State.paymentChoice === 'blik') {
-        showBlikInstructionModal(kosztDostawy);
-    } else if (successTextEl) {
-        successTextEl.textContent = 'Zamówienie przyjęte! Przejdź do czatu, aby ustalić szczegóły i płatność po zakupach.';
+    if (successTextEl) {
+        successTextEl.textContent = platnosc === 'cash'
+            ? 'Zamówienie przyjęte! Przejdź do czatu, aby ustalić szczegóły i płatność gotówką.'
+            : 'Zamówienie wysłane! Kurier wyruszy zaraz po zaksięgowaniu płatności.';
     }
     if (successIdEl) successIdEl.textContent = '🔑 ID: ' + uniqueOrderId;
     document.getElementById('success-modal').classList.add('active');
-    playSuccessSound();
 
     window.open(`https://wa.me/${CONFIG.WHATSAPP_NUMBER}?text=${wiadomosc}`, '_blank');
 
@@ -2574,16 +2562,12 @@ function sendOrder(e) {
 
     saveLastOrderLocally(orderObj);
     checkQuickReorderWidget();
-    startTrackingSimulator(uniqueOrderId);
     restoreSubmitBtn();
-
-    const localCount = (parseInt(localStorage.getItem('czernica_local_order_count') || '0') + 1);
-    localStorage.setItem('czernica_local_order_count', String(localCount));
-    checkLoyaltyConfettiTrigger(localCount);
 
     State.cart = []; Cart.render();
     document.getElementById('lista').value = '';
     document.getElementById('price-estimate-box').classList.remove('visible');
+    State.estimatedGroceryCost = 0;
     State.discountPercent = 0; State.discountCode = ''; State.flatDiscount = 0;
     State.selectedSlot = null;
     State.grubegoQty = { male: 0, duze: 0 };
@@ -2593,6 +2577,10 @@ function sendOrder(e) {
     const discBadge = document.getElementById('discount-badge');
     if (discBadge) { discBadge.classList.remove('visible'); discBadge.textContent = ''; }
     document.getElementById('discount-code').value = '';
+    document.getElementById('paczkomat-imie').value = '';
+    document.getElementById('paczkomat-telefon').value = '';
+    document.getElementById('paczkomat-kod').value = '';
+    document.getElementById('paczkomat-pobranie').value = '';
 
     if (State.currentUser) setTimeout(() => loadUserHistory(State.currentUser.uid), 1000);
 }
@@ -2756,7 +2744,8 @@ function loadAdminData() {
             u.maintenanceReopenAt || null,
             u.blikNumber || '',
             u.bankAccount || '',
-            u.accountOwner || ''
+            u.accountOwner || '',
+            u.hasOwnProperty('safetyMarginPercent') ? u.safetyMarginPercent : CONFIG.DEFAULT_SAFETY_MARGIN_PERCENT
         );
         syncAdminControlsUI(u);
     });
@@ -2793,6 +2782,10 @@ function syncAdminControlsUI(u) {
     if (accountInput && document.activeElement !== accountInput) accountInput.value = u.bankAccount || '';
     const ownerInput = document.getElementById('admin-account-owner');
     if (ownerInput && document.activeElement !== ownerInput) ownerInput.value = u.accountOwner || '';
+    const marginInput = document.getElementById('admin-safety-margin');
+    if (marginInput && document.activeElement !== marginInput) {
+        marginInput.value = u.hasOwnProperty('safetyMarginPercent') ? u.safetyMarginPercent : CONFIG.DEFAULT_SAFETY_MARGIN_PERCENT;
+    }
 
     const reopenInput = document.getElementById('maintenance-reopen-input');
     if (reopenInput && document.activeElement !== reopenInput && u.maintenanceReopenAt) {
@@ -2814,8 +2807,9 @@ function renderAdminOrders(orders) {
 
             const idEl = DOM.el('div', { style: { fontSize: '12px', color: '#aaa', marginBottom: '4px' } }, ['#' + (o.id || '—') + ' | ' + (o.sklep || '—')]);
             const addrEl = DOM.el('div', { style: { fontSize: '12px', marginBottom: '4px' } }, ['📍 ' + (o.adres || '—')]);
-            const phoneNote = o.paczkomatTelefon ? ` | 📞 ${o.paczkomatTelefon} | Kod: ${o.paczkomatKod || '—'}` : '';
-            const costEl = DOM.el('div', { style: { fontSize: '12px', fontWeight: '700', marginBottom: '8px' } }, ['Dostawa: ' + (o.koszt || '—') + ' zł | Płatność: ' + (o.platnosc || '—') + phoneNote]);
+            const paczkomatNote = o.paczkomatTelefon ? ` | 📞 ${o.paczkomatTelefon} (${o.paczkomatImie || '—'}) | Kod: ${o.paczkomatKod || '—'}` + (o.paczkomatPobranie ? ` | Pobranie: ${o.paczkomatPobranie} zł` : '') : '';
+            const costEl = DOM.el('div', { style: { fontSize: '12px', fontWeight: '700', marginBottom: '4px' } }, ['Kwota: ' + (o.koszt || '—') + ' zł' + paczkomatNote]);
+            const payStatusEl = DOM.el('div', { style: { fontSize: '12px', fontWeight: '700', marginBottom: '8px', color: (o.platnosc === 'cash' ? '#888' : 'var(--secondary)') } }, [o.platnoscStatus || '—']);
             const listaEl = DOM.el('div', { style: { fontSize: '12px', background: 'var(--bg)', padding: '8px', borderRadius: '6px', whiteSpace: 'pre-line', marginBottom: '10px' } }, [o.lista || '']);
 
             const statusRow = DOM.el('div', { style: { display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' } });
@@ -2841,7 +2835,7 @@ function renderAdminOrders(orders) {
             statusRow.appendChild(notifyLink);
 
             card.appendChild(header); card.appendChild(idEl); card.appendChild(addrEl);
-            card.appendChild(costEl); card.appendChild(listaEl); card.appendChild(statusRow);
+            card.appendChild(costEl); card.appendChild(payStatusEl); card.appendChild(listaEl); card.appendChild(statusRow);
             container.appendChild(card);
         });
     });
@@ -2954,13 +2948,15 @@ function savePricing(e) {
    APPLY SETTINGS (from Firebase listener) — drives banners,
    order button state, schedule mode, pickup toggles, pricing
 ========================================================= */
-function applySettings(isAvailable, returnTime, modalText, weatherFee, scheduleMode, pickupEnabled, cennik, maintenanceReopenAt, blikNumber, bankAccount, accountOwner) {
+function applySettings(isAvailable, returnTime, modalText, weatherFee, scheduleMode, pickupEnabled, cennik, maintenanceReopenAt, blikNumber, bankAccount, accountOwner, safetyMarginPercent) {
     State.scheduleModeOverride = (scheduleMode === 'wakacje' || scheduleMode === 'szkola') ? scheduleMode : null;
     State.pickupEnabled = Object.assign({ paczkomat: true, czernica: true, janowek: true, grubego: true }, pickupEnabled || {});
     State.pricing = Object.assign({}, CONFIG.DEFAULT_PRICING, cennik || {});
     State.blikNumber = blikNumber || '';
     State.bankAccount = bankAccount || '';
     State.accountOwner = accountOwner || '';
+    State.safetyMarginPercent = (safetyMarginPercent !== undefined && safetyMarginPercent !== null) ? safetyMarginPercent : CONFIG.DEFAULT_SAFETY_MARGIN_PERCENT;
+    State.isCurrentlyAvailable = !!isAvailable;
 
     const orderBtn = document.getElementById('submit-btn');
     const isWorkingHours = Schedule.isWithinWorkingHours();
@@ -3010,6 +3006,7 @@ function applySettings(isAvailable, returnTime, modalText, weatherFee, scheduleM
     updateLiveStatusBadge(isAvailable);
 
     applyPickupAvailabilityRules();
+    updatePriceEstimate();
     calculate();
 }
 
@@ -3024,7 +3021,7 @@ function syncWithDatabase() {
             localStorage.getItem('returnTime') || 'później',
             localStorage.getItem('czernicaModalText') || null,
             localStorage.getItem('weatherFee') === 'true',
-            null, null, null, null, '', '', ''
+            null, null, null, null, '', '', '', CONFIG.DEFAULT_SAFETY_MARGIN_PERCENT
         );
         return;
     }
@@ -3044,7 +3041,8 @@ function syncWithDatabase() {
             u.maintenanceReopenAt || null,
             u.blikNumber || '',
             u.bankAccount || '',
-            u.accountOwner || ''
+            u.accountOwner || '',
+            u.hasOwnProperty('safetyMarginPercent') ? u.safetyMarginPercent : CONFIG.DEFAULT_SAFETY_MARGIN_PERCENT
         );
     });
 }
@@ -3223,7 +3221,6 @@ function initPWA() {
 ========================================================= */
 window.onload = function () {
     checkTheme();
-    applyStoredTheme();
     initFirebase();
     initCounter();
     syncWithDatabase();
@@ -3242,8 +3239,13 @@ window.onload = function () {
     const qrDetails = document.getElementById('qr-canvas-container');
     if (qrDetails) qrDetails.addEventListener('toggle', () => { if (qrDetails.open) refreshPaymentDetails(); });
 
-    const copyAllBtn = document.getElementById('blik-copy-all-btn');
-    if (copyAllBtn) copyAllBtn.addEventListener('click', copyAllPaymentDetails);
+    const blikCopyAllBtn = document.getElementById('blik-copy-all-btn');
+    if (blikCopyAllBtn) blikCopyAllBtn.addEventListener('click', copyAllBlikDetails);
+    const transferCopyAllBtn = document.getElementById('transfer-copy-all-btn');
+    if (transferCopyAllBtn) transferCopyAllBtn.addEventListener('click', copyAllTransferDetails);
+
+    const paczkomatPobranieInput = document.getElementById('paczkomat-pobranie');
+    if (paczkomatPobranieInput) paczkomatPobranieInput.addEventListener('input', calculate);
 
     const slotDateInput = document.getElementById('slot-date');
     if (slotDateInput) {
@@ -3251,12 +3253,6 @@ window.onload = function () {
         slotDateInput.min = today.toISOString().split('T')[0];
         slotDateInput.addEventListener('change', onSlotDateChange);
     }
-
-    document.addEventListener('click', (ev) => {
-        if (ev.target.closest('.option-card, .rec-card, .tip-btn, .slot-btn, .mode-btn')) {
-            playClickSound();
-        }
-    });
 
     setTimeout(() => { document.getElementById('welcome-modal').classList.add('active'); }, 2500);
 
