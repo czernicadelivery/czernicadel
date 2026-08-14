@@ -1,4 +1,4 @@
-{
+
   "_INSTRUKCJA": "Wgraj te reguły do Firebase Console → Realtime Database → Reguły",
   "rules": {
     "admins": {
@@ -21,7 +21,13 @@
           ".validate": "newData.val().length >= 6 && newData.val().length <= 20"
         },
         "paczkomatKod": {
-          ".validate": "newData.val().length >= 3 && newData.val().length <= 10"
+          ".validate": "newData.val().length >= 6 && newData.val().length <= 9"
+        },
+        "paczkomatImie": {
+          ".validate": "newData.val().length >= 2 && newData.val().length <= 100"
+        },
+        "paczkomatPobranie": {
+          ".validate": "newData.val().length <= 20"
         },
         "platnoscStatus": {
           ".validate": "newData.val().length <= 200"
@@ -57,6 +63,15 @@
       },
       "blikNumber": {
         ".validate": "newData.val().length <= 30"
+      },
+      "bankAccount": {
+        ".validate": "newData.val().length <= 40"
+      },
+      "accountOwner": {
+        ".validate": "newData.val().length <= 100"
+      },
+      "safetyMarginPercent": {
+        ".validate": "newData.val() >= 0 && newData.val() <= 100"
       }
     },
     "kody_rabatowe": {
