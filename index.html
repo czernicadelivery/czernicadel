@@ -273,6 +273,28 @@
         }
         [data-theme="dark"] .price-estimate-box { color: #7fd4e3; }
         .price-estimate-box.visible { display: block; animation: fadeIn 0.3s ease; }
+        .excluded-products-note {
+            background: rgba(108,117,125,0.08); border: 1px solid rgba(108,117,125,0.25);
+            border-radius: 10px; padding: 10px 14px; font-size: 12px; color: #555; margin-bottom: 15px; line-height: 1.5;
+        }
+        [data-theme="dark"] .excluded-products-note { color: #bbb; }
+        .excluded-products-note i { color: var(--danger); margin-right: 4px; }
+        .delivery-rules {
+            max-width: 600px; margin: 0 auto 10px; padding: 0 20px;
+        }
+        .delivery-rules summary {
+            cursor: pointer; font-size: 13px; font-weight: 700; color: #777;
+            padding: 12px 0; list-style: none;
+        }
+        .delivery-rules summary::-webkit-details-marker { display: none; }
+        .delivery-rules summary i { color: var(--primary); margin-right: 6px; }
+        .delivery-rules-body {
+            background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+            padding: 16px 18px; font-size: 12.5px; color: #666; line-height: 1.6;
+        }
+        .delivery-rules-body p { margin: 0 0 12px; }
+        .delivery-rules-body p:last-child { margin-bottom: 0; }
+        .delivery-rules-body strong { color: var(--text); }
 
         /* PAYMENT CHOICE CARDS */
         .payment-choice-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 10px 0 5px; }
@@ -470,8 +492,13 @@
                 <input type="text" id="paczkomat-imie" placeholder="Imię i nazwisko odbierającego" autocomplete="name">
                 <input type="tel" id="paczkomat-telefon" placeholder="Numer telefonu zamawiającego" autocomplete="tel">
                 <input type="text" id="paczkomat-kod" placeholder="Kod odbioru (6-9 cyfr, z SMS/aplikacji)" maxlength="9" inputmode="numeric">
-                <input type="number" id="paczkomat-pobranie" placeholder="Kwota pobrania za paczkę (zł) — jeśli dotyczy, opcjonalnie" min="0" step="0.01">
-                <div class="note" style="margin-top:-8px;">Jeśli Twoja paczka jest za pobraniem, wpisz kwotę widoczną w aplikacji InPost — doliczymy ją do rozliczenia.</div>
+                <label style="font-size:12px; color:#666; font-weight:bold; display:block; margin-top:6px;">
+                    Kwota pobrania za paczkę <span style="color:var(--primary); font-weight:800;">(OPCJONALNE — wypełnij tylko jeśli faktycznie masz pobranie)</span>
+                </label>
+                <input type="number" id="paczkomat-pobranie" placeholder="Zostaw puste, jeśli nie masz pobrania" min="0" step="0.01">
+                <div class="note" style="margin-top:-8px; color:var(--danger); font-weight:600;">
+                    Ważne: podaj tę kwotę tylko wtedy, gdy Twoja paczka RZECZYWIŚCIE jest za pobraniem (widoczne w aplikacji InPost). Błędnie wpisana kwota oznacza niepotrzebny kurs kuriera lub złe rozliczenie — sprawdź dwa razy przed wysłaniem.
+                </div>
             </div>
 
             <label class="option-card" id="option-czernica" onclick="addRipple(event)">
@@ -587,6 +614,9 @@
 
             <textarea id="lista" rows="4" placeholder="Co mamy kupić? (np. 1x chleb jasny, 2x mleko 3.2%)" oninput="updatePriceEstimate()"></textarea>
             <div class="price-estimate-box" id="price-estimate-box"></div>
+            <div class="excluded-products-note">
+                <i class="fas fa-ban"></i> Nie kupujemy i nie dowozimy: alkoholu, papierosów, e-papierosów/liquidów, zapałek/zapalniczek ani napojów energetycznych.
+            </div>
 
             <h2 style="margin-top: 25px;"><i class="fas fa-wallet"></i> 5. Jak zapłacisz?</h2>
             <div class="payment-choice-grid">
@@ -641,8 +671,9 @@
                         <div id="qr-canvas"></div>
                     </div>
                 </details>
-                <div class="payment-safety-note"
-                    <i class="fas fa-shield-alt"></i> Kwota zawiera bezpieczny margines na wypadek, gdyby zakupy okazały się droższe niż szacunek. <strong>Jeśli zapłacisz za dużo, zawsze natychmiast zwracamy różnicę</strong> - po zakupie zawsze zwracamy od razu nadwyżkę na te same konto/numer/adres
+                <div class="payment-safety-note">
+                    <i class="fas fa-shield-alt"></i> Kwota zawiera bezpieczny margines na wypadek, gdyby zakupy okazały się droższe niż szacunek. <strong>Jeśli zapłacisz za dużo, zawsze natychmiast zwracamy różnicę</strong> — wystarczy że po dostawie wyślesz nam zdjęci
+    .
                 </div>
             </div>
 
@@ -675,7 +706,7 @@
                     <i class="fas fa-copy"></i> Kopiuj wszystkie dane
                 </button>
                 <div class="payment-safety-note">
-                    <i class="fas fa-shield-alt"></i> Kwota zawiera bezpieczny margines na wypadek, gdyby zakupy okazały się droższe niż szacunek. <strong>Jeśli zapłacisz za dużo, zawsze natychmiast zwracamy różnicę</strong> — wystarczy że po dostawie wyślesz nam zdjęcie paragonu na WhatsApp.
+                    <i class="fas fa-shield-alt"></i> Kwota zawiera bezpieczny margines na wypadek, gdyby zakupy okazały się droższe niż szacunek. <strong>Jeśli zapłacisz za dużo, zawsze natychmiast zwracamy różnicę</strong> — od razu po zakupieniu produktow wysylamy paragon i zwracamy nadwyżkę 😎.
                 </div>
             </div>
 
@@ -714,7 +745,12 @@
             Koszt samej dostawy:<br>
             <span id="old-total" class="old-price"></span>
             <span class="total-price"><span id="total">3.00</span> zł</span>
-            <span style="font-size: 12px; font-weight: normal; color: #777;">+ paragon za produkty ze sklepu</span>
+            <span style="font-size: 12px; font-weight: normal; color: #777;">+ paragon za produkty ze sklepu (rozliczenie co do grosza)</span>
+            <div id="grand-total-row" style="display:none; margin-top:14px; padding-top:14px; border-top: 1px dashed var(--border);">
+                <span style="font-size: 13px; font-weight: 600; color: #777;">Orientacyjnie razem (dostawa + szacunek zakupów):</span><br>
+                <span style="font-size: 24px; font-weight: 800; color: var(--primary);"><span id="grand-total">0.00</span> zł</span><br>
+                <span style="font-size: 11px; font-weight: normal; color: #aaa;">Ostateczna kwota wynika z paragonu.</span>
+            </div>
         </div>
 
         <button id="submit-btn" class="order-btn" onclick="sendOrder(event)">
@@ -1022,6 +1058,18 @@
         </div>
     </div>
 
+    <details class="delivery-rules">
+        <summary><i class="fas fa-file-alt"></i> Zasady dostawy — przeczytaj przed zamówieniem</summary>
+        <div class="delivery-rules-body">
+            <p><strong>Brak produktu w sklepie.</strong> Jeśli danego produktu z Twojej listy zabraknie na miejscu, kurier skontaktuje się z Tobą na WhatsApp, aby ustalić zamiennik lub pominięcie pozycji. Bez kontaktu z Twojej strony nie podejmujemy decyzji za Ciebie.</p>
+            <p><strong>Rezygnacja w trakcie realizacji.</strong> Jeśli zamówienie zostanie odwołane, gdy kurier jest już w drodze (po połowie trasy), zatrzymujemy połowę opłaty za dostawę jako rekompensatę za przejechany dystans — resztę zwracamy niezwłocznie na wskazane konto/numer BLIK.</p>
+            <p><strong>Nadpłata.</strong> Jeśli zapłacona z góry kwota (BLIK/przelew) okaże się wyższa niż rzeczywisty koszt z paragonu, różnicę zwracamy od razu po dostawie na to samo konto/numer, z którego przyszła płatność.</p>
+            <p><strong>Produkty wykluczone.</strong> Nie realizujemy zakupu ani dostawy alkoholu, papierosów, e-papierosów/liquidów, zapałek/zapalniczek ani napojów energetycznych.</p>
+            <p><strong>Paczkomat — pobranie.</strong> Kwotę pobrania podaje wyłącznie osoba składająca zamówienie i tylko wtedy, gdy paczka faktycznie jest za pobraniem. Błędnie podana kwota może skutkować niepotrzebnym kursem kuriera.</p>
+            <p><strong>Godziny i dostępność.</strong> Realizujemy zamówienia wyłącznie w godzinach wskazanych na stronie (zależnych od pory roku i dnia tygodnia) oraz gdy dostawy nie są wstrzymane przez tryb przerwy.</p>
+        </div>
+    </details>
+
     <div class="footer">
         © 2026 Czernica Delivery.<br>
         Projekt i wykonanie lokalne. Gwarantujemy uczciwość i paragony ze sklepu.
@@ -1142,43 +1190,58 @@ const CONFIG = {
     PRICE_KEYWORDS: {
         // Pieczywo
         'chleb': 6, 'chleba': 6, 'bułki': 5, 'bułka': 2, 'bagietka': 4, 'bagietki': 4,
-        'rogal': 3, 'rogaliki': 6, 'tost': 5, 'tosty': 5, 'kajzerka': 2,
+        'rogal': 3, 'rogaliki': 6, 'tost': 5, 'tosty': 5, 'kajzerka': 2, 'bulka': 2, 'buła': 2,
+        'chalka': 6, 'chałka': 6, 'bagietka francuska': 5,
         // Nabiał
-        'mleko': 4.5, 'maślanka': 4, 'kefir': 4, 'śmietana': 5, 'śmietanka': 5,
-        'masło': 7, 'margaryna': 6, 'jajka': 12, 'jaja': 12, 'jajko': 2,
-        'ser': 10, 'ser żółty': 12, 'twaróg': 6, 'serek': 3, 'serki': 3,
-        'jogurt': 3, 'jogurty': 3, 'danonki': 8, 'danio': 3, 'aktivia': 4,
+        'mleko': 4.5, 'mleko 3.2': 4.5, 'mleko 2': 4, 'mlako': 4.5, 'laciate': 5, 'mlekovita': 4.5,
+        'maślanka': 4, 'kefir': 4, 'śmietana': 5, 'smietana': 5, 'śmietanka': 5,
+        'masło': 7, 'maslo': 7, 'masełko': 7, 'margaryna': 6, 'kasztelan': 4,
+        'jajka': 12, 'jaja': 12, 'jajko': 2, 'jajeczka': 12,
+        'ser': 10, 'ser żółty': 12, 'ser zolty': 12, 'gouda': 12, 'edamski': 11, 'twaróg': 6, 'twarog': 6,
+        'serek': 3, 'serki': 3, 'serek wiejski': 4, 'philadelphia': 8, 'mascarpone': 12,
+        'jogurt': 3, 'jogurty': 3, 'jogobella': 3, 'danonki': 8, 'danio': 3, 'aktivia': 4, 'skyr': 5,
         // Podstawowe produkty sypkie / oleje
-        'olej': 8, 'oliwa': 15, 'mąka': 5, 'cukier': 5, 'sól': 3, 'ryż': 6,
-        'makaron': 5, 'kasza': 5, 'płatki': 8, 'musli': 10,
-        // Napoje
-        'woda': 4, 'woda niegazowana': 4, 'woda gazowana': 4, 'cisowianka': 5, 'żywiec zdrój': 5,
-        'cola': 6, 'coca cola': 7, 'coca-cola': 7, 'kola': 6, 'pepsi': 6,
-        'sok': 5, 'sok pomarańczowy': 6, 'sok jabłkowy': 5, 'tymbark': 5, 'kubuś': 4,
-        'napój': 5, 'napoje': 5, 'oranżada': 4, 'lipton': 6, 'piwo': 5, 'piwa': 5,
-        'energetyk': 6, 'red bull': 8, 'tiger': 4, 'monster': 8,
+        'olej': 8, 'olej rzepakowy': 8, 'oliwa': 15, 'oliwa z oliwek': 18,
+        'mąka': 5, 'maka': 5, 'cukier': 5, 'cukier puder': 6, 'sól': 3, 'sol': 3, 'ryż': 6, 'ryz': 6,
+        'makaron': 5, 'kasza': 5, 'kasza gryczana': 5, 'płatki owsiane': 6, 'platki owsiane': 6,
+        'płatki': 8, 'platki': 8, 'musli': 10, 'nesquik': 10, 'lubella': 5, 'winiary': 4,
+        // Napoje (bez alkoholu — patrz wykluczenia poniżej)
+        'woda': 4, 'woda niegazowana': 4, 'woda gazowana': 4, 'woda mineralna': 4,
+        'cisowianka': 5, 'żywiec zdrój': 5, 'zywiec zdroj': 5, 'muszynianka': 5, 'nałęczowianka': 5, 'kropla beskidu': 4,
+        'cola': 6, 'coca cola': 7, 'coca-cola': 7, 'koka cola': 7, 'kola': 6, 'pepsi': 6, 'pepsi cola': 6,
+        'fanta': 6, 'sprite': 6, 'mirinda': 6, '7up': 6,
+        'sok': 5, 'sok pomarańczowy': 6, 'sok jablkowy': 5, 'sok jabłkowy': 5, 'tymbark': 5, 'kubuś': 4, 'kubus': 4,
+        'hortex': 5, 'fortuna': 4, 'appetita': 4,
+        'napój': 5, 'napoje': 5, 'napuj': 5, 'oranżada': 4, 'oranzada': 4, 'lipton ice tea': 6,
         // Przekąski / słodycze
-        'chipsy': 6, 'lays': 7, 'crunchips': 7, 'paluszki': 4, 'krakersy': 5,
-        'czekolada': 6, 'wedel': 6, 'milka': 6, 'ptasie mleczko': 12, 'ptasie mleczka': 12,
-        'ciastka': 8, 'delicje': 7, 'oreo': 6, 'wafle': 5, 'prince polo': 2,
-        'lody': 8, 'lody familijne': 15, 'magnum': 6, 'cornetto': 5,
-        'cukierki': 6, 'żelki': 6, 'haribo': 7, 'guma do żucia': 4,
+        'chipsy': 6, 'lays': 7, 'crunchips': 7, 'pringles': 9, 'paluszki': 4, 'krakersy': 5,
+        'czekolada': 6, 'czekolda': 6, 'wedel': 6, 'milka': 6, 'lindt': 10, 'goplana': 6, 'terravita': 5,
+        'ptasie mleczko': 12, 'ptasie mleczka': 12, 'michałki': 6, 'michalki': 6,
+        'ciastka': 8, 'ciasteczka': 8, 'delicje': 7, 'oreo': 6, 'wafle': 5, 'grzeski': 4, 'prince polo': 2,
+        'lody': 8, 'lody familijne': 15, 'magnum': 6, 'cornetto': 5, 'калиппо': 4, 'calippo': 4, 'paczki lodowe': 15,
+        'cukierki': 6, 'żelki': 6, 'zelki': 6, 'haribo': 7, 'mentos': 4, 'guma do żucia': 4, 'guma balonowa': 4,
         // Kawa / herbata
-        'kawa': 15, 'nescafe': 18, 'jacobs': 18, 'herbata': 10, 'lipton herbata': 8, 'cukier w kostkach': 6,
+        'kawa': 15, 'nescafe': 18, 'jacobs': 18, 'tchibo': 17, 'kawa mielona': 15, 'kawa rozpuszczalna': 15,
+        'herbata': 10, 'lipton herbata': 8, 'teekanne': 9, 'cukier w kostkach': 6,
         // Mięso / wędliny
-        'wędlina': 12, 'szynka': 12, 'kiełbasa': 10, 'parówki': 8, 'boczek': 12,
-        'kurczak': 18, 'filet z kurczaka': 20, 'mięso mielone': 18, 'mięso': 20, 'schab': 20,
+        'wędlina': 12, 'wedlina': 12, 'szynka': 12, 'kiełbasa': 10, 'kielbasa': 10, 'parówki': 8, 'parowki': 8, 'boczek': 12,
+        'kurczak': 18, 'filet z kurczaka': 20, 'mięso mielone': 18, 'mieso mielone': 18, 'mięso': 20, 'mieso': 20, 'schab': 20,
+        'salceson': 10, 'pasztet': 6, 'mortadela': 9,
         // Warzywa / owoce
-        'pomidory': 6, 'pomidor': 2, 'ogórki': 5, 'ogórek': 2, 'ziemniaki': 6,
-        'cebula': 3, 'marchew': 4, 'sałata': 4, 'papryka': 6, 'banany': 6,
-        'jabłka': 6, 'cytryny': 5, 'owoce': 10, 'warzywa': 8,
+        'pomidory': 6, 'pomidor': 2, 'ogórki': 5, 'ogorki': 5, 'ogórek': 2, 'ziemniaki': 6, 'ziemniaki młode': 8,
+        'cebula': 3, 'marchew': 4, 'marchewka': 4, 'sałata': 4, 'salata': 4, 'papryka': 6, 'banany': 6,
+        'jabłka': 6, 'jablka': 6, 'cytryny': 5, 'gruszki': 6, 'owoce': 10, 'warzywa': 8,
         // Chemia domowa / higiena (często dokupowane razem z zakupami)
-        'papier toaletowy': 12, 'ręcznik papierowy': 8, 'płyn do naczyń': 6,
-        'proszek do prania': 20, 'pasta do zębów': 8, 'szampon': 12, 'mydło': 5,
-        // Inne
-        'papierosy': 20, 'zapałki': 3, 'zapalniczka': 5, 'karma dla psa': 25, 'karma dla kota': 20
+        'papier toaletowy': 12, 'papier toaletowy velvet': 14, 'ręcznik papierowy': 8, 'reczniki papierowe': 8,
+        'płyn do naczyń': 6, 'plyn do naczyn': 6, 'ludwik': 6,
+        'proszek do prania': 20, 'persil': 22, 'vizir': 20, 'pasta do zębów': 8, 'pasta do zebow': 8,
+        'szampon': 12, 'mydło': 5, 'mydlo': 5, 'żel pod prysznic': 10, 'chusteczki': 5, 'pieluchy': 30
     }
 };
+
+// Product categories the shop does not deliver — shown as an explicit
+// notice near the shopping-list field so customers don't waste a trip.
+const EXCLUDED_PRODUCTS_NOTICE = 'Nie kupujemy i nie dowozimy: alkoholu, papierosów, e-papierosów/liquidów, zapałek/zapalniczek ani napojów energetycznych.';
 
 /* =========================================================
    SCHEDULE LOGIC — Wakacje vs Rok Szkolny
@@ -2049,7 +2112,13 @@ function onPickupChange() {
     if (listaEl) {
         listaEl.style.display = isPaczkomat ? 'none' : 'block';
         listaEl.required = !isPaczkomat;
-        if (isPaczkomat && priceEstimateBox) priceEstimateBox.classList.remove('visible');
+        // Paczkomat has no shopping list — clear any leftover grocery
+        // estimate from a previously-selected pickup point, otherwise
+        // the upfront payment amount would still include it.
+        if (isPaczkomat) {
+            if (priceEstimateBox) priceEstimateBox.classList.remove('visible');
+            State.estimatedGroceryCost = 0;
+        }
     }
     if (adresEl) {
         adresEl.style.display = isPaczkomat ? 'none' : 'block';
@@ -2060,6 +2129,7 @@ function onPickupChange() {
     if (recHeading) recHeading.style.display = isPaczkomat ? 'none' : '';
     if (recGrid) recGrid.style.display = isPaczkomat ? 'none' : '';
 
+    if (!isPaczkomat) updatePriceEstimate();
     calculate();
 }
 
@@ -2332,7 +2402,21 @@ function calculate() {
     if (State.flatDiscount > 0) deliveryBase = Math.max(0, deliveryBase - State.flatDiscount);
 
     const totalEl = document.getElementById('total');
-    if (totalEl) totalEl.textContent = (deliveryBase + State.currentTip + paczkomatPobranie).toFixed(2);
+    const finalTotal = deliveryBase + State.currentTip + paczkomatPobranie;
+    if (totalEl) totalEl.textContent = finalTotal.toFixed(2);
+
+    // Grand total row: only meaningful when there's a grocery estimate to add
+    // (i.e. not for Paczkomat, which has no shopping list).
+    const grandTotalRow = document.getElementById('grand-total-row');
+    const grandTotalEl = document.getElementById('grand-total');
+    if (grandTotalRow && grandTotalEl) {
+        if (sklepKey !== 'paczkomat' && State.estimatedGroceryCost > 0) {
+            grandTotalEl.textContent = (finalTotal + State.estimatedGroceryCost).toFixed(2);
+            grandTotalRow.style.display = 'block';
+        } else {
+            grandTotalRow.style.display = 'none';
+        }
+    }
 
     refreshPaymentDetails();
 }
