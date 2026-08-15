@@ -48,17 +48,18 @@
         .header-btn { background: none; border: 2px solid var(--border); border-radius: 50px; padding: 6px 14px; font-size: 12px; font-weight: 700; cursor: pointer; color: var(--text); font-family: inherit; transition: all 0.2s ease; white-space: nowrap; }
         .header-btn:hover { border-color: var(--primary); color: var(--primary); }
         .header-btn.active-user { border-color: var(--secondary); color: var(--secondary); background: rgba(37,211,102,0.08); }
-        .status-banner, .happy-hour-banner, .weather-banner, .school-banner { text-align: center; padding: 12px; font-weight: 600; font-size: 14px; animation: slideDown 0.5s ease-out; }
+        .status-banner, .happy-hour-banner, .weather-banner, .school-banner, .holiday-banner { text-align: center; padding: 12px; font-weight: 600; font-size: 14px; animation: slideDown 0.5s ease-out; }
         .status-banner { background-color: var(--danger); color: white; display: none; }
         .happy-hour-banner { background-color: var(--primary); color: white; display: none; }
         .weather-banner { background-color: #17a2b8; color: white; display: none; }
         .school-banner { background-color: #6f42c1; color: white; display: none; }
+        .holiday-banner { background-color: #b8860b; color: white; display: none; }
         @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes ripple-anim { to { transform: scale(4); opacity: 0; } }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .trust-badges { display: flex; justify-content: center; gap: 20px; background: var(--surface); padding: 15px 10px; font-size: 12px; color: #555; font-weight: 600; }
+        .trust-badges { display: flex; justify-content: center; gap: 20px; background: var(--surface); padding: 15px 10px; font-size: 12px; color: #555; font-weight: 600; flex-wrap: wrap; }
         .trust-badge i { color: var(--secondary); margin-right: 5px; font-size: 14px; }
         .nav-buttons { display: flex; justify-content: center; background-color: var(--surface); margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); overflow-x: auto; }
         .nav-buttons button { flex: 1; min-width: 80px; padding: 15px 10px; border: none; background: none; color: #888; font-size: 13px; cursor: pointer; font-weight: 600; font-family: inherit; transition: all 0.3s ease; position: relative; }
@@ -79,7 +80,7 @@
         .option-card.disabled-option { opacity: 0.5; pointer-events: none; }
         .note { font-size: 12px; color: #888; margin-top: 5px; font-weight: 400; }
         .badge-weekend { background: var(--danger); color: white; padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: bold; margin-left: 10px; display: none; }
-        input[type="text"], input[type="password"], input[type="email"], input[type="tel"], input[type="number"], input[type="date"], textarea, select { width: 100%; padding: 15px; margin-top: 8px; margin-bottom: 15px; border: 1.5px solid var(--border); border-radius: 12px; box-sizing: border-box; font-family: inherit; font-size: 14px; transition: all 0.3s ease; background: #fafafa; color: var(--text); }
+        input[type="text"], input[type="password"], input[type="email"], input[type="tel"], input[type="number"], input[type="date"], input[type="datetime-local"], textarea, select { width: 100%; padding: 15px; margin-top: 8px; margin-bottom: 15px; border: 1.5px solid var(--border); border-radius: 12px; box-sizing: border-box; font-family: inherit; font-size: 14px; transition: all 0.3s ease; background: #fafafa; color: var(--text); }
         input:focus, textarea:focus, select:focus { border-color: var(--primary); background: var(--surface); outline: none; box-shadow: 0 0 0 4px rgba(255,102,0,0.1); }
         .subopt-box { background: #f9f9f9; border: 1px solid var(--border); border-radius: 12px; padding: 15px; margin-top: -5px; margin-bottom: 15px; display: none; animation: fadeIn 0.3s ease; }
         .subopt-title { font-size: 13px; font-weight: 700; color: #555; margin-bottom: 10px; }
@@ -111,7 +112,7 @@
         .ripple { position: absolute; border-radius: 50%; background: rgba(255,255,255,0.4); transform: scale(0); animation: ripple-anim 0.6s linear; pointer-events: none; }
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; visibility: hidden; transition: 0.3s; }
         .modal-overlay.active { opacity: 1; visibility: visible; }
-        .modal-content { background: white; padding: 30px; border-radius: 20px; text-align: center; max-width: 85%; width: 340px; transform: scale(0.8); transition: 0.3s; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+        .modal-content { background: white; padding: 30px; border-radius: 20px; text-align: center; max-width: 85%; width: 340px; transform: scale(0.8); transition: 0.3s; box-shadow: 0 20px 40px rgba(0,0,0,0.2); max-height: 85vh; overflow-y: auto; }
         .modal-overlay.active .modal-content { transform: scale(1); }
         .modal-content h3 { color: var(--primary); margin-top: 0; }
         .modal-content p { font-size: 15px; margin-bottom: 25px; }
@@ -295,6 +296,7 @@
         .delivery-rules-body p { margin: 0 0 12px; }
         .delivery-rules-body p:last-child { margin-bottom: 0; }
         .delivery-rules-body strong { color: var(--text); }
+        .delivery-rules-body h4 { margin: 18px 0 8px; font-size: 12.5px; color: var(--primary); }
 
         /* PAYMENT CHOICE CARDS */
         .payment-choice-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 10px 0 5px; }
@@ -352,7 +354,24 @@
         .maintenance-close-btn:hover { color: var(--danger); border-color: var(--danger); }
         .maintenance-lock-note { font-size: 11px; color: #aaa; margin-top: 14px; }
 
-        /* CONFETTI CANVAS removed with gamification cut */
+        /* SHOP HOURS TODAY WIDGET */
+        .hours-today-grid { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+        .hours-today-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 14px; border-radius: 10px; background: var(--bg); border: 1px solid var(--border); transition: opacity 0.2s; }
+        .hours-today-row.dimmed { opacity: 0.42; }
+        .hours-today-row .shop-name { font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+        .hours-today-row .shop-name i { color: var(--primary); width: 16px; text-align: center; }
+        .hours-today-row .shop-hours { font-size: 12.5px; font-weight: 700; color: var(--secondary); text-align: right; }
+        .hours-today-row.dimmed .shop-hours { color: var(--danger); }
+        .hours-today-row .shop-sub { display: block; font-size: 10.5px; font-weight: 500; color: #999; margin-top: 2px; }
+
+        /* ADMIN HOLIDAY CALENDAR */
+        .holiday-item { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+        .holiday-item:last-child { border-bottom: none; }
+        .holiday-item-info { flex: 1; }
+        .holiday-item-name { font-size: 13px; font-weight: 700; }
+        .holiday-item-date { font-size: 11px; color: #888; }
+        .holiday-add-row { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+        .holiday-add-row input { margin: 0; flex: 1; min-width: 120px; }
     </style>
 </head>
 <body>
@@ -433,8 +452,11 @@
 <div id="status-banner" class="status-banner">
     <i class="fas fa-exclamation-triangle"></i> Przepraszamy, nie przyjmujemy zamówień. Wracamy: <span id="return-time-display">jutro</span>.
 </div>
+<div id="holiday-banner" class="holiday-banner">
+    <i class="fas fa-pray"></i> <span id="holiday-banner-text">Dziś świętujemy — dostawy nieczynne.</span>
+</div>
 <div id="school-banner" class="school-banner">
-    🎒 W roku szkolnym (1 wrz – 27 cze) w tygodniu dowozimy tylko w godzinach 17:30–18:30 (szkoła!). Uszanujcie nasz czas. W wakacje i weekendy latamy normalnie! 🚴‍♂️
+    🎒 W roku szkolnym w tygodniu dowozimy w ograniczonych godzinach (szkoła!). Uszanujcie nasz czas. W wakacje i weekendy latamy normalnie! 🚴‍♂️
 </div>
 <div id="weather-banner" class="weather-banner">
     <i class="fas fa-cloud-showers-heavy"></i> Trudne warunki pogodowe! Zwiększony koszt dostawy.
@@ -471,11 +493,15 @@
             <i class="fas fa-clock"></i> Aktualnie w kolejce: <strong id="queue-count">0</strong> zamówień
         </div>
 
+        <div class="section" id="hours-today-section">
+            <h2><i class="fas fa-business-time"></i> Godziny dziś (<span id="hours-today-dayname">—</span>)</h2>
+            <div class="hours-today-grid" id="hours-today-grid"></div>
+        </div>
+
         <div id="hours-warning" class="section" style="background: #fff8e1; border-color: #ffc107; display: none;">
             <strong style="color: #d39e00;"><i class="fas fa-clock"></i> Poza godzinami pracy!</strong><br>
             <span style="font-size: 13px; color: #333;" id="hours-warning-text">Sprawdź aktualne godziny dostaw powyżej.</span>
         </div>
-
         <div class="section">
             <h2><i class="fas fa-map-marker-alt"></i> 1. Skąd dostawa / odbiór?</h2>
 
@@ -524,7 +550,7 @@
                 <i class="fas fa-utensils"></i>
                 <div>
                     <strong>Bar u Grubego (+2,00 zł)</strong>
-                    <div class="note">Otwarte także w niedziele! 🍟</div>
+                    <div class="note">Sprawdź godziny powyżej — otwarte także w weekendy! 🍟</div>
                 </div>
             </label>
             <div class="subopt-box" id="subopt-grubego">
@@ -672,8 +698,7 @@
                     </div>
                 </details>
                 <div class="payment-safety-note">
-                    <i class="fas fa-shield-alt"></i> Kwota zawiera bezpieczny margines na wypadek, gdyby zakupy okazały się droższe niż szacunek. <strong>Jeśli zapłacisz za dużo, zawsze natychmiast zwracamy różnicę</strong> — po zakupie produktow wysylamy paragon i zwracamy nadwyżkę na te samo konto/numer/adres 
-    .
+                    <i class="fas fa-shield-alt"></i> Kwota zawiera bezpieczny margines na wypadek, gdyby zakupy okazały się droższe niż szacunek. <strong>Jeśli zapłacisz za dużo, zawsze natychmiast zwracamy różnicę</strong> — po zakupie produktow wysylamy paragon i zwracamy nadwyżkę na te samo konto/numer/adres.
                 </div>
             </div>
 
@@ -737,7 +762,7 @@
 
             <div class="checkbox-container">
                 <input type="checkbox" id="regulamin" required>
-                <label for="regulamin">Oświadczam, że zapłacę za zakupy zgodnie z paragonem ze sklepu oraz doliczonym kosztem dostawy.</label>
+                <label for="regulamin">Oświadczam, że zapłacę za zakupy zgodnie z paragonem ze sklepu oraz doliczonym kosztem dostawy i akceptuję <strong>Zasady dostawy</strong> opisane poniżej.</label>
             </div>
         </div>
 
@@ -757,7 +782,6 @@
             Wyślij zamówienie <i class="fas fa-paper-plane" style="margin-left:5px;"></i>
         </button>
     </div>
-
     <div id="reviews-panel">
         <div class="section">
             <h2><i class="fas fa-star"></i> Zostaw swoją opinię</h2>
@@ -890,7 +914,6 @@
             </div>
         </div>
     </div>
-
     <div id="driver-panel">
         <div class="section" id="admin-login-section">
             <h2><i class="fas fa-lock"></i> Panel Administratora</h2>
@@ -924,7 +947,7 @@
 
             <div class="section">
                 <h2><i class="fas fa-calendar-alt"></i> Tryb grafiku dostaw</h2>
-                <p style="font-size:13px; color:#888;">Domyślnie ustawiany automatycznie wg daty (wakacje: do 31 sierpnia i od 28 czerwca; rok szkolny: 1 wrz–27 cze). Możesz nadpisać ręcznie.</p>
+                <p style="font-size:13px; color:#888;">Domyślnie ustawiany automatycznie wg daty (wakacje: 28 cze – 31 sie; rok szkolny: 1 wrz – 27 cze). Możesz nadpisać ręcznie.</p>
                 <div class="mode-toggle-group">
                     <button class="mode-btn" id="mode-auto-btn" onclick="setScheduleMode('auto', event)">
                         <i class="fas fa-magic"></i><br>Automatycznie
@@ -937,6 +960,30 @@
                     </button>
                 </div>
                 <p style="font-size:12px; color:#aaa; margin-top:10px;">Aktualnie obowiązujący tryb: <strong id="current-mode-label">—</strong></p>
+
+                <div style="margin-top:16px; padding-top:16px; border-top:1px dashed var(--border);">
+                    <p style="font-size:13px; font-weight:700; color:#555; margin:0 0 8px;">Godzina dostaw w dni szkolne (zależna od Twoich zajęć)</p>
+                    <div class="mode-toggle-group">
+                        <button class="mode-btn" id="szkola-plan-a-btn" onclick="setSzkolaPlan('a', event)">
+                            17:30–18:30
+                        </button>
+                        <button class="mode-btn" id="szkola-plan-b-btn" onclick="setSzkolaPlan('b', event)">
+                            17:30–19:00
+                        </button>
+                    </div>
+                    <p style="font-size:11px; color:#aaa; margin-top:8px;">Wybierz wariant pasujący do planu zajęć w tym tygodniu.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2><i class="fas fa-flag"></i> Kalendarz świąt i dni wolnych</h2>
+                <p style="font-size:13px; color:#888;">Wbudowane święta państwowe i kościelne — włącz/wyłącz jako dzień zamknięty. Możesz też dodać własny dzień (np. Wigilia, dzień prywatny).</p>
+                <div id="holiday-list"></div>
+                <div class="holiday-add-row">
+                    <input type="text" id="new-holiday-name" placeholder="Nazwa dnia (np. Wigilia)">
+                    <input type="date" id="new-holiday-date">
+                    <button class="btn-admin-action" onclick="addCustomHoliday(event)"><i class="fas fa-plus"></i></button>
+                </div>
             </div>
 
             <div class="section">
@@ -1059,14 +1106,20 @@
     </div>
 
     <details class="delivery-rules">
-        <summary><i class="fas fa-file-alt"></i> Zasady dostawy — przeczytaj przed zamówieniem</summary>
+        <summary><i class="fas fa-file-alt"></i> Zasady dostawy i regulamin — przeczytaj przed zamówieniem</summary>
         <div class="delivery-rules-body">
-            <p><strong>Brak produktu w sklepie.</strong> Jeśli danego produktu z Twojej listy zabraknie na miejscu, kurier skontaktuje się z Tobą na WhatsApp, aby ustalić zamiennik lub pominięcie pozycji. Bez kontaktu z Twojej strony nie podejmujemy decyzji za Ciebie.</p>
+            <p><strong>Charakter usługi.</strong> Czernica Delivery świadczy wyłącznie usługę zakupu na zlecenie i dostawy (kurierską). Nie jesteśmy sprzedawcą produktów — sprzedawcą jest sklep/punkt, w którym dokonywany jest zakup, co potwierdza wystawiany paragon.</p>
+            <p><strong>Odpowiedzialność za zawartość paczki/przesyłki.</strong> W przypadku odbioru z Paczkomatu InPost lub innej przesyłki kurier realizuje wyłącznie fizyczny odbiór i dostarczenie zamkniętej paczki. Nie odpowiadamy za zawartość, stan ani zgodność przesyłki z zamówieniem złożonym u nadawcy/sprzedawcy — wszelkie reklamacje dotyczące zawartości należy kierować bezpośrednio do nadawcy (InPost / sklepu, z którego pochodzi przesyłka).</p>
+            <p><strong>Brak produktu w sklepie.</strong> Jeśli danego produktu z Twojej listy zabraknie na miejscu, kurier skontaktuje się z Tobą na WhatsApp, aby ustalić zamiennik lub pominięcie pozycji. Bez kontaktu z Twojej strony nie podejmujemy decyzji za Ciebie i nie ponosimy odpowiedzialności za niedostępność towaru u sprzedawcy.</p>
             <p><strong>Rezygnacja w trakcie realizacji.</strong> Jeśli zamówienie zostanie odwołane, gdy kurier jest już w drodze (po połowie trasy), zatrzymujemy połowę opłaty za dostawę jako rekompensatę za przejechany dystans — resztę zwracamy niezwłocznie na wskazane konto/numer BLIK.</p>
+            <p><strong>Anulowanie kursu z przyczyn niezależnych od kuriera.</strong> Jeżeli realizacja zamówienia stanie się niemożliwa z przyczyn niezależnych od kuriera (np. błędny/niekompletny adres podany przez klienta, brak kontaktu z klientem, zamknięty punkt odbioru, warunki pogodowe zagrażające bezpieczeństwu, decyzja klienta o zmianie miejsca dostawy w trakcie realizacji), kurs może zostać anulowany, a poniesione koszty (w tym już zakupione produkty) obciążają zamawiającego.</p>
             <p><strong>Nadpłata.</strong> Jeśli zapłacona z góry kwota (BLIK/przelew) okaże się wyższa niż rzeczywisty koszt z paragonu, różnicę zwracamy od razu po dostawie na to samo konto/numer, z którego przyszła płatność.</p>
-            <p><strong>Produkty wykluczone.</strong> Nie realizujemy zakupu ani dostawy alkoholu, papierosów, e-papierosów/liquidów, zapałek/zapalniczek ani napojów energetycznych.</p>
-            <p><strong>Paczkomat — pobranie.</strong> Kwotę pobrania podaje wyłącznie osoba składająca zamówienie i tylko wtedy, gdy paczka faktycznie jest za pobraniem. Błędnie podana kwota może skutkować niepotrzebnym kursem kuriera.</p>
-            <p><strong>Godziny i dostępność.</strong> Realizujemy zamówienia wyłącznie w godzinach wskazanych na stronie (zależnych od pory roku i dnia tygodnia) oraz gdy dostawy nie są wstrzymane przez tryb przerwy.</p>
+            <p><strong>Produkty wykluczone.</strong> Nie realizujemy zakupu ani dostawy alkoholu, papierosów, e-papierosów/liquidów, zapałek/zapalniczek ani napojów energetycznych. Zamówienie zawierające takie pozycje zostanie automatycznie pomniejszone o te produkty bez odrębnego powiadomienia, jeśli nie uda się nawiązać kontaktu z klientem.</p>
+            <p><strong>Paczkomat — pobranie.</strong> Kwotę pobrania podaje wyłącznie osoba składająca zamówienie i tylko wtedy, gdy paczka faktycznie jest za pobraniem. Odpowiedzialność za poprawność podanej kwoty spoczywa na zamawiającym — błędnie podana kwota może skutkować niepotrzebnym kursem kuriera, którego koszt pokrywa zamawiający.</p>
+            <p><strong>Godziny, dni świąteczne i dostępność.</strong> Realizujemy zamówienia wyłącznie w godzinach i dniach wskazanych na stronie (zależnych od pory roku, dnia tygodnia oraz kalendarza świąt i dni wolnych) oraz gdy dostawy nie są wstrzymane przez tryb przerwy. Zamówienia złożone poza godzinami pracy lub w dniu oznaczonym jako wolny/świąteczny nie są przyjmowane do realizacji.</p>
+            <p><strong>Dostawa bezkontaktowa.</strong> Wybierając opcję pozostawienia zakupów pod drzwiami, klient przejmuje na siebie ryzyko związane z pozostawieniem towaru bez odbioru osobistego (w tym ewentualną kradzież lub uszkodzenie po pozostawieniu przez kuriera zgodnie z dyspozycją klienta).</p>
+            <p><strong>Dane osobowe.</strong> Dane podane w formularzu (imię, adres, telefon) są wykorzystywane wyłącznie w celu realizacji zamówienia i kontaktu w jego sprawie oraz nie są przekazywane podmiotom trzecim poza zakresem niezbędnym do dostawy (np. InPost przy odbiorze paczki).</p>
+            <p><strong>Reklamacje.</strong> Wszelkie reklamacje dotyczące jakości usługi kurierskiej (czas dostawy, stan zakupionych produktów w momencie przekazania) należy zgłaszać w ciągu 24 godzin od dostawy poprzez WhatsApp, podając ID zamówienia. Reklamacje dotyczące jakości lub świeżości samych produktów rozpatrywane są z uwzględnieniem warunków panujących w danym sklepie w chwili zakupu.</p>
         </div>
     </details>
 
@@ -1102,7 +1155,8 @@ const Security = (() => {
         email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
         discountCode: /^[A-Z0-9]{3,20}$/,
         phone: /^[\d\s\+\-()]{6,20}$/,
-        pickupCode: /^\d{6,9}$/
+        pickupCode: /^\d{6,9}$/,
+        holidayKey: /^[a-z0-9_\-]{2,60}$/
     };
 
     function validate(type, value) {
@@ -1183,16 +1237,10 @@ const CONFIG = {
     DEFAULT_BANK_ACCOUNT: '',
     DEFAULT_ACCOUNT_OWNER: 'Karol Bezak',
     DEFAULT_SAFETY_MARGIN_PERCENT: 20,
-    // Keyword price table for the Smart Price Estimator.
-    // Covers common grocery items, popular brand names, and common
-    // misspellings/variants so the estimator matches real shopping lists.
-    // Prices are approximate zł per typical single unit/pack.
     PRICE_KEYWORDS: {
-        // Pieczywo
         'chleb': 6, 'chleba': 6, 'bułki': 5, 'bułka': 2, 'bagietka': 4, 'bagietki': 4,
         'rogal': 3, 'rogaliki': 6, 'tost': 5, 'tosty': 5, 'kajzerka': 2, 'bulka': 2, 'buła': 2,
         'chalka': 6, 'chałka': 6, 'bagietka francuska': 5,
-        // Nabiał
         'mleko': 4.5, 'mleko 3.2': 4.5, 'mleko 2': 4, 'mlako': 4.5, 'laciate': 5, 'mlekovita': 4.5,
         'maślanka': 4, 'kefir': 4, 'śmietana': 5, 'smietana': 5, 'śmietanka': 5,
         'masło': 7, 'maslo': 7, 'masełko': 7, 'margaryna': 6, 'kasztelan': 4,
@@ -1200,12 +1248,10 @@ const CONFIG = {
         'ser': 10, 'ser żółty': 12, 'ser zolty': 12, 'gouda': 12, 'edamski': 11, 'twaróg': 6, 'twarog': 6,
         'serek': 3, 'serki': 3, 'serek wiejski': 4, 'philadelphia': 8, 'mascarpone': 12,
         'jogurt': 3, 'jogurty': 3, 'jogobella': 3, 'danonki': 8, 'danio': 3, 'aktivia': 4, 'skyr': 5,
-        // Podstawowe produkty sypkie / oleje
         'olej': 8, 'olej rzepakowy': 8, 'oliwa': 15, 'oliwa z oliwek': 18,
         'mąka': 5, 'maka': 5, 'cukier': 5, 'cukier puder': 6, 'sól': 3, 'sol': 3, 'ryż': 6, 'ryz': 6,
         'makaron': 5, 'kasza': 5, 'kasza gryczana': 5, 'płatki owsiane': 6, 'platki owsiane': 6,
         'płatki': 8, 'platki': 8, 'musli': 10, 'nesquik': 10, 'lubella': 5, 'winiary': 4,
-        // Napoje (bez alkoholu — patrz wykluczenia poniżej)
         'woda': 4, 'woda niegazowana': 4, 'woda gazowana': 4, 'woda mineralna': 4,
         'cisowianka': 5, 'żywiec zdrój': 5, 'zywiec zdroj': 5, 'muszynianka': 5, 'nałęczowianka': 5, 'kropla beskidu': 4,
         'cola': 6, 'coca cola': 7, 'coca-cola': 7, 'koka cola': 7, 'kola': 6, 'pepsi': 6, 'pepsi cola': 6,
@@ -1213,38 +1259,164 @@ const CONFIG = {
         'sok': 5, 'sok pomarańczowy': 6, 'sok jablkowy': 5, 'sok jabłkowy': 5, 'tymbark': 5, 'kubuś': 4, 'kubus': 4,
         'hortex': 5, 'fortuna': 4, 'appetita': 4,
         'napój': 5, 'napoje': 5, 'napuj': 5, 'oranżada': 4, 'oranzada': 4, 'lipton ice tea': 6,
-        // Przekąski / słodycze
         'chipsy': 6, 'lays': 7, 'crunchips': 7, 'pringles': 9, 'paluszki': 4, 'krakersy': 5,
         'czekolada': 6, 'czekolda': 6, 'wedel': 6, 'milka': 6, 'lindt': 10, 'goplana': 6, 'terravita': 5,
         'ptasie mleczko': 12, 'ptasie mleczka': 12, 'michałki': 6, 'michalki': 6,
         'ciastka': 8, 'ciasteczka': 8, 'delicje': 7, 'oreo': 6, 'wafle': 5, 'grzeski': 4, 'prince polo': 2,
-        'lody': 8, 'lody familijne': 15, 'magnum': 6, 'cornetto': 5, 'калиппо': 4, 'calippo': 4, 'paczki lodowe': 15,
+        'lody': 8, 'lody familijne': 15, 'magnum': 6, 'cornetto': 5, 'calippo': 4, 'paczki lodowe': 15,
         'cukierki': 6, 'żelki': 6, 'zelki': 6, 'haribo': 7, 'mentos': 4, 'guma do żucia': 4, 'guma balonowa': 4,
-        // Kawa / herbata
         'kawa': 15, 'nescafe': 18, 'jacobs': 18, 'tchibo': 17, 'kawa mielona': 15, 'kawa rozpuszczalna': 15,
         'herbata': 10, 'lipton herbata': 8, 'teekanne': 9, 'cukier w kostkach': 6,
-        // Mięso / wędliny
         'wędlina': 12, 'wedlina': 12, 'szynka': 12, 'kiełbasa': 10, 'kielbasa': 10, 'parówki': 8, 'parowki': 8, 'boczek': 12,
         'kurczak': 18, 'filet z kurczaka': 20, 'mięso mielone': 18, 'mieso mielone': 18, 'mięso': 20, 'mieso': 20, 'schab': 20,
         'salceson': 10, 'pasztet': 6, 'mortadela': 9,
-        // Warzywa / owoce
         'pomidory': 6, 'pomidor': 2, 'ogórki': 5, 'ogorki': 5, 'ogórek': 2, 'ziemniaki': 6, 'ziemniaki młode': 8,
         'cebula': 3, 'marchew': 4, 'marchewka': 4, 'sałata': 4, 'salata': 4, 'papryka': 6, 'banany': 6,
         'jabłka': 6, 'jablka': 6, 'cytryny': 5, 'gruszki': 6, 'owoce': 10, 'warzywa': 8,
-        // Chemia domowa / higiena (często dokupowane razem z zakupami)
         'papier toaletowy': 12, 'papier toaletowy velvet': 14, 'ręcznik papierowy': 8, 'reczniki papierowe': 8,
         'płyn do naczyń': 6, 'plyn do naczyn': 6, 'ludwik': 6,
         'proszek do prania': 20, 'persil': 22, 'vizir': 20, 'pasta do zębów': 8, 'pasta do zebow': 8,
         'szampon': 12, 'mydło': 5, 'mydlo': 5, 'żel pod prysznic': 10, 'chusteczki': 5, 'pieluchy': 30
-    }
+    },
+    /* ===== SHOP HOURS =====
+       Each shop has its own weekly hours table. 'closed:true' means the
+       shop does not operate that day at all. 'break' (optional) is a
+       cashier lunch break window during which the shop is shown as
+       dimmed/unavailable even though it's technically open before/after. */
+    SHOP_HOURS: {
+        czernica: {
+            icon: 'fa-store', label: 'Sklep Czernica',
+            week: {
+                1: { start: 8.0, end: 19.0 }, 2: { start: 8.0, end: 19.0 }, 3: { start: 8.0, end: 19.0 },
+                4: { start: 8.0, end: 19.0 }, 5: { start: 8.0, end: 19.0 },
+                6: { start: 8.0, end: 18.0 },
+                0: { start: 10.0, end: 14.0 }
+            },
+            break: { start: 12.0, end: 14.0, label: 'Przerwa kasjerki' }
+        },
+        janowek: {
+            icon: 'fa-shopping-basket', label: 'Sklep Janówek',
+            week: {
+                1: { start: 8.0, end: 20.0 }, 2: { start: 8.0, end: 20.0 }, 3: { start: 8.0, end: 20.0 }, 4: { start: 8.0, end: 20.0 },
+                5: { start: 8.0, end: 18.0 }, 6: { start: 8.0, end: 18.0 },
+                0: { closed: true }
+            }
+        },
+        grubego: {
+            icon: 'fa-utensils', label: 'Bar u Grubego',
+            week: {
+                1: { closed: true }, 2: { closed: true }, 3: { closed: true }, 4: { closed: true },
+                5: { start: 15.0, end: 22.0 },
+                6: { start: 15.0, end: 24.0 },
+                0: { start: 12.0, end: 22.5 }
+            }
+        },
+        paczkomat: {
+            icon: 'fa-box', label: 'Paczkomat InPost',
+            week: {
+                1: { start: 0, end: 24 }, 2: { start: 0, end: 24 }, 3: { start: 0, end: 24 }, 4: { start: 0, end: 24 },
+                5: { start: 0, end: 24 }, 6: { start: 0, end: 24 }, 0: { start: 0, end: 24 }
+            },
+            note24h: true
+        }
+    },
+    /* ===== HOLIDAY CALENDAR =====
+       Built-in Polish public/religious holidays that close the whole
+       service. 'rule' generates the date for a given year; fixed dates
+       use month/day. 'theme' is shown to customers on that day instead
+       of the order form. Admin can toggle each on/off and add custom
+       ones (stored in Firebase under ustawienia/customHolidays and
+       ustawienia/disabledHolidays). */
+    HOLIDAYS: [
+        { key: 'nowy_rok', name: 'Nowy Rok', month: 1, day: 1, theme: 'Nowego Roku! Życzymy samych udanych dostaw 🎉 Dziś odpoczywamy — do zobaczenia jutro.' },
+        { key: 'trzech_kroli', name: 'Trzech Króli', month: 1, day: 6, theme: 'Święto Trzech Króli — dziś jesteśmy nieczynni. Wracamy jutro!' },
+        { key: 'wielkanoc', name: 'Wielkanoc (Niedziela)', easterOffset: 0, theme: 'Wesołych Świąt Wielkanocnych! 🐣 Dziś świętujemy z rodziną — zapraszamy po świętach.' },
+        { key: 'poniedzialek_wielkanocny', name: 'Poniedziałek Wielkanocny', easterOffset: 1, theme: 'Śmigus-Dyngus! 💦 Dziś nie dowozimy — do zobaczenia we wtorek.' },
+        { key: 'majowka1', name: 'Święto Pracy', month: 5, day: 1, theme: '1 Maja — Święto Pracy. Dziś i my odpoczywamy!' },
+        { key: 'majowka3', name: 'Święto Konstytucji 3 Maja', month: 5, day: 3, theme: 'Święto Konstytucji 3 Maja 🇵🇱 — dziś nieczynne, wracamy jutro.' },
+        { key: 'zielone_swiatki', name: 'Zielone Świątki', easterOffset: 49, theme: 'Zielone Świątki — dziś świętujemy, zapraszamy w kolejnym dniu roboczym.' },
+        { key: 'boze_cialo', name: 'Boże Ciało', easterOffset: 60, theme: 'Boże Ciało — dziś procesja i odpoczynek, zamiast zamówienia proponujemy chwilę refleksji. Do zobaczenia jutro!' },
+        { key: 'wniebowziecie', name: 'Wniebowzięcie NMP', month: 8, day: 15, theme: 'Wniebowzięcie Najświętszej Maryi Panny — zamiast zamówienia proponujemy dziś chwilę modlitwy. Zapraszamy ponownie jutro! 🙏' },
+        { key: 'solidarnosc', name: 'Dzień Solidarności i Wolności', month: 8, day: 31, theme: 'Dzień Solidarności i Wolności — pamiętamy 🇵🇱. Dziś nieczynne, wracamy jutro.' },
+        { key: 'wszystkich_swietych', name: 'Wszystkich Świętych', month: 11, day: 1, theme: 'Dzień Wszystkich Świętych — dziś odwiedzamy bliskich. Zamówienia wracają jutro 🕯️' },
+        { key: 'niepodleglosci', name: 'Narodowe Święto Niepodległości', month: 11, day: 11, theme: '11 Listopada — Narodowe Święto Niepodległości 🇵🇱. Dziś nieczynne, chwała bohaterom!' },
+        { key: 'wigilia', name: 'Wigilia', month: 12, day: 24, theme: 'Wigilia Bożego Narodzenia 🎄 — dziś jesteśmy z rodziną. Wesołych Świąt!' },
+        { key: 'boze_narodzenie1', name: 'Boże Narodzenie (1 dzień)', month: 12, day: 25, theme: 'Wesołych Świąt Bożego Narodzenia! 🎄 Dziś nieczynne.' },
+        { key: 'boze_narodzenie2', name: 'Boże Narodzenie (2 dzień)', month: 12, day: 26, theme: 'Drugi dzień Świąt Bożego Narodzenia — dziś odpoczywamy.' },
+        { key: 'sylwester', name: 'Sylwester', month: 12, day: 31, theme: 'Sylwester! 🎆 Dziś kończymy wcześniej i szykujemy się na Nowy Rok. Nieczynne.' }
+    ]
 };
 
-// Product categories the shop does not deliver — shown as an explicit
-// notice near the shopping-list field so customers don't waste a trip.
 const EXCLUDED_PRODUCTS_NOTICE = 'Nie kupujemy i nie dowozimy: alkoholu, papierosów, e-papierosów/liquidów, zapałek/zapalniczek ani napojów energetycznych.';
 
 /* =========================================================
-   SCHEDULE LOGIC — Wakacje vs Rok Szkolny
+   HOLIDAY LOGIC
+========================================================= */
+const Holidays = (() => {
+    // Meeus/Jones/Butcher algorithm for Easter Sunday (Gregorian).
+    function getEasterSunday(year) {
+        const a = year % 19, b = Math.floor(year / 100), c = year % 100;
+        const d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25);
+        const g = Math.floor((b - f + 1) / 3), h = (19 * a + b - d - g + 15) % 30;
+        const i = Math.floor(c / 4), k = c % 4, l = (32 + 2 * e + 2 * i - h - k) % 7;
+        const m = Math.floor((a + 11 * h + 22 * l) / 451);
+        const month = Math.floor((h + l - 7 * m + 114) / 31);
+        const day = ((h + l - 7 * m + 114) % 31) + 1;
+        return new Date(year, month - 1, day);
+    }
+
+    function resolveDate(holiday, year) {
+        if (holiday.easterOffset !== undefined) {
+            const easter = getEasterSunday(year);
+            const d = new Date(easter);
+            d.setDate(d.getDate() + holiday.easterOffset);
+            return d;
+        }
+        return new Date(year, holiday.month - 1, holiday.day);
+    }
+
+    function sameDate(a, b) {
+        return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+    }
+
+    // Returns the active holiday object for `date` (built-in, respecting
+    // State.disabledHolidays, plus any custom holiday), or null.
+    function getActiveHolidayFor(date) {
+        const year = date.getFullYear();
+        const disabled = State.disabledHolidays || {};
+        for (const h of CONFIG.HOLIDAYS) {
+            if (disabled[h.key]) continue;
+            const resolved = resolveDate(h, year);
+            if (sameDate(resolved, date)) return { key: h.key, name: h.name, theme: h.theme, custom: false };
+        }
+        const custom = State.customHolidays || {};
+        for (const [key, h] of Object.entries(custom)) {
+            if (!h || !h.date) continue;
+            const [y, m, d] = h.date.split('-').map(Number);
+            if (y === year && (m - 1) === date.getMonth() && d === date.getDate()) {
+                return { key, name: h.name || 'Dzień wolny', theme: (h.name || 'Dzień wolny') + ' — dziś nieczynne. Zapraszamy w kolejnym dniu roboczym!', custom: true };
+            }
+            // custom holidays recur every year on the same month/day unless a full 4-digit year match is required
+            if ((m - 1) === date.getMonth() && d === date.getDate() && h.yearly) {
+                return { key, name: h.name || 'Dzień wolny', theme: (h.name || 'Dzień wolny') + ' — dziś nieczynne. Zapraszamy w kolejnym dniu roboczym!', custom: true };
+            }
+        }
+        return null;
+    }
+
+    function getTodayActiveHoliday() {
+        return getActiveHolidayFor(new Date());
+    }
+
+    function getAllForYear(year) {
+        return CONFIG.HOLIDAYS.map(h => ({ key: h.key, name: h.name, date: resolveDate(h, year) }));
+    }
+
+    return { getEasterSunday, resolveDate, getActiveHolidayFor, getTodayActiveHoliday, getAllForYear };
+})();
+
+/* =========================================================
+   SCHEDULE LOGIC — Wakacje vs Rok Szkolny, per-shop hours
 ========================================================= */
 const Schedule = (() => {
     function isHolidayByDate(date) {
@@ -1264,6 +1436,14 @@ const Schedule = (() => {
         return isHolidayByDate(new Date()) ? 'wakacje' : 'szkola';
     }
 
+    // School-day delivery window has two selectable variants depending
+    // on the admin's actual class schedule that week.
+    function getSzkolaWindow() {
+        const plan = State.szkolaPlan || 'a';
+        if (plan === 'b') return { start: 17.5, end: 19.0, label: '17:30–19:00' };
+        return { start: 17.5, end: 18.5, label: '17:30–18:30' };
+    }
+
     function getHoursForToday() {
         const mode = getEffectiveMode();
         const day = new Date().getDay();
@@ -1275,7 +1455,7 @@ const Schedule = (() => {
         if (mode === 'wakacje') {
             return { start: 10.0, end: 18.5, label: '10:00–18:30' };
         }
-        return { start: 17.5, end: 18.5, label: '17:30–18:30' };
+        return getSzkolaWindow();
     }
 
     function isWithinWorkingHours() {
@@ -1285,7 +1465,63 @@ const Schedule = (() => {
         return hourDec >= start && hourDec < end;
     }
 
-    return { getEffectiveMode, getHoursForToday, isWithinWorkingHours, isHolidayByDate };
+    // ---- Per-shop hours (for the "Godziny dziś" widget & pickup gating) ----
+    function fmtHour(t) {
+        const hh = Math.floor(t);
+        const mm = Math.round((t - hh) * 60);
+        return `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}`;
+    }
+
+    function getShopDayConfig(shopKey, date) {
+        const shop = CONFIG.SHOP_HOURS[shopKey];
+        if (!shop) return null;
+        const day = date.getDay();
+        return shop.week[day] || { closed: true };
+    }
+
+    // Returns { isOpenNow, label, dimmed, reason } for a shop right now.
+    function getShopStatusNow(shopKey) {
+        const shop = CONFIG.SHOP_HOURS[shopKey];
+        if (!shop) return { isOpenNow: false, label: 'Niedostępne', dimmed: true, reason: '' };
+        const now = new Date();
+        const dayConf = getShopDayConfig(shopKey, now);
+        const hourDec = now.getHours() + now.getMinutes() / 60;
+
+        if (dayConf.closed) {
+            return { isOpenNow: false, label: 'Zamknięte dzisiaj', dimmed: true, reason: '' };
+        }
+        if (shop.note24h) {
+            return { isOpenNow: true, label: 'Dostępny 24/7', dimmed: false, reason: '' };
+        }
+
+        const inWindow = hourDec >= dayConf.start && hourDec < dayConf.end;
+        if (!inWindow) {
+            return { isOpenNow: false, label: `${fmtHour(dayConf.start)}–${fmtHour(dayConf.end)}`, dimmed: true, reason: 'Poza godzinami' };
+        }
+
+        if (shop.break) {
+            const inBreak = hourDec >= shop.break.start && hourDec < shop.break.end;
+            if (inBreak) {
+                return { isOpenNow: false, label: `${fmtHour(dayConf.start)}–${fmtHour(dayConf.end)}`, dimmed: true, reason: shop.break.label + ` (${fmtHour(shop.break.start)}–${fmtHour(shop.break.end)})` };
+            }
+        }
+
+        return { isOpenNow: true, label: `${fmtHour(dayConf.start)}–${fmtHour(dayConf.end)}`, dimmed: false, reason: '' };
+    }
+
+    function getShopHoursLabelForToday(shopKey) {
+        const shop = CONFIG.SHOP_HOURS[shopKey];
+        if (!shop) return '—';
+        if (shop.note24h) return '24/7';
+        const dayConf = getShopDayConfig(shopKey, new Date());
+        if (dayConf.closed) return 'Zamknięte dzisiaj';
+        return `${fmtHour(dayConf.start)}–${fmtHour(dayConf.end)}`;
+    }
+
+    return {
+        getEffectiveMode, getHoursForToday, isWithinWorkingHours, isHolidayByDate,
+        getSzkolaWindow, getShopStatusNow, getShopHoursLabelForToday, fmtHour, getShopDayConfig
+    };
 })();
 
 /* =========================================================
@@ -1311,8 +1547,11 @@ const State = {
     pricing: Object.assign({}, CONFIG.DEFAULT_PRICING),
     pickupEnabled: { paczkomat: true, czernica: true, janowek: true, grubego: true },
     scheduleModeOverride: null,
+    szkolaPlan: 'a',
+    disabledHolidays: {},
+    customHolidays: {},
     grubegoQty: { male: 0, duze: 0 },
-    paymentChoice: 'blik', // 'blik' | 'transfer' | 'cash'
+    paymentChoice: 'blik',
     blikNumber: '',
     bankAccount: '',
     accountOwner: '',
@@ -1322,7 +1561,8 @@ const State = {
     maintenanceReopenAt: null,
     maintenanceCountdownInterval: null,
     isCurrentlyAvailable: true,
-    pendingOrderSubmit: null
+    pendingOrderSubmit: null,
+    todayHoliday: null
 };
 
 /* =========================================================
@@ -1716,8 +1956,7 @@ function loadLastOrderQuick() {
 }
 
 /* =========================================================
-   SMART PRICE ESTIMATOR — keyword-based, with admin-configurable
-   safety margin baked into the number shown to the customer.
+   SMART PRICE ESTIMATOR
 ========================================================= */
 function updatePriceEstimate() {
     const box = document.getElementById('price-estimate-box');
@@ -1730,8 +1969,6 @@ function updatePriceEstimate() {
     let total = 0;
     let matched = 0;
     const matchedKeywords = new Set();
-    // Sort keywords longest-first so multi-word entries (e.g. "coca cola")
-    // are tried before their shorter substrings (e.g. "cola").
     const sortedKeywords = Object.keys(CONFIG.PRICE_KEYWORDS).sort((a, b) => b.length - a.length);
 
     sortedKeywords.forEach(keyword => {
@@ -1740,7 +1977,6 @@ function updatePriceEstimate() {
         const re = new RegExp('(\\d+)\\s*x?\\s*' + escaped + '|' + escaped, 'gi');
         const matches = text.match(re);
         if (matches) {
-            // Avoid double-counting a substring keyword already covered by a longer match
             const alreadyCovered = [...matchedKeywords].some(k => k.includes(keyword) || keyword.includes(k));
             if (alreadyCovered) return;
             matches.forEach(m => {
@@ -1768,10 +2004,6 @@ function updatePriceEstimate() {
 
 /* =========================================================
    PAYMENT CHOICE (BLIK / Przelew / Gotówka)
-   All hard transfer data — phone number, bank account, recipient
-   name, and amount (delivery + estimated groceries) — is always
-   shown as plain, copyable text. The QR code (BLIK only) is an
-   optional extra for a second device.
 ========================================================= */
 function selectPaymentChoice(choice) {
     State.paymentChoice = choice;
@@ -1786,8 +2018,6 @@ function selectPaymentChoice(choice) {
     refreshPaymentDetails();
 }
 
-/* Total the customer needs to pay upfront for BLIK/transfer:
-   delivery cost (from #total) + estimated grocery cost (with margin). */
 function getUpfrontPaymentAmount() {
     const deliveryCost = parseFloat(document.getElementById('total')?.textContent || '0') || 0;
     return deliveryCost + (State.estimatedGroceryCost || 0);
@@ -1855,8 +2085,6 @@ function copyTextToClipboard(text) {
     }
 }
 
-/* QR is a convenience extra only — generated on demand when the
-   <details> panel is opened, not on every keystroke. */
 function maybeRenderBlikQr(blikNumber, amount, owner) {
     const detailsEl = document.getElementById('qr-canvas-container');
     if (!detailsEl || !detailsEl.open) return;
@@ -1901,9 +2129,6 @@ function saveBlikNumber(e) {
 
 /* =========================================================
    PRE-SUBMIT PAYMENT CONFIRMATION
-   For BLIK/transfer, ask the customer to confirm they actually
-   paid before we send the order and open WhatsApp — avoids
-   wasting the courier's time on unpaid "already sent" orders.
 ========================================================= */
 function openPaymentConfirmModal(submitFn) {
     State.pendingOrderSubmit = submitFn;
@@ -1929,9 +2154,6 @@ function confirmPaymentAndSend() {
 
 /* =========================================================
    MAINTENANCE MODE — overlay + live countdown + dismissible X
-   Orders stay blocked regardless of whether the overlay is
-   dismissed; dismissing only hides the overlay for this browser
-   session (sessionStorage), so it returns on next page load.
 ========================================================= */
 function applyMaintenanceMode(isAvailable, reason, reopenAtIso) {
     const overlay = document.getElementById('maintenance-overlay');
@@ -1994,15 +2216,67 @@ function updateLiveStatusBadge(isAvailable) {
     const dot = document.getElementById('live-status-dot');
     const text = document.getElementById('live-status-text');
     if (!dot || !text) return;
-    const isOpenNow = isAvailable && Schedule.isWithinWorkingHours();
+    const isOpenNow = isAvailable && !State.todayHoliday && Schedule.isWithinWorkingHours();
     dot.className = 'status-dot ' + (isOpenNow ? 'open' : 'closed');
     text.className = 'status-badge-text ' + (isOpenNow ? 'open' : 'closed');
     text.textContent = isOpenNow ? 'OTWARTE TERAZ' : 'ZAMKNIĘTE';
 }
 
 /* =========================================================
-   MULTI-CHANNEL NOTIFICATIONS — Discord + Email (best-effort,
-   silently skipped if the corresponding CONFIG constant is empty)
+   "GODZINY DZIŚ" WIDGET — shows today's hours for every shop,
+   dimmed when closed/on break, so the customer sees at a glance
+   which points are usable right now.
+========================================================= */
+function renderHoursTodayWidget() {
+    const grid = document.getElementById('hours-today-grid');
+    const dayNameEl = document.getElementById('hours-today-dayname');
+    if (!grid) return;
+
+    const dayNames = ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota'];
+    const now = new Date();
+    if (dayNameEl) dayNameEl.textContent = dayNames[now.getDay()];
+
+    grid.textContent = '';
+    Object.keys(CONFIG.SHOP_HOURS).forEach(shopKey => {
+        const shop = CONFIG.SHOP_HOURS[shopKey];
+        const status = Schedule.getShopStatusNow(shopKey);
+        const enabledByAdmin = State.pickupEnabled[shopKey] !== false;
+        const isDimmed = status.dimmed || !enabledByAdmin;
+
+        const row = DOM.el('div', { className: 'hours-today-row' + (isDimmed ? ' dimmed' : '') });
+        const nameWrap = DOM.el('span', { className: 'shop-name' });
+        nameWrap.appendChild(DOM.el('i', { className: 'fas ' + shop.icon }));
+        nameWrap.appendChild(document.createTextNode(shop.label));
+        row.appendChild(nameWrap);
+
+        const hoursWrap = DOM.el('span', { className: 'shop-hours' });
+        hoursWrap.appendChild(document.createTextNode(!enabledByAdmin ? 'Wyłączone' : status.label));
+        if (status.reason) hoursWrap.appendChild(DOM.el('small', { className: 'shop-sub' }, [status.reason]));
+        row.appendChild(hoursWrap);
+
+        grid.appendChild(row);
+    });
+}
+
+/* =========================================================
+   HOLIDAY BANNER + ORDER LOCK
+========================================================= */
+function applyHolidayState() {
+    State.todayHoliday = Holidays.getTodayActiveHoliday();
+    const banner = document.getElementById('holiday-banner');
+    const bannerText = document.getElementById('holiday-banner-text');
+    if (!banner) return;
+
+    if (State.todayHoliday) {
+        banner.style.display = 'block';
+        if (bannerText) bannerText.textContent = State.todayHoliday.theme || (State.todayHoliday.name + ' — dziś nieczynne.');
+    } else {
+        banner.style.display = 'none';
+    }
+}
+
+/* =========================================================
+   MULTI-CHANNEL NOTIFICATIONS
 ========================================================= */
 function notifyDiscordWebhook(orderObj, kosztDostawy) {
     if (!CONFIG.DISCORD_WEBHOOK_URL) return;
@@ -2093,7 +2367,7 @@ function renderRecommendations(items) {
 }
 
 /* =========================================================
-   PICKUP POINT LOGIC (Paczkomat / Czernica / Janówek / Bar u Grubego)
+   PICKUP POINT LOGIC
 ========================================================= */
 function onPickupChange() {
     const selected = document.querySelector('input[name="sklep"]:checked');
@@ -2112,9 +2386,6 @@ function onPickupChange() {
     if (listaEl) {
         listaEl.style.display = isPaczkomat ? 'none' : 'block';
         listaEl.required = !isPaczkomat;
-        // Paczkomat has no shopping list — clear any leftover grocery
-        // estimate from a previously-selected pickup point, otherwise
-        // the upfront payment amount would still include it.
         if (isPaczkomat) {
             if (priceEstimateBox) priceEstimateBox.classList.remove('visible');
             State.estimatedGroceryCost = 0;
@@ -2124,8 +2395,6 @@ function onPickupChange() {
         adresEl.style.display = isPaczkomat ? 'none' : 'block';
         adresEl.required = !isPaczkomat;
     }
-    // Recommendations (rec-cards) don't apply to a locker pickup —
-    // there's no shopping list to add items to.
     if (recHeading) recHeading.style.display = isPaczkomat ? 'none' : '';
     if (recGrid) recGrid.style.display = isPaczkomat ? 'none' : '';
 
@@ -2140,43 +2409,48 @@ function adjustGrubegoQty(size, delta) {
 }
 
 function applyPickupAvailabilityRules() {
-    const day = new Date().getDay();
-    const isSunday = (day === 0);
+    const now = new Date();
 
-    const janowekRadio = document.querySelector('input[name="sklep"][value="janowek"]');
-    const janowekCard = document.getElementById('option-janowek');
-    const janowekNote = document.getElementById('janowek-note');
-    const janowekForceOff = isSunday || !State.pickupEnabled.janowek;
-
-    if (janowekRadio) janowekRadio.disabled = janowekForceOff;
-    if (janowekCard) janowekCard.classList.toggle('disabled-option', janowekForceOff);
-    if (janowekNote) {
-        if (isSunday) { janowekNote.textContent = 'Sklep Janówek jest zamknięty w niedziele'; janowekNote.style.color = 'var(--danger)'; janowekNote.style.fontWeight = 'bold'; }
-        else if (!State.pickupEnabled.janowek) { janowekNote.textContent = 'Chwilowo niedostępne'; janowekNote.style.color = 'var(--danger)'; janowekNote.style.fontWeight = 'bold'; }
-        else { janowekNote.textContent = 'Wymagająca trasa.'; janowekNote.style.color = ''; janowekNote.style.fontWeight = 'normal'; }
-    }
-    if (janowekRadio && janowekRadio.checked && janowekForceOff) {
-        const fallback = document.querySelector('input[name="sklep"][value="czernica"]');
-        if (fallback) { fallback.checked = true; onPickupChange(); }
-    }
-
-    ['paczkomat', 'czernica', 'grubego'].forEach(key => {
+    ['paczkomat', 'czernica', 'janowek', 'grubego'].forEach(key => {
         const radio = document.querySelector(`input[name="sklep"][value="${key}"]`);
         const card = document.getElementById('option-' + key);
-        const enabled = State.pickupEnabled[key];
-        if (radio) radio.disabled = !enabled;
-        if (card) card.classList.toggle('disabled-option', !enabled);
-        if (radio && radio.checked && !enabled) {
+        const enabledByAdmin = State.pickupEnabled[key];
+        const shopStatus = Schedule.getShopStatusNow(key);
+        const openNow = shopStatus.isOpenNow;
+        const finalEnabled = enabledByAdmin && openNow;
+
+        if (radio) radio.disabled = !finalEnabled;
+        if (card) card.classList.toggle('disabled-option', !finalEnabled);
+
+        if (key === 'janowek') {
+            const note = document.getElementById('janowek-note');
+            if (note) {
+                if (!enabledByAdmin) { note.textContent = 'Chwilowo niedostępne'; note.style.color = 'var(--danger)'; note.style.fontWeight = 'bold'; }
+                else if (!openNow) { note.textContent = 'Zamknięte teraz (' + Schedule.getShopHoursLabelForToday('janowek') + ')'; note.style.color = 'var(--danger)'; note.style.fontWeight = 'bold'; }
+                else { note.textContent = 'Wymagająca trasa. Dziś czynne: ' + Schedule.getShopHoursLabelForToday('janowek'); note.style.color = ''; note.style.fontWeight = 'normal'; }
+            }
+        }
+        if (key === 'czernica') {
+            const note = document.getElementById('czernica-note');
+            if (note) {
+                if (!enabledByAdmin) { note.textContent = 'Chwilowo niedostępne'; note.style.display = 'block'; }
+                else if (!openNow) { note.textContent = 'Zamknięte teraz (' + Schedule.getShopHoursLabelForToday('czernica') + (shopStatus.reason ? ' — ' + shopStatus.reason : '') + ')'; note.style.display = 'block'; }
+                else { note.style.display = 'none'; }
+            }
+        }
+
+        if (radio && radio.checked && !finalEnabled) {
             const fallback = document.querySelector('input[name="sklep"]:not(:disabled)');
             if (fallback) { fallback.checked = true; onPickupChange(); }
         }
     });
 
+    renderHoursTodayWidget();
     calculate();
 }
 
 /* =========================================================
-   TIME SLOTS (1h blocks within today's working-hours window)
+   TIME SLOTS
 ========================================================= */
 function buildSlotList() {
     const { start, end } = Schedule.getHoursForToday();
@@ -2206,6 +2480,15 @@ function onSlotDateChange() {
     grid.appendChild(DOM.el('p', { style: { gridColumn: '1/-1', fontSize: '12px', color: '#aaa' } }, ['Ładowanie dostępności...']));
 
     const dateStr = dateInput.value;
+    const [yy, mm, dd] = dateStr.split('-').map(Number);
+    const pickedDate = new Date(yy, mm - 1, dd);
+    const holidayOnDate = Holidays.getActiveHolidayFor(pickedDate);
+    if (holidayOnDate) {
+        grid.textContent = '';
+        grid.appendChild(DOM.el('p', { style: { gridColumn: '1/-1', fontSize: '12px', color: 'var(--danger)', fontWeight: '700' } }, ['🚫 ' + holidayOnDate.name + ' — tego dnia jesteśmy nieczynni. Wybierz inną datę.']));
+        return;
+    }
+
     const slots = buildSlotList();
 
     const finishRender = (occupancy) => {
@@ -2380,9 +2663,6 @@ function calculate() {
 
     let deliveryBase = sklepPrice + transportPrice + weekendFee + weatherExtra;
 
-    // Paczkomat cash-on-delivery amount (COD via InPost) is added on top,
-    // it is not part of the "delivery cost" itself but the customer still
-    // needs to know the total they'll owe.
     let paczkomatPobranie = 0;
     if (sklepKey === 'paczkomat') {
         const pobranieInput = document.getElementById('paczkomat-pobranie');
@@ -2405,8 +2685,6 @@ function calculate() {
     const finalTotal = deliveryBase + State.currentTip + paczkomatPobranie;
     if (totalEl) totalEl.textContent = finalTotal.toFixed(2);
 
-    // Grand total row: only meaningful when there's a grocery estimate to add
-    // (i.e. not for Paczkomat, which has no shopping list).
     const grandTotalRow = document.getElementById('grand-total-row');
     const grandTotalEl = document.getElementById('grand-total');
     if (grandTotalRow && grandTotalEl) {
@@ -2427,6 +2705,11 @@ function calculate() {
 function sendOrder(e) {
     addRipple(e);
 
+    if (State.todayHoliday) {
+        showToast('Dziś (' + State.todayHoliday.name + ') nie przyjmujemy zamówień. Zapraszamy w kolejnym dniu roboczym!', 'error');
+        return;
+    }
+
     const now = Date.now();
     if (now - State.lastOrderTimestamp < CONFIG.ORDER_COOLDOWN_MS) {
         const waitSec = Math.ceil((CONFIG.ORDER_COOLDOWN_MS - (now - State.lastOrderTimestamp)) / 1000);
@@ -2443,8 +2726,6 @@ function sendOrder(e) {
         showToast('Musisz zaakceptować zasady rozliczenia!', 'error'); return;
     }
 
-    // Validate everything up-front; only after validation passes do we
-    // either show the payment confirmation modal (BLIK/transfer) or send directly (cash).
     const validation = validateOrderForm();
     if (!validation.ok) {
         showToast(validation.message, 'error');
@@ -2458,12 +2739,16 @@ function sendOrder(e) {
     }
 }
 
-/* Runs all form checks without mutating anything or sending — used so
-   we can show the payment confirmation modal only after the order is
-   known to be valid, and reuse the same checks for the actual submit. */
 function validateOrderForm() {
     const selectedSklep = document.querySelector('input[name="sklep"]:checked');
     const sklepKey = selectedSklep ? selectedSklep.value : '';
+
+    if (sklepKey && sklepKey !== 'paczkomat') {
+        const shopStatus = Schedule.getShopStatusNow(sklepKey);
+        if (!shopStatus.isOpenNow) {
+            return { ok: false, message: 'Wybrany punkt jest teraz zamknięty (' + Schedule.getShopHoursLabelForToday(sklepKey) + (shopStatus.reason ? ', ' + shopStatus.reason : '') + '). Wybierz inny punkt lub godzinę.' };
+        }
+    }
 
     const imie = Security.sanitizeInput(document.getElementById('imie').value);
     if (!imie || imie.length < 2) return { ok: false, message: 'Podaj swoje imię i nazwisko' };
@@ -2829,10 +3114,15 @@ function loadAdminData() {
             u.blikNumber || '',
             u.bankAccount || '',
             u.accountOwner || '',
-            u.hasOwnProperty('safetyMarginPercent') ? u.safetyMarginPercent : CONFIG.DEFAULT_SAFETY_MARGIN_PERCENT
+            u.hasOwnProperty('safetyMarginPercent') ? u.safetyMarginPercent : CONFIG.DEFAULT_SAFETY_MARGIN_PERCENT,
+            u.szkolaPlan || 'a',
+            u.disabledHolidays || {},
+            u.customHolidays || {}
         );
         syncAdminControlsUI(u);
     });
+
+    renderHolidayList();
 }
 
 function syncAdminControlsUI(u) {
@@ -2847,6 +3137,12 @@ function syncAdminControlsUI(u) {
         const effective = Schedule.getEffectiveMode();
         modeLabel.textContent = (activeMode === 'auto' ? 'Automatyczny — obecnie: ' : 'Ręczny: ') + (effective === 'wakacje' ? 'Wakacje' : 'Rok szkolny');
     }
+
+    const plan = u.szkolaPlan || 'a';
+    const planABtn = document.getElementById('szkola-plan-a-btn');
+    const planBBtn = document.getElementById('szkola-plan-b-btn');
+    if (planABtn) planABtn.classList.toggle('active', plan === 'a');
+    if (planBBtn) planBBtn.classList.toggle('active', plan === 'b');
 
     const pe = u.pickupEnabled || {};
     ['paczkomat', 'czernica', 'janowek', 'grubego'].forEach(key => {
@@ -2875,6 +3171,8 @@ function syncAdminControlsUI(u) {
     if (reopenInput && document.activeElement !== reopenInput && u.maintenanceReopenAt) {
         reopenInput.value = u.maintenanceReopenAt;
     }
+
+    renderHolidayList();
 }
 
 function renderAdminOrders(orders) {
@@ -3003,6 +3301,14 @@ function setScheduleMode(mode, e) {
         .catch(() => showToast('Odmowa dostępu', 'error'));
 }
 
+function setSzkolaPlan(plan, e) {
+    if (e) addRipple(e);
+    if (!State.db) { showToast('Firebase niedostępny', 'error'); return; }
+    State.db.ref('ustawienia').update({ szkolaPlan: plan })
+        .then(() => showToast('Plan dni szkolnych ustawiony: ' + (plan === 'a' ? '17:30–18:30' : '17:30–19:00'), 'success'))
+        .catch(() => showToast('Odmowa dostępu', 'error'));
+}
+
 function togglePickupPoint(key, enabled) {
     if (!State.db) { showToast('Firebase niedostępny', 'error'); return; }
     State.db.ref('ustawienia/pickupEnabled').update({ [key]: enabled })
@@ -3029,10 +3335,85 @@ function savePricing(e) {
 }
 
 /* =========================================================
-   APPLY SETTINGS (from Firebase listener) — drives banners,
-   order button state, schedule mode, pickup toggles, pricing
+   ADMIN — HOLIDAY CALENDAR MANAGEMENT
 ========================================================= */
-function applySettings(isAvailable, returnTime, modalText, weatherFee, scheduleMode, pickupEnabled, cennik, maintenanceReopenAt, blikNumber, bankAccount, accountOwner, safetyMarginPercent) {
+function renderHolidayList() {
+    const container = document.getElementById('holiday-list');
+    if (!container) return;
+    const year = new Date().getFullYear();
+    const built = Holidays.getAllForYear(year).sort((a, b) => a.date - b.date);
+    const disabled = State.disabledHolidays || {};
+
+    container.textContent = '';
+    built.forEach(h => {
+        const isOn = !disabled[h.key];
+        const row = DOM.el('div', { className: 'holiday-item' });
+        const info = DOM.el('div', { className: 'holiday-item-info' });
+        info.appendChild(DOM.el('div', { className: 'holiday-item-name' }, [h.name]));
+        info.appendChild(DOM.el('div', { className: 'holiday-item-date' }, [h.date.toLocaleDateString('pl-PL')]));
+        row.appendChild(info);
+
+        const sw = DOM.el('label', { className: 'switch' });
+        const cb = DOM.el('input', { type: 'checkbox' });
+        cb.checked = isOn;
+        cb.addEventListener('change', () => toggleHoliday(h.key, cb.checked));
+        sw.appendChild(cb);
+        sw.appendChild(DOM.el('span', { className: 'switch-slider' }));
+        row.appendChild(sw);
+
+        container.appendChild(row);
+    });
+
+    const custom = State.customHolidays || {};
+    Object.entries(custom).forEach(([key, h]) => {
+        if (!h) return;
+        const row = DOM.el('div', { className: 'holiday-item' });
+        const info = DOM.el('div', { className: 'holiday-item-info' });
+        info.appendChild(DOM.el('div', { className: 'holiday-item-name' }, [(h.name || 'Dzień wolny') + ' (własne)']));
+        info.appendChild(DOM.el('div', { className: 'holiday-item-date' }, [h.date || '—']));
+        row.appendChild(info);
+        const delBtn = DOM.el('button', { className: 'delete-btn', title: 'Usuń' }, ['🗑']);
+        delBtn.addEventListener('click', () => removeCustomHoliday(key));
+        row.appendChild(delBtn);
+        container.appendChild(row);
+    });
+}
+
+function toggleHoliday(key, enabled) {
+    if (!State.db) { showToast('Firebase niedostępny', 'error'); return; }
+    State.db.ref('ustawienia/disabledHolidays').update({ [key]: enabled ? null : true })
+        .then(() => showToast(enabled ? 'Święto włączone (dzień wolny)' : 'Święto wyłączone (dzień roboczy)', 'info'))
+        .catch(() => showToast('Odmowa dostępu', 'error'));
+}
+
+function addCustomHoliday(e) {
+    addRipple(e);
+    const nameInput = document.getElementById('new-holiday-name');
+    const dateInput = document.getElementById('new-holiday-date');
+    const name = Security.sanitizeInput(nameInput.value);
+    const date = dateInput.value;
+    if (!name || name.length < 2) { showToast('Podaj nazwę dnia', 'error'); return; }
+    if (!date) { showToast('Wybierz datę', 'error'); return; }
+    if (!State.db) { showToast('Firebase niedostępny', 'error'); return; }
+
+    const key = 'custom_' + Date.now();
+    State.db.ref('ustawienia/customHolidays/' + key).set({ name, date })
+        .then(() => { showToast('Dzień wolny dodany: ' + name, 'success'); nameInput.value = ''; dateInput.value = ''; })
+        .catch(() => showToast('Odmowa dostępu', 'error'));
+}
+
+function removeCustomHoliday(key) {
+    if (!confirm('Usunąć ten dzień wolny?')) return;
+    if (!State.db) return;
+    State.db.ref('ustawienia/customHolidays/' + key).remove()
+        .then(() => showToast('Usunięto', 'success'))
+        .catch(() => showToast('Błąd', 'error'));
+}
+
+/* =========================================================
+   APPLY SETTINGS (from Firebase listener)
+========================================================= */
+function applySettings(isAvailable, returnTime, modalText, weatherFee, scheduleMode, pickupEnabled, cennik, maintenanceReopenAt, blikNumber, bankAccount, accountOwner, safetyMarginPercent, szkolaPlan, disabledHolidays, customHolidays) {
     State.scheduleModeOverride = (scheduleMode === 'wakacje' || scheduleMode === 'szkola') ? scheduleMode : null;
     State.pickupEnabled = Object.assign({ paczkomat: true, czernica: true, janowek: true, grubego: true }, pickupEnabled || {});
     State.pricing = Object.assign({}, CONFIG.DEFAULT_PRICING, cennik || {});
@@ -3040,13 +3421,23 @@ function applySettings(isAvailable, returnTime, modalText, weatherFee, scheduleM
     State.bankAccount = bankAccount || '';
     State.accountOwner = accountOwner || '';
     State.safetyMarginPercent = (safetyMarginPercent !== undefined && safetyMarginPercent !== null) ? safetyMarginPercent : CONFIG.DEFAULT_SAFETY_MARGIN_PERCENT;
+    State.szkolaPlan = (szkolaPlan === 'b') ? 'b' : 'a';
+    State.disabledHolidays = disabledHolidays || {};
+    State.customHolidays = customHolidays || {};
     State.isCurrentlyAvailable = !!isAvailable;
+
+    applyHolidayState();
 
     const orderBtn = document.getElementById('submit-btn');
     const isWorkingHours = Schedule.isWithinWorkingHours();
     const hours = Schedule.getHoursForToday();
+    const isHolidayToday = !!State.todayHoliday;
 
-    if (!isAvailable) {
+    if (isHolidayToday) {
+        document.getElementById('status-banner').style.display = 'none';
+        document.getElementById('hours-warning').style.display = 'none';
+        if (orderBtn) { orderBtn.disabled = true; orderBtn.textContent = ''; orderBtn.appendChild(document.createTextNode('Dziś świętujemy — zamówienia wstrzymane')); }
+    } else if (!isAvailable) {
         document.getElementById('status-banner').style.display = 'block';
         DOM.setText('return-time-display', returnTime);
         document.getElementById('hours-warning').style.display = 'none';
@@ -3070,7 +3461,13 @@ function applySettings(isAvailable, returnTime, modalText, weatherFee, scheduleM
     const effectiveMode = Schedule.getEffectiveMode();
     const day = new Date().getDay();
     const isWeekday = day >= 1 && day <= 5;
-    if (schoolBanner) schoolBanner.style.display = (effectiveMode === 'szkola' && isWeekday) ? 'block' : 'none';
+    if (schoolBanner) {
+        schoolBanner.style.display = (effectiveMode === 'szkola' && isWeekday && !isHolidayToday) ? 'block' : 'none';
+        if (schoolBanner.style.display === 'block') {
+            schoolBanner.textContent = '';
+            schoolBanner.appendChild(document.createTextNode('🎒 W roku szkolnym w tygodniu dowozimy w godzinach ' + Schedule.getSzkolaWindow().label + ' (szkoła!). Uszanujcie nasz czas. W wakacje i weekendy latamy normalnie! 🚴‍♂️'));
+        }
+    }
 
     const savedName = localStorage.getItem('czernica_name');
     if (!savedName) {
@@ -3080,7 +3477,7 @@ function applySettings(isAvailable, returnTime, modalText, weatherFee, scheduleM
             'Zapomniałeś o czymś w sklepie? My nie zapomnimy! 🛒',
             'Zrób listę, a my zajmiemy się resztą. Relaks w cenie! ☕'
         ];
-        if (modalTextEl) modalTextEl.textContent = (modalText && modalText.trim()) ? modalText : texts[Math.floor(Math.random() * texts.length)];
+        if (modalTextEl) modalTextEl.textContent = (modalText && modalText.trim()) ? modalText : (isHolidayToday ? State.todayHoliday.theme : texts[Math.floor(Math.random() * texts.length)]);
     }
 
     State.isWeatherBad = weatherFee;
@@ -3099,13 +3496,14 @@ function applySettings(isAvailable, returnTime, modalText, weatherFee, scheduleM
 ========================================================= */
 function syncWithDatabase() {
     if (!State.db) {
+        applyHolidayState();
         renderReviews(JSON.parse(localStorage.getItem('czernicaReviews') || '[]'));
         applySettings(
             localStorage.getItem('isAvailable') !== 'false',
             localStorage.getItem('returnTime') || 'później',
             localStorage.getItem('czernicaModalText') || null,
             localStorage.getItem('weatherFee') === 'true',
-            null, null, null, null, '', '', '', CONFIG.DEFAULT_SAFETY_MARGIN_PERCENT
+            null, null, null, null, '', '', '', CONFIG.DEFAULT_SAFETY_MARGIN_PERCENT, 'a', {}, {}
         );
         return;
     }
@@ -3126,7 +3524,10 @@ function syncWithDatabase() {
             u.blikNumber || '',
             u.bankAccount || '',
             u.accountOwner || '',
-            u.hasOwnProperty('safetyMarginPercent') ? u.safetyMarginPercent : CONFIG.DEFAULT_SAFETY_MARGIN_PERCENT
+            u.hasOwnProperty('safetyMarginPercent') ? u.safetyMarginPercent : CONFIG.DEFAULT_SAFETY_MARGIN_PERCENT,
+            u.szkolaPlan || 'a',
+            u.disabledHolidays || {},
+            u.customHolidays || {}
         );
     });
 }
@@ -3257,7 +3658,7 @@ function checkReturningUser() {
         if (nameEl) nameEl.value = savedName;
         if (addrEl) addrEl.value = savedAddress;
         const modalTextEl = document.getElementById('modal-text');
-        if (modalTextEl) modalTextEl.textContent = 'Witaj ponownie, ' + savedName + '! Wypełniliśmy Twoje dane automatycznie.';
+        if (modalTextEl && !State.todayHoliday) modalTextEl.textContent = 'Witaj ponownie, ' + savedName + '! Wypełniliśmy Twoje dane automatycznie.';
     }
 }
 
@@ -3338,7 +3739,9 @@ window.onload = function () {
         slotDateInput.addEventListener('change', onSlotDateChange);
     }
 
-    setTimeout(() => { document.getElementById('welcome-modal').classList.add('active'); }, 2500);
+    setInterval(() => { renderHoursTodayWidget(); applyPickupAvailabilityRules(); }, 60000);
+
+    setTimeout(() => { if (!State.todayHoliday) document.getElementById('welcome-modal').classList.add('active'); }, 2500);
 
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('sw.js')
