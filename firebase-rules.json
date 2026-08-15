@@ -1,4 +1,4 @@
-
+{
   "_INSTRUKCJA": "Wgraj te reguły do Firebase Console → Realtime Database → Reguły",
   "rules": {
     "admins": {
@@ -57,6 +57,21 @@
       },
       "scheduleMode": {
         ".validate": "newData.val() === 'auto' || newData.val() === 'wakacje' || newData.val() === 'szkola'"
+      },
+      "szkolaPlan": {
+        ".validate": "newData.val() === 'a' || newData.val() === 'b'"
+      },
+      "disabledHolidays": {
+        ".validate": true,
+        "$holidayKey": {
+          ".validate": "newData.val() === true || newData.val() === null"
+        }
+      },
+      "customHolidays": {
+        ".validate": true,
+        "$customKey": {
+          ".validate": "newData.hasChildren(['name', 'date']) && newData.child('name').val().length >= 1 && newData.child('name').val().length <= 100 && newData.child('date').val().length <= 12"
+        }
       },
       "maintenanceReopenAt": {
         ".validate": "newData.val() === null || newData.val().length <= 30"
