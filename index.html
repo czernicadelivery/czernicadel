@@ -573,6 +573,50 @@
                 </div>
                 <textarea id="grubego-inne" rows="2" placeholder="Co jeszcze z menu Bara u Grubego? (inne dania/napoje)" style="margin-top:10px; margin-bottom:0;"></textarea>
             </div>
+
+            <label class="option-card" id="option-nadanie" onclick="addRipple(event)">
+                <input type="radio" name="sklep" value="nadanie" onchange="onPickupChange()" data-nazwa="Wysyłka paczki (Paczkomat)" data-price="2.00">
+                <i class="fas fa-paper-plane"></i>
+                <div>
+                    <strong>Wyślij paczkę przez Paczkomat (+2,00 zł)</strong>
+                    <div class="note">Odbieramy paczkę od Ciebie i nadajemy w Paczkomacie <span id="nadanie-paczkomat-label">CRCA01M</span>. <strong>Etykieta musi być już naklejona!</strong></div>
+                </div>
+            </label>
+            <div class="subopt-box" id="subopt-nadanie">
+                <div class="subopt-title">Dane do odbioru paczki na wysyłkę</div>
+                <div class="note" style="color:var(--danger); font-weight:700; margin-top:0;">
+                    <i class="fas fa-exclamation-triangle"></i> Paczka MUSI mieć już naklejoną etykietę nadawczą (wygenerowaną w aplikacji InPost). Nie generujemy i nie drukujemy etykiet.
+                </div>
+                <input type="text" id="nadanie-adres" placeholder="Adres, pod który podjechać po paczkę" autocomplete="street-address">
+                <input type="tel" id="nadanie-telefon" placeholder="Twój numer telefonu (kontakt dla kuriera)" autocomplete="tel">
+                <textarea id="nadanie-opis" rows="2" placeholder="Opis paczki (np. rozmiar, ile paczek, coś ważnego dla kuriera)"></textarea>
+            </div>
+
+            <label class="option-card" id="option-osoby3" onclick="addRipple(event)">
+                <input type="radio" name="sklep" value="osoby3" onchange="onPickupChange()" data-nazwa="Dowóz/odbiór od osoby trzeciej" data-price="4.00">
+                <i class="fas fa-people-arrows"></i>
+                <div>
+                    <strong>Dowóz / odbiór od kogoś innego (+4,00 zł)</strong>
+                    <div class="note">Odbieramy lub dowozimy przedmiot między dwiema osobami (np. sąsiad, znajomy, rodzina).</div>
+                </div>
+            </label>
+            <div class="subopt-box" id="subopt-osoby3">
+                <div class="subopt-title">Skąd i dokąd?</div>
+                <input type="text" id="osoby3-adres-odbioru" placeholder="Adres ODBIORU przedmiotu" autocomplete="off">
+                <input type="text" id="osoby3-kontakt-odbioru" placeholder="Osoba/telefon do kontaktu przy odbiorze">
+                <input type="text" id="osoby3-adres-dostawy" placeholder="Adres DOSTAWY / do kogo dowieźć">
+                <input type="text" id="osoby3-kontakt-dostawy" placeholder="Osoba/telefon do kontaktu przy dostawie">
+                <textarea id="osoby3-opis" rows="2" placeholder="Co dokładnie mam odebrać/dowieźć? (opis przedmiotu)"></textarea>
+            </div>
+        </div>
+
+        <div class="section" id="cost-calculator-section">
+            <h2><i class="fas fa-calculator"></i> Szybki kalkulator kosztu</h2>
+            <p style="font-size:12.5px; color:#888; margin-top:-8px;">Zanim wypełnisz cały formularz — sprawdź orientacyjny koszt samej dostawy dla wybranej opcji powyżej.</p>
+            <div id="quick-cost-display" style="text-align:center; padding:12px; background:var(--bg); border-radius:12px; border:1px dashed var(--border);">
+                <span style="font-size:13px; color:#888;">Szacowany koszt dostawy:</span><br>
+                <span style="font-size:26px; font-weight:800; color:var(--primary);" id="quick-cost-value">3.00 zł</span>
+            </div>
         </div>
 
         <div class="section">
@@ -752,6 +796,12 @@
             </div>
             <div class="discount-badge" id="discount-badge"></div>
 
+            <div class="discount-row">
+                <input type="text" id="referral-code" placeholder="Kod znajomego (polecenie, opcjonalne)" style="margin:0;" maxlength="20">
+                <button class="discount-apply-btn" onclick="applyReferralCode()">Użyj</button>
+            </div>
+            <div class="discount-badge" id="referral-badge"></div>
+
             <h3 style="font-size: 14px; margin: 20px 0 10px; color: #555;">Doceniasz kuriera? Dorzuć napiwek 🛵</h3>
             <div class="tips-container">
                 <button class="tip-btn active" onclick="setTip(0, this)">0 zł</button>
@@ -893,6 +943,17 @@
                 <div class="loyalty-reward-badge" id="loyalty-reward-badge"></div>
             </div>
 
+            <div class="section" id="referral-section">
+                <h2><i class="fas fa-user-friends"></i> Poleć znajomym</h2>
+                <p style="font-size:13px; color:#888;">Podaj znajomemu swój kod — on dostanie rabat na pierwsze zamówienie, a Ty dostaniesz rabat na kolejne, gdy je złoży.</p>
+                <div style="background:var(--bg); border:2px dashed var(--primary-light); border-radius:12px; padding:15px; text-align:center;">
+                    <span style="font-size:12px; color:#888;">Twój kod polecający:</span><br>
+                    <span style="font-size:24px; font-weight:800; color:var(--primary); font-family:monospace;" id="my-referral-code">—</span>
+                </div>
+                <button class="discount-apply-btn" style="width:100%; margin-top:10px;" onclick="copyMyReferralCode()"><i class="fas fa-copy"></i> Kopiuj kod</button>
+                <p id="referral-stats-note" style="font-size:12px; color:#aaa; margin-top:10px; text-align:center;"></p>
+            </div>
+
             <div class="section">
                 <h2><i class="fas fa-history"></i> Historia zamówień</h2>
                 <div id="history-loading" class="loading-spinner active">
@@ -1005,6 +1066,14 @@
                     <span><i class="fas fa-utensils"></i> Bar u Grubego</span>
                     <label class="switch"><input type="checkbox" id="toggle-grubego" onchange="togglePickupPoint('grubego', this.checked)"><span class="switch-slider"></span></label>
                 </div>
+                <div class="admin-toggle-row">
+                    <span><i class="fas fa-paper-plane"></i> Wysyłka paczki (Paczkomat)</span>
+                    <label class="switch"><input type="checkbox" id="toggle-nadanie" onchange="togglePickupPoint('nadanie', this.checked)"><span class="switch-slider"></span></label>
+                </div>
+                <div class="admin-toggle-row">
+                    <span><i class="fas fa-people-arrows"></i> Dowóz/odbiór od osób trzecich</span>
+                    <label class="switch"><input type="checkbox" id="toggle-osoby3" onchange="togglePickupPoint('osoby3', this.checked)"><span class="switch-slider"></span></label>
+                </div>
             </div>
 
             <div class="section">
@@ -1014,6 +1083,8 @@
                 <div class="price-edit-row"><span>Sklep Czernica</span><input type="number" step="0.5" id="price-czernica" value="1.00"></div>
                 <div class="price-edit-row"><span>Sklep Janówek</span><input type="number" step="0.5" id="price-janowek" value="2.00"></div>
                 <div class="price-edit-row"><span>Bar u Grubego</span><input type="number" step="0.5" id="price-grubego" value="2.00"></div>
+                <div class="price-edit-row"><span>Wysyłka paczki</span><input type="number" step="0.5" id="price-nadanie" value="2.00"></div>
+                <div class="price-edit-row"><span>Dowóz/odbiór od osób 3-cich</span><input type="number" step="0.5" id="price-osoby3" value="4.00"></div>
                 <div class="price-edit-row"><span>Rower (transport)</span><input type="number" step="0.5" id="price-rower" value="2.00"></div>
                 <div class="price-edit-row"><span>Opłata weekendowa</span><input type="number" step="0.5" id="price-weekend" value="1.00"></div>
                 <button class="btn-admin-action" onclick="savePricing(event)" style="width:100%; padding:12px; margin-top:10px;">
@@ -1226,9 +1297,14 @@ const CONFIG = {
         czernica: 1.00,
         janowek: 2.00,
         grubego: 2.00,
+        nadanie: 2.00,
+        osoby3: 4.00,
         rower: 2.00,
         weekend: 1.00
     },
+    PACZKOMAT_ADDRESS: 'CRCA01M — Czernica',
+    REFERRAL_DISCOUNT_ZL: 3,
+    REFERRAL_REWARD_ZL: 3,
     DISCORD_WEBHOOK_URL: 'https://discord.com/api/webhooks/1537384002044825640/DxCkJz5L8owZoStjlXocwjNTm6dZUCw0GtPEzWQteAJQeAj-2BdKLM-UAy_uFzHKXzaG',
     EMAILJS_SERVICE_ID: '',
     EMAILJS_TEMPLATE_ID: '',
@@ -1545,7 +1621,7 @@ const State = {
     lastOrderTimestamp: 0,
     loyaltyCount: 0,
     pricing: Object.assign({}, CONFIG.DEFAULT_PRICING),
-    pickupEnabled: { paczkomat: true, czernica: true, janowek: true, grubego: true },
+    pickupEnabled: { paczkomat: true, czernica: true, janowek: true, grubego: true, nadanie: true, osoby3: true },
     scheduleModeOverride: null,
     szkolaPlan: 'a',
     disabledHolidays: {},
@@ -1562,7 +1638,10 @@ const State = {
     maintenanceCountdownInterval: null,
     isCurrentlyAvailable: true,
     pendingOrderSubmit: null,
-    todayHoliday: null
+    todayHoliday: null,
+    referralCodeUsed: null,
+    referralDiscount: 0,
+    myReferralCode: null
 };
 
 /* =========================================================
@@ -1703,6 +1782,7 @@ function updateAccountUI(user) {
 
         const nameEl = document.getElementById('imie');
         if (nameEl && !nameEl.value) nameEl.value = displayName;
+        refreshMyReferralCodeUI();
     } else if (!State.isGuest) {
         if (loggedOut) loggedOut.style.display = 'block';
         if (loggedIn) loggedIn.style.display = 'none';
@@ -1774,7 +1854,7 @@ function renderHistory(orders) {
             const addrEl = DOM.el('p', { style: { margin: '6px 0 4px', fontSize: '14px', fontWeight: '600' } }, [o.adres || o.punktOdbioru || '']);
             const listEl = DOM.el('p', { style: { margin: '0', fontSize: '12px', color: '#888', whiteSpace: 'pre-line' } }, [o.lista || '']);
             const kostEl = DOM.el('p', { style: { margin: '8px 0 4px', fontSize: '14px', fontWeight: '700', color: 'var(--primary)' } }, ['Dostawa: ' + (o.koszt || '-') + ' zł']);
-            const progress = buildProgressBar(o.status || 'Przyjeto');
+            const progress = buildProgressBar(o.status || 'Przyjeto', o.punktKey);
 
             const footerRow = DOM.el('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '8px', flexWrap: 'wrap', gap: '8px' } });
             footerRow.appendChild(DOM.el('span', { className: 'history-status ' + statusClass }, [o.status || 'Przyjęto']));
@@ -1790,11 +1870,17 @@ function renderHistory(orders) {
     });
 }
 
-function buildProgressBar(status) {
+function buildProgressBar(status, punktKey) {
+    const labelSets = {
+        nadanie: ['Przyjęto zlecenie', 'Odebrano paczkę', 'Nadano w Paczkomacie'],
+        osoby3: ['Przyjęto zlecenie', 'W trasie', 'Dostarczono'],
+        default: ['Przyjęto', 'W drodze', 'Dostarczone']
+    };
+    const labels = labelSets[punktKey] || labelSets.default;
     const steps = [
-        { key: 'Przyjeto', label: 'Przyjęto', icon: '1' },
-        { key: 'W drodze', label: 'W drodze', icon: '2' },
-        { key: 'Dostarczone', label: 'Dostarczone', icon: '3' }
+        { key: 'Przyjeto', label: labels[0], icon: '1' },
+        { key: 'W drodze', label: labels[1], icon: '2' },
+        { key: 'Dostarczone', label: labels[2], icon: '3' }
     ];
     const currentIdx = steps.findIndex(s => s.key === status);
     const wrap = DOM.el('div', { className: 'progress-bar' });
@@ -2375,31 +2461,48 @@ function onPickupChange() {
 
     document.getElementById('subopt-paczkomat').style.display = (val === 'paczkomat') ? 'block' : 'none';
     document.getElementById('subopt-grubego').style.display = (val === 'grubego') ? 'block' : 'none';
+    document.getElementById('subopt-nadanie').style.display = (val === 'nadanie') ? 'block' : 'none';
+    document.getElementById('subopt-osoby3').style.display = (val === 'osoby3') ? 'block' : 'none';
 
     const listaEl = document.getElementById('lista');
     const priceEstimateBox = document.getElementById('price-estimate-box');
     const adresEl = document.getElementById('adres');
     const recHeading = document.getElementById('rec-heading');
     const recGrid = document.getElementById('recommendations-grid');
+    const excludedNote = document.querySelector('.excluded-products-note');
     const isPaczkomat = (val === 'paczkomat');
+    const isNadanie = (val === 'nadanie');
+    const isOsoby3 = (val === 'osoby3');
+    const hasNoShoppingList = isPaczkomat || isNadanie || isOsoby3;
 
     if (listaEl) {
-        listaEl.style.display = isPaczkomat ? 'none' : 'block';
-        listaEl.required = !isPaczkomat;
-        if (isPaczkomat) {
+        listaEl.style.display = hasNoShoppingList ? 'none' : 'block';
+        listaEl.required = !hasNoShoppingList;
+        if (hasNoShoppingList) {
             if (priceEstimateBox) priceEstimateBox.classList.remove('visible');
             State.estimatedGroceryCost = 0;
         }
     }
     if (adresEl) {
-        adresEl.style.display = isPaczkomat ? 'none' : 'block';
-        adresEl.required = !isPaczkomat;
+        adresEl.style.display = hasNoShoppingList ? 'none' : 'block';
+        adresEl.required = !hasNoShoppingList;
     }
-    if (recHeading) recHeading.style.display = isPaczkomat ? 'none' : '';
-    if (recGrid) recGrid.style.display = isPaczkomat ? 'none' : '';
+    if (recHeading) recHeading.style.display = hasNoShoppingList ? 'none' : '';
+    if (recGrid) recGrid.style.display = hasNoShoppingList ? 'none' : '';
+    if (excludedNote) excludedNote.style.display = hasNoShoppingList ? 'none' : 'block';
 
-    if (!isPaczkomat) updatePriceEstimate();
+    if (!hasNoShoppingList) updatePriceEstimate();
     calculate();
+    updateQuickCostDisplay();
+}
+
+/* Quick cost calculator — shows delivery-only cost for the currently
+   selected pickup option before the customer fills the whole form. */
+function updateQuickCostDisplay() {
+    const el = document.getElementById('quick-cost-value');
+    if (!el) return;
+    const totalText = document.getElementById('total')?.textContent || '0.00';
+    el.textContent = totalText + ' zł';
 }
 
 function adjustGrubegoQty(size, delta) {
@@ -2444,6 +2547,24 @@ function applyPickupAvailabilityRules() {
             if (fallback) { fallback.checked = true; onPickupChange(); }
         }
     });
+
+    // nadanie/osoby3 aren't tied to a shop's hours — just admin on/off,
+    // gated the same way the whole order form is (working hours check
+    // already happens at submit time via validateOrderForm).
+    ['nadanie', 'osoby3'].forEach(key => {
+        const radio = document.querySelector(`input[name="sklep"][value="${key}"]`);
+        const card = document.getElementById('option-' + key);
+        const enabledByAdmin = State.pickupEnabled[key] !== false;
+        if (radio) radio.disabled = !enabledByAdmin;
+        if (card) card.classList.toggle('disabled-option', !enabledByAdmin);
+        if (radio && radio.checked && !enabledByAdmin) {
+            const fallback = document.querySelector('input[name="sklep"]:not(:disabled)');
+            if (fallback) { fallback.checked = true; onPickupChange(); }
+        }
+    });
+
+    const paczkomatLabelEl = document.getElementById('nadanie-paczkomat-label');
+    if (paczkomatLabelEl) paczkomatLabelEl.textContent = CONFIG.PACZKOMAT_ADDRESS;
 
     renderHoursTodayWidget();
     calculate();
@@ -2639,6 +2760,78 @@ function applyFlatDiscount(amountZl, code, badge) {
 }
 
 /* =========================================================
+   REFERRAL PROGRAM — a logged-in user gets a stable code derived
+   from their uid; anyone entering it at checkout gets a flat
+   discount, and the referrer earns a reward tracked in Firebase
+   under 'polecenia/<uid>'.
+========================================================= */
+function generateReferralCodeForUid(uid) {
+    // Short, stable, human-typeable code derived from the uid.
+    let hash = 0;
+    for (let i = 0; i < uid.length; i++) { hash = (hash * 31 + uid.charCodeAt(i)) >>> 0; }
+    return 'ZNAJOMY' + (hash % 100000);
+}
+
+function refreshMyReferralCodeUI() {
+    const codeEl = document.getElementById('my-referral-code');
+    const noteEl = document.getElementById('referral-stats-note');
+    if (!codeEl) return;
+    if (!State.currentUser) { codeEl.textContent = '—'; if (noteEl) noteEl.textContent = 'Zaloguj się, aby dostać swój kod.'; return; }
+    State.myReferralCode = generateReferralCodeForUid(State.currentUser.uid);
+    codeEl.textContent = State.myReferralCode;
+    if (!State.db) return;
+    State.db.ref('polecenia/' + State.currentUser.uid).once('value').then(snap => {
+        const count = snap.exists() ? (snap.val().count || 0) : 0;
+        if (noteEl) noteEl.textContent = count > 0 ? `Poleciłeś nas już ${count} razy — dzięki!` : 'Udostępnij ten kod, gdy tylko znajomy zapyta o dostawę!';
+    }).catch(() => {});
+}
+
+function copyMyReferralCode() {
+    if (!State.myReferralCode) { showToast('Zaloguj się, aby mieć własny kod', 'error'); return; }
+    copyTextToClipboard(State.myReferralCode);
+}
+
+function applyReferralCode() {
+    const input = document.getElementById('referral-code');
+    const badge = document.getElementById('referral-badge');
+    const raw = input ? input.value.toUpperCase().trim() : '';
+    const code = Security.sanitizeInput(raw);
+    if (!code) { showToast('Wpisz kod znajomego', 'error'); return; }
+
+    if (State.currentUser && generateReferralCodeForUid(State.currentUser.uid) === code) {
+        showToast('Nie możesz użyć własnego kodu polecającego', 'error');
+        return;
+    }
+    if (!/^ZNAJOMY\d+$/.test(code)) {
+        showToast('Nieprawidłowy format kodu polecającego', 'error');
+        return;
+    }
+
+    State.referralCodeUsed = code;
+    State.referralDiscount = CONFIG.REFERRAL_DISCOUNT_ZL;
+    if (badge) {
+        badge.textContent = '';
+        badge.appendChild(document.createTextNode(`✅ Kod "${code}" — ${CONFIG.REFERRAL_DISCOUNT_ZL} zł rabatu za polecenie!`));
+        badge.classList.add('visible');
+    }
+    showToast(`Kod polecający aktywny! -${CONFIG.REFERRAL_DISCOUNT_ZL} zł`, 'success');
+    calculate();
+}
+
+// Called after a successful order that used a referral code — credits
+// the referrer's counter so their reward can be tracked/redeemed manually.
+function creditReferralIfUsed() {
+    if (!State.referralCodeUsed || !State.db) return;
+    // We only know the code, not directly the referrer's uid (codes are
+    // one-way hashes), so we log it for the admin to reconcile manually
+    // via the referral code shown in the order/WhatsApp message.
+    State.db.ref('polecenia_uzycia/' + Date.now()).set({
+        code: State.referralCodeUsed,
+        timestamp: Date.now()
+    }).catch(() => {});
+}
+
+/* =========================================================
    CALCULATE DELIVERY COST
 ========================================================= */
 function calculate() {
@@ -2680,6 +2873,7 @@ function calculate() {
 
     if (State.discountPercent > 0) deliveryBase *= (1 - State.discountPercent / 100);
     if (State.flatDiscount > 0) deliveryBase = Math.max(0, deliveryBase - State.flatDiscount);
+    if (State.referralDiscount > 0) deliveryBase = Math.max(0, deliveryBase - State.referralDiscount);
 
     const totalEl = document.getElementById('total');
     const finalTotal = deliveryBase + State.currentTip + paczkomatPobranie;
@@ -2697,6 +2891,7 @@ function calculate() {
     }
 
     refreshPaymentDetails();
+    updateQuickCostDisplay();
 }
 
 /* =========================================================
@@ -2743,7 +2938,8 @@ function validateOrderForm() {
     const selectedSklep = document.querySelector('input[name="sklep"]:checked');
     const sklepKey = selectedSklep ? selectedSklep.value : '';
 
-    if (sklepKey && sklepKey !== 'paczkomat') {
+    const noShopHoursCheck = ['paczkomat', 'nadanie', 'osoby3'];
+    if (sklepKey && !noShopHoursCheck.includes(sklepKey)) {
         const shopStatus = Schedule.getShopStatusNow(sklepKey);
         if (!shopStatus.isOpenNow) {
             return { ok: false, message: 'Wybrany punkt jest teraz zamknięty (' + Schedule.getShopHoursLabelForToday(sklepKey) + (shopStatus.reason ? ', ' + shopStatus.reason : '') + '). Wybierz inny punkt lub godzinę.' };
@@ -2760,6 +2956,22 @@ function validateOrderForm() {
         if (!paczkomatImie || paczkomatImie.length < 2) return { ok: false, message: 'Podaj imię i nazwisko odbierającego paczkę' };
         if (!Security.validate('phone', paczkomatTelefon)) return { ok: false, message: 'Podaj poprawny numer telefonu' };
         if (!Security.validate('pickupCode', paczkomatKod)) return { ok: false, message: 'Kod odbioru to 6-9 cyfr' };
+    } else if (sklepKey === 'nadanie') {
+        const nadanieAdres = Security.sanitizeInput(document.getElementById('nadanie-adres').value);
+        const nadanieTelefon = Security.sanitizeInput(document.getElementById('nadanie-telefon').value);
+        if (!nadanieAdres || nadanieAdres.length < 5) return { ok: false, message: 'Podaj adres, pod który mamy podjechać po paczkę' };
+        if (!Security.validate('phone', nadanieTelefon)) return { ok: false, message: 'Podaj poprawny numer telefonu' };
+    } else if (sklepKey === 'osoby3') {
+        const adresOdbioru = Security.sanitizeInput(document.getElementById('osoby3-adres-odbioru').value);
+        const kontaktOdbioru = Security.sanitizeInput(document.getElementById('osoby3-kontakt-odbioru').value);
+        const adresDostawy = Security.sanitizeInput(document.getElementById('osoby3-adres-dostawy').value);
+        const kontaktDostawy = Security.sanitizeInput(document.getElementById('osoby3-kontakt-dostawy').value);
+        const opis = Security.sanitizeInput(document.getElementById('osoby3-opis').value);
+        if (!adresOdbioru || adresOdbioru.length < 5) return { ok: false, message: 'Podaj adres odbioru przedmiotu' };
+        if (!kontaktOdbioru || kontaktOdbioru.length < 3) return { ok: false, message: 'Podaj osobę/telefon kontaktowy przy odbiorze' };
+        if (!adresDostawy || adresDostawy.length < 5) return { ok: false, message: 'Podaj adres dostawy / do kogo dowieźć' };
+        if (!kontaktDostawy || kontaktDostawy.length < 3) return { ok: false, message: 'Podaj osobę/telefon kontaktowy przy dostawie' };
+        if (!opis || opis.length < 3) return { ok: false, message: 'Opisz co mamy odebrać/dowieźć' };
     } else {
         const adres = Security.sanitizeInput(document.getElementById('adres').value);
         if (!adres || adres.length < 5) return { ok: false, message: 'Podaj dokładny adres dostawy' };
@@ -2771,7 +2983,7 @@ function validateOrderForm() {
         if (State.grubegoQty.male === 0 && State.grubegoQty.duze === 0 && !grubegoInne && !lista) {
             return { ok: false, message: 'Wybierz coś z menu Bara u Grubego' };
         }
-    } else if (sklepKey !== 'paczkomat') {
+    } else if (!['paczkomat', 'nadanie', 'osoby3'].includes(sklepKey)) {
         const lista = Security.sanitizeInput(document.getElementById('lista').value);
         if (!lista || lista.length < 3) return { ok: false, message: 'Wpisz co mamy kupić!' };
     }
@@ -2806,13 +3018,28 @@ function executeSendOrder() {
 
     let adres = '';
     let paczkomatImie = '', paczkomatTelefon = '', paczkomatKod = '', paczkomatPobranie = '';
+    let nadanieAdres = '', nadanieTelefon = '', nadanieOpis = '';
+    let osoby3AdresOdbioru = '', osoby3KontaktOdbioru = '', osoby3AdresDostawy = '', osoby3KontaktDostawy = '', osoby3Opis = '';
+
     if (sklepKey === 'paczkomat') {
         paczkomatImie = Security.sanitizeInput(document.getElementById('paczkomat-imie').value);
         paczkomatTelefon = Security.sanitizeInput(document.getElementById('paczkomat-telefon').value);
         paczkomatKod = Security.sanitizeInput(document.getElementById('paczkomat-kod').value);
         const pobranieVal = document.getElementById('paczkomat-pobranie').value;
         paczkomatPobranie = pobranieVal ? parseFloat(pobranieVal).toFixed(2) : '';
-        adres = 'Odbiór: Paczkomat InPost Czernica';
+        adres = 'Odbiór: Paczkomat InPost ' + CONFIG.PACZKOMAT_ADDRESS;
+    } else if (sklepKey === 'nadanie') {
+        nadanieAdres = Security.sanitizeInput(document.getElementById('nadanie-adres').value);
+        nadanieTelefon = Security.sanitizeInput(document.getElementById('nadanie-telefon').value);
+        nadanieOpis = Security.sanitizeInput(document.getElementById('nadanie-opis').value);
+        adres = nadanieAdres + ' → nadanie w Paczkomacie ' + CONFIG.PACZKOMAT_ADDRESS;
+    } else if (sklepKey === 'osoby3') {
+        osoby3AdresOdbioru = Security.sanitizeInput(document.getElementById('osoby3-adres-odbioru').value);
+        osoby3KontaktOdbioru = Security.sanitizeInput(document.getElementById('osoby3-kontakt-odbioru').value);
+        osoby3AdresDostawy = Security.sanitizeInput(document.getElementById('osoby3-adres-dostawy').value);
+        osoby3KontaktDostawy = Security.sanitizeInput(document.getElementById('osoby3-kontakt-dostawy').value);
+        osoby3Opis = Security.sanitizeInput(document.getElementById('osoby3-opis').value);
+        adres = osoby3AdresOdbioru + ' → ' + osoby3AdresDostawy;
     } else {
         adres = Security.sanitizeInput(document.getElementById('adres').value);
     }
@@ -2825,6 +3052,10 @@ function executeSendOrder() {
         if (State.grubegoQty.duze > 0) grubegoParts.push(`${State.grubegoQty.duze}x Frytki Duże`);
         if (grubegoInne) grubegoParts.push(grubegoInne);
         lista = [grubegoParts.join(', '), lista].filter(Boolean).join(' | ');
+    } else if (sklepKey === 'nadanie') {
+        lista = nadanieOpis || 'Paczka do nadania (etykieta naklejona)';
+    } else if (sklepKey === 'osoby3') {
+        lista = osoby3Opis;
     }
 
     const platnosc = State.paymentChoice;
@@ -2872,10 +3103,19 @@ function executeSendOrder() {
         orderObj.paczkomatTelefon = paczkomatTelefon;
         orderObj.paczkomatKod = paczkomatKod;
         if (paczkomatPobranie) orderObj.paczkomatPobranie = paczkomatPobranie;
+    } else if (sklepKey === 'nadanie') {
+        orderObj.nadanieAdres = nadanieAdres;
+        orderObj.nadanieTelefon = nadanieTelefon;
+        orderObj.nadanieOpis = nadanieOpis;
+    } else if (sklepKey === 'osoby3') {
+        orderObj.osoby3AdresOdbioru = osoby3AdresOdbioru;
+        orderObj.osoby3KontaktOdbioru = osoby3KontaktOdbioru;
+        orderObj.osoby3AdresDostawy = osoby3AdresDostawy;
+        orderObj.osoby3KontaktDostawy = osoby3KontaktDostawy;
     }
 
     localStorage.setItem('czernica_name', imie);
-    if (sklepKey !== 'paczkomat') localStorage.setItem('czernica_address', adres);
+    if (!['paczkomat', 'nadanie', 'osoby3'].includes(sklepKey)) localStorage.setItem('czernica_address', adres);
 
     if (State.db) {
         State.db.ref('zamowienia/' + uniqueOrderId).set(orderObj)
@@ -2894,15 +3134,24 @@ function executeSendOrder() {
         : platnosc === 'transfer' ? '✅ *ZAPŁACONE PRZELEWEM — od razu wyruszam!*'
         : '💬 *Gotówka — dogadanie na WhatsApp*';
 
+    const listaLabel = sklepKey === 'nadanie' ? '📤 *Opis paczki:*' : sklepKey === 'osoby3' ? '📦 *Co odebrać/dowieźć:*' : '*🛒 Lista zakupów:*';
+
     const wiadomosc = [
         '📦 *NOWE ZAMÓWIENIE CZERNICA* 📦', '',
         paidLine, '',
         `*Klient:* ${imie}`,
         `*Punkt:* ${wybranySklep}`,
         sklepKey === 'paczkomat' ? `*Odbierający:* ${paczkomatImie}` : '',
-        sklepKey === 'paczkomat' ? `*Telefon:* ${paczkomatTelefon}` : `*Adres:* ${adres}`,
+        sklepKey === 'paczkomat' ? `*Telefon:* ${paczkomatTelefon}` : '',
         sklepKey === 'paczkomat' ? `*Kod odbioru:* ${paczkomatKod}` : '',
         sklepKey === 'paczkomat' && paczkomatPobranie ? `*Pobranie za paczkę:* ${paczkomatPobranie} zł` : '',
+        sklepKey === 'nadanie' ? `*Adres odbioru paczki:* ${nadanieAdres}` : '',
+        sklepKey === 'nadanie' ? `*Telefon:* ${nadanieTelefon}` : '',
+        sklepKey === 'nadanie' ? `*Nadanie w:* Paczkomat ${CONFIG.PACZKOMAT_ADDRESS}` : '',
+        sklepKey === 'nadanie' ? '⚠️ *Etykieta musi być już naklejona!*' : '',
+        sklepKey === 'osoby3' ? `*Odbiór od:* ${osoby3AdresOdbioru} (${osoby3KontaktOdbioru})` : '',
+        sklepKey === 'osoby3' ? `*Dostawa do:* ${osoby3AdresDostawy} (${osoby3KontaktDostawy})` : '',
+        (!['paczkomat', 'nadanie', 'osoby3'].includes(sklepKey)) ? `*Adres:* ${adres}` : '',
         `*ID Zamówienia:* ${uniqueOrderId}`,
         `*Transport:* ${wybranyTransport}`,
         `*Kiedy:* ${kiedyDostarczyc}`,
@@ -2910,7 +3159,8 @@ function executeSendOrder() {
         `*Kwota:* ${kosztDostawy} zł`,
         State.currentTip > 0 ? `*Napiwek:* ${State.currentTip} zł` : '',
         State.discountCode ? `*Kod rabatowy:* ${State.discountCode}` : '',
-        '', '*🛒 Lista zakupów:*', lista, '',
+        State.referralCodeUsed ? `*Kod polecający:* ${State.referralCodeUsed}` : '',
+        '', listaLabel, lista, '',
         'Czekam na potwierdzenie!'
     ].filter(l => l !== null && l !== '').join('%0A');
 
@@ -2928,6 +3178,7 @@ function executeSendOrder() {
 
     notifyDiscordWebhook(orderObj, kosztDostawy);
     notifyEmailCopy(orderObj, kosztDostawy);
+    creditReferralIfUsed();
 
     saveLastOrderLocally(orderObj);
     checkQuickReorderWidget();
@@ -2950,6 +3201,19 @@ function executeSendOrder() {
     document.getElementById('paczkomat-telefon').value = '';
     document.getElementById('paczkomat-kod').value = '';
     document.getElementById('paczkomat-pobranie').value = '';
+    document.getElementById('nadanie-adres').value = '';
+    document.getElementById('nadanie-telefon').value = '';
+    document.getElementById('nadanie-opis').value = '';
+    document.getElementById('osoby3-adres-odbioru').value = '';
+    document.getElementById('osoby3-kontakt-odbioru').value = '';
+    document.getElementById('osoby3-adres-dostawy').value = '';
+    document.getElementById('osoby3-kontakt-dostawy').value = '';
+    document.getElementById('osoby3-opis').value = '';
+    const refBadge = document.getElementById('referral-badge');
+    if (refBadge) { refBadge.classList.remove('visible'); refBadge.textContent = ''; }
+    document.getElementById('referral-code').value = '';
+    State.referralCodeUsed = null;
+    State.referralDiscount = 0;
 
     if (State.currentUser) setTimeout(() => loadUserHistory(State.currentUser.uid), 1000);
 }
@@ -3145,7 +3409,7 @@ function syncAdminControlsUI(u) {
     if (planBBtn) planBBtn.classList.toggle('active', plan === 'b');
 
     const pe = u.pickupEnabled || {};
-    ['paczkomat', 'czernica', 'janowek', 'grubego'].forEach(key => {
+    ['paczkomat', 'czernica', 'janowek', 'grubego', 'nadanie', 'osoby3'].forEach(key => {
         const toggle = document.getElementById('toggle-' + key);
         if (toggle) toggle.checked = pe.hasOwnProperty(key) ? pe[key] : true;
     });
@@ -3415,7 +3679,7 @@ function removeCustomHoliday(key) {
 ========================================================= */
 function applySettings(isAvailable, returnTime, modalText, weatherFee, scheduleMode, pickupEnabled, cennik, maintenanceReopenAt, blikNumber, bankAccount, accountOwner, safetyMarginPercent, szkolaPlan, disabledHolidays, customHolidays) {
     State.scheduleModeOverride = (scheduleMode === 'wakacje' || scheduleMode === 'szkola') ? scheduleMode : null;
-    State.pickupEnabled = Object.assign({ paczkomat: true, czernica: true, janowek: true, grubego: true }, pickupEnabled || {});
+    State.pickupEnabled = Object.assign({ paczkomat: true, czernica: true, janowek: true, grubego: true, nadanie: true, osoby3: true }, pickupEnabled || {});
     State.pricing = Object.assign({}, CONFIG.DEFAULT_PRICING, cennik || {});
     State.blikNumber = blikNumber || '';
     State.bankAccount = bankAccount || '';
