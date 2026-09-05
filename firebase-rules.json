@@ -31,6 +31,27 @@
         },
         "platnoscStatus": {
           ".validate": "newData.val().length <= 200"
+        },
+        "nadanieAdres": {
+          ".validate": "newData.val().length >= 5 && newData.val().length <= 200"
+        },
+        "nadanieTelefon": {
+          ".validate": "newData.val().length >= 6 && newData.val().length <= 20"
+        },
+        "nadanieOpis": {
+          ".validate": "newData.val().length <= 500"
+        },
+        "osoby3AdresOdbioru": {
+          ".validate": "newData.val().length >= 5 && newData.val().length <= 200"
+        },
+        "osoby3KontaktOdbioru": {
+          ".validate": "newData.val().length >= 3 && newData.val().length <= 150"
+        },
+        "osoby3AdresDostawy": {
+          ".validate": "newData.val().length >= 5 && newData.val().length <= 200"
+        },
+        "osoby3KontaktDostawy": {
+          ".validate": "newData.val().length >= 3 && newData.val().length <= 150"
         }
       }
     },
@@ -94,6 +115,21 @@
       ".write": "auth !== null && root.child('admins').child(auth.uid).exists()",
       "$code": {
         ".validate": "newData.hasChildren(['percent']) && newData.child('percent').val() >= 1 && newData.child('percent').val() <= 99"
+      }
+    },
+    "polecenia": {
+      ".read": "auth !== null",
+      "$uid": {
+        ".read": "auth !== null && (auth.uid === $uid || root.child('admins').child(auth.uid).exists())",
+        ".write": "auth !== null && root.child('admins').child(auth.uid).exists()",
+        ".validate": "newData.hasChild('count') && newData.child('count').val() >= 0"
+      }
+    },
+    "polecenia_uzycia": {
+      ".read": "auth !== null && root.child('admins').child(auth.uid).exists()",
+      "$useId": {
+        ".write": "!data.exists()",
+        ".validate": "newData.hasChildren(['code', 'timestamp']) && newData.child('code').val().length >= 3 && newData.child('code').val().length <= 30"
       }
     },
     "$other": {
